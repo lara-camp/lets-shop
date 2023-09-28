@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Town extends Model
 {
     use HasFactory;
+    protected $fillable=["name","fees","region_id"];
+
+    public function region(){
+        return $this->belongsTo(Region::class);
+    }
+
 }

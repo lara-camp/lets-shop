@@ -58,4 +58,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Address::class);
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, "send_from");
+    }
+
+    public function ratings(){
+        return $this->hasMany(Rating::class);
+    }
+
+    public function reviews() {
+        return $this->hasMany(Review::class);
+    }
 }

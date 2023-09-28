@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Coupon extends Model
 {
     use HasFactory;
+    protected $fillable = ["min_purchase", "discount","coupon_code", "discounttimeline_id","is_used"];
+
+    public function discounttimeline() {
+        return $this->belongsTo(DiscountTimeline::class);
+    }
+    public function payments() {
+        return $this->hasOne(Payment::class);
+    }
 }
