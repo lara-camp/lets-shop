@@ -1,6 +1,2 @@
-*
-!chat_img/
-!avatar/
-!bank_img/
-!payment_img/
+!*
 !.gitignore
