@@ -16,12 +16,18 @@ use Illuminate\Support\Facades\App;
 |
 */
 
-// Guest Routes
+
 Route::get('lang/{lang}', function ($lang) {
     App::setLocale($lang);
     session()->put('locale', $lang);
     return redirect()->back();
 });
+
+Route::get("/test", function () {
+   return \Inertia\Inertia::render("Test");
+});
+
+// Guest Routes
 Route::get("/", [PageController::class, "home"])->name("page.home");
 Route::get("/shop", [PageController::class, "shop"])->name("page.shop");
 Route::get("/category/{category}", [PageController::class, "category"])->name("page.category");
@@ -29,6 +35,8 @@ Route::get("/product/{product}", [PageController::class, "detail"])->name("page.
 Route::get("/flashsale", [PageController::class, "flashsale"])->name("page.flashsale");
 Route::get("/contact", [PageController::class, "contact"])->name("page.contact");
 
+
+// Admin Routes
 Route::prefix('dashboard')->group(function () {
     Route::get("/login", [AuthController::class, "loginView"])->name("admin.login");
     Route::post("/login", [AuthController::class, "login"]);
