@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\AdminAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('admin')->group(function () {
+// Guest Routes
+Route::get("/", [PageController::class, "home"])->name("page.home");
+Route::get("/shop", [PageController::class, "shop"])->name("page.shop");
+Route::get("/category/{category}", [PageController::class, "category"])->name("page.category");
+Route::get("/product/{product}", [PageController::class, "detail"])->name("page.detail");
+Route::get("/flashsale", [PageController::class, "flashsale"])->name("page.flashsale");
+Route::get("/contact", [PageController::class, "contact"])->name("page.contact");
 
+Route::prefix('dashboard')->group(function () {
+    Route::get("/login", [AdminAuthController::class, "loginView"])->name("admin.login");
+    Route::post("/login", [AdminAuthController::class, "login"]);
 });
