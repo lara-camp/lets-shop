@@ -13,7 +13,7 @@ class DiscountTimeline extends Model
     public function flashDiscounts () {
         return $this->hasMany(FlashDiscount::class);
     }
-    public function couponDiscounts () {
+    public function coupons() {
         return $this->hasMany(Coupon::class);
     }
 }

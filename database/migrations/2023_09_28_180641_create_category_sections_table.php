@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('category_sections', function (Blueprint $table) {
             $table->id();
             $table->foreignId("category_id");
+            $table->integer('section_id');
             $table->timestamps();
         });
     }

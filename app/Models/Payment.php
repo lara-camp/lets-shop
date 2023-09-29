@@ -18,4 +18,7 @@ class Payment extends Model
         return $this->hasMany(Payment::class);
     }
 
+    // public function banking() {
+    //     return $this->hasMany(Banking::class);
+    // }
 }

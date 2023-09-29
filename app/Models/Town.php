@@ -14,4 +14,7 @@ class Town extends Model
         return $this->belongsTo(Region::class);
     }
 
+    public function addresses(){
+        return $this->hasMany(Address::class);
+    }
 }

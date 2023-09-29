@@ -13,7 +13,7 @@ class Coupon extends Model
     public function discounttimeline() {
         return $this->belongsTo(DiscountTimeline::class);
     }
-    public function payments() {
+    public function payment() {
         return $this->hasOne(Payment::class);
     }
 }
