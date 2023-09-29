@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend\Product;
 
-use App\Models\Banner;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
+use App\Models\Product;
+use App\Http\Controllers\Controller;
 
-class BannerController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +28,7 @@ class BannerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         //
     }
@@ -34,7 +36,7 @@ class BannerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Banner $banner)
+    public function show(Product $product)
     {
         //
     }
@@ -42,7 +44,7 @@ class BannerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Banner $banner)
+    public function edit(Product $product)
     {
         //
     }
@@ -50,7 +52,7 @@ class BannerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Banner $banner)
+    public function update(UpdateProductRequest $request, Product $product)
     {
         //
     }
@@ -58,7 +60,7 @@ class BannerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Banner $banner)
+    public function destroy(Product $product)
     {
         //
     }

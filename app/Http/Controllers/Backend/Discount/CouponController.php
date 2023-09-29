@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend\Discount;
 
-use App\Models\DiscountTimeline;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class DiscountTimelineController extends Controller
+class CouponController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +35,7 @@ class DiscountTimelineController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(DiscountTimeline $discountTimeline)
+    public function show(Coupon $coupon)
     {
         //
     }
@@ -42,7 +43,7 @@ class DiscountTimelineController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DiscountTimeline $discountTimeline)
+    public function edit(Coupon $coupon)
     {
         //
     }
@@ -50,7 +51,7 @@ class DiscountTimelineController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, DiscountTimeline $discountTimeline)
+    public function update(Request $request, Coupon $coupon)
     {
         //
     }
@@ -58,7 +59,7 @@ class DiscountTimelineController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DiscountTimeline $discountTimeline)
+    public function destroy(Coupon $coupon)
     {
         //
     }

@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\Frontend\PageController;
+use App\Http\Controllers\Backend\AdminAuthController;
 
 /*
 |--------------------------------------------------------------------------

@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend\Page;
 
-use App\Models\Banking;
+use App\Models\HotSlide;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBankingRequest;
-use App\Http\Requests\UpdateBankingRequest;
 
-class BankingController extends Controller
+class HotSlideController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,7 +27,7 @@ class BankingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBankingRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -36,7 +35,7 @@ class BankingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Banking $banking)
+    public function show(HotSlide $hotSlide)
     {
         //
     }
@@ -44,7 +43,7 @@ class BankingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Banking $banking)
+    public function edit(HotSlide $hotSlide)
     {
         //
     }
@@ -52,7 +51,7 @@ class BankingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBankingRequest $request, Banking $banking)
+    public function update(Request $request, HotSlide $hotSlide)
     {
         //
     }
@@ -60,7 +59,7 @@ class BankingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Banking $banking)
+    public function destroy(HotSlide $hotSlide)
     {
         //
     }
