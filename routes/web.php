@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\PageController;
-use App\Http\Controllers\Backend\AdminAuthController;
+use App\Http\Controllers\Backend\AuthController;
 use Illuminate\Support\Facades\App;
 
 /*
@@ -30,6 +30,6 @@ Route::get("/flashsale", [PageController::class, "flashsale"])->name("page.flash
 Route::get("/contact", [PageController::class, "contact"])->name("page.contact");
 
 Route::prefix('dashboard')->group(function () {
-    Route::get("/login", [AdminAuthController::class, "loginView"])->name("admin.login");
-    Route::post("/login", [AdminAuthController::class, "login"]);
+    Route::get("/login", [AuthController::class, "loginView"])->name("admin.login");
+    Route::post("/login", [AuthController::class, "login"]);
 });

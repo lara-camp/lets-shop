@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 
-class AdminAuthController extends Controller
+class AuthController extends Controller
 {
     public function loginView (){
 
