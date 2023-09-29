@@ -40,8 +40,8 @@ class HandleInertiaRequests extends Middleware
     {
         if(session()->has('locale')){
             App::setLocale(session()->get('locale'));
-            $translations = Lang::get('messages');
         }
+        $translations = Lang::get('messages');
         return array_merge(parent::share($request), [
             'translations' => $translations
         ]);
