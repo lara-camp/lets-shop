@@ -18,7 +18,7 @@ class Payment extends Model
         return $this->hasMany(Payment::class);
     }
 
-    // public function banking() {
-    //     return $this->hasMany(Banking::class);
-    // }
+    public function banking() {
+        return $this->belongsTo(Banking::class);
+    }
 }

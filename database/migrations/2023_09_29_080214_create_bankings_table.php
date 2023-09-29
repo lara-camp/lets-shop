@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('banners', function (Blueprint $table) {
+        Schema::create('bankings', function (Blueprint $table) {
             $table->id();
-            $table->string("image");
-            $table->text("description")->nullable();
-            $table->enum("banner_type", ["flashsale", "coupon", "event",'coupon_detail']);
-            $table->enum("section",['home','coupon'])->nullable();
-            $table->string("url");
+            $table->string('username');
+            $table->string('banking_type');
+            $table->string('phone_no');
+            $table->string('account_id');
+            $table->string('image');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('banners');
+        Schema::dropIfExists('bankings');
     }
 };
