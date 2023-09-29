@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend\Address;
 
-use App\Models\Rating;
+use App\Models\Region;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class RatingController extends Controller
+class RegionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +35,7 @@ class RatingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Rating $rating)
+    public function show(Region $region)
     {
         //
     }
@@ -42,7 +43,7 @@ class RatingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Rating $rating)
+    public function edit(Region $region)
     {
         //
     }
@@ -50,7 +51,7 @@ class RatingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Rating $rating)
+    public function update(Request $request, Region $region)
     {
         //
     }
@@ -58,7 +59,7 @@ class RatingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Rating $rating)
+    public function destroy(Region $region)
     {
         //
     }

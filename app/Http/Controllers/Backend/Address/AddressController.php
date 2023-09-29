@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend\Address;
 
-use App\Models\FlashDiscount;
+use App\Models\Address;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class FlashDiscountController extends Controller
+class AddressController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +35,7 @@ class FlashDiscountController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(FlashDiscount $flashDiscount)
+    public function show(Address $address)
     {
         //
     }
@@ -42,7 +43,7 @@ class FlashDiscountController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(FlashDiscount $flashDiscount)
+    public function edit(Address $address)
     {
         //
     }
@@ -50,7 +51,7 @@ class FlashDiscountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, FlashDiscount $flashDiscount)
+    public function update(Request $request, Address $address)
     {
         //
     }
@@ -58,7 +59,7 @@ class FlashDiscountController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(FlashDiscount $flashDiscount)
+    public function destroy(Address $address)
     {
         //
     }

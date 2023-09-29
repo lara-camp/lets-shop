@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend\Banking;
 
-use App\Models\Review;
-use Illuminate\Http\Request;
+use App\Models\Banking;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreBankingRequest;
+use App\Http\Requests\UpdateBankingRequest;
 
-class ReviewController extends Controller
+class BankingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +28,7 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreBankingRequest $request)
     {
         //
     }
@@ -34,7 +36,7 @@ class ReviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Review $review)
+    public function show(Banking $banking)
     {
         //
     }
@@ -42,7 +44,7 @@ class ReviewController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Review $review)
+    public function edit(Banking $banking)
     {
         //
     }
@@ -50,7 +52,7 @@ class ReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Review $review)
+    public function update(UpdateBankingRequest $request, Banking $banking)
     {
         //
     }
@@ -58,7 +60,7 @@ class ReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Review $review)
+    public function destroy(Banking $banking)
     {
         //
     }

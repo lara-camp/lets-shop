@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend\Product;
 
-use App\Models\Address;
+use App\Models\Detail;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class AddressController extends Controller
+class DetailController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +35,7 @@ class AddressController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Address $address)
+    public function show(Detail $detail)
     {
         //
     }
@@ -42,7 +43,7 @@ class AddressController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Address $address)
+    public function edit(Detail $detail)
     {
         //
     }
@@ -50,7 +51,7 @@ class AddressController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Address $address)
+    public function update(Request $request, Detail $detail)
     {
         //
     }
@@ -58,7 +59,7 @@ class AddressController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Address $address)
+    public function destroy(Detail $detail)
     {
         //
     }

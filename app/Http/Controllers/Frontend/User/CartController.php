@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Frontend\User;
 
-use App\Models\HotSlide;
+use App\Models\Cart;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class HotSlideController extends Controller
+class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +35,7 @@ class HotSlideController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(HotSlide $hotSlide)
+    public function show(Cart $cart)
     {
         //
     }
@@ -42,7 +43,7 @@ class HotSlideController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HotSlide $hotSlide)
+    public function edit(Cart $cart)
     {
         //
     }
@@ -50,7 +51,7 @@ class HotSlideController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HotSlide $hotSlide)
+    public function update(Request $request, Cart $cart)
     {
         //
     }
@@ -58,7 +59,7 @@ class HotSlideController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HotSlide $hotSlide)
+    public function destroy(Cart $cart)
     {
         //
     }

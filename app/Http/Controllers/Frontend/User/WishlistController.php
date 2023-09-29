@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Frontend\User;
 
-use App\Models\Region;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class RegionController extends Controller
+class WishlistController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +35,7 @@ class RegionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Region $region)
+    public function show(Wishlist $wishlist)
     {
         //
     }
@@ -42,7 +43,7 @@ class RegionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Region $region)
+    public function edit(Wishlist $wishlist)
     {
         //
     }
@@ -50,7 +51,7 @@ class RegionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Region $region)
+    public function update(Request $request, Wishlist $wishlist)
     {
         //
     }
@@ -58,7 +59,7 @@ class RegionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Region $region)
+    public function destroy(Wishlist $wishlist)
     {
         //
     }
