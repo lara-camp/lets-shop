@@ -2,6 +2,7 @@ import './bootstrap'
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
+import ToastService from 'primevue/toastservice'
 import PrimeVue from 'primevue/config'
 
 createInertiaApp({
@@ -10,6 +11,7 @@ createInertiaApp({
     return createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(PrimeVue)
+      .use(ToastService)
       .mixin({ methods: { route } })
       .mount(el)
   },
