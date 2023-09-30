@@ -1,20 +1,18 @@
 <template>
-    <div
-        class="flex flex-column justify-content-center align-items-center yellow-container h-screen w-100">
+    <AdminAuthLayoutVue>
         <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
             <div class="text-center mb-5">
                 <img
                     src="../../../../images/logo.png"
                     alt="Image"
-                    height="200"
+                    height="150"
                     class="mb-3"
                 />
                 <div class="text-900 text-3xl font-medium mb-3">
                     Welcome Admin
                 </div>
-            </div>
-
-            <form @submit.prevent="form.post('/dashboard/login')">
+        </div>
+        <form @submit.prevent="form.post('/dashboard/login')">
                 <div>
                     <label for="email1" class="block text-900 font-medium mb-2"
                         >Email</label
@@ -39,8 +37,10 @@
                         class="w-full mb-3"
                         name="password"
                         v-model="form.password"
+
                     />
-                    <div v-if="form.errors.password" class="text-red-500 mb-4">{{ form.errors.password }}</div>
+                    <div v-if="form.errors.password"  class="text-red-500 mb-4">{{ form.errors.password }}</div>
+
 
                     <Button
                         label="Sign In"
@@ -51,16 +51,24 @@
                 </div>
             </form>
         </div>
-    </div>
+    </AdminAuthLayoutVue>
 </template>
 
 <script setup>
+
+import AdminAuthLayoutVue from "../../../Layout/AdminAuthLayout.vue";
 import { useForm } from '@inertiajs/vue3'
 
 const form = useForm({
   email: null,
   password: null,
 })
+
 </script>
 
-<style></style>
+<style>
+    body{
+        overflow: hidden;
+        margin: 0;
+    }
+</style>
