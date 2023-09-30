@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
+use Illuminate\Support\Facades\App;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,11 @@ use App\Http\Controllers\Backend\DashboardController;
 */
 
 // Guest Routes
+Route::get('lang/{lang}', function ($lang) {
+    App::setLocale($lang);
+    session()->put('locale', $lang);
+    return redirect()->back();
+});
 Route::get("/", [PageController::class, "home"])->name("page.home");
 Route::get("/shop", [PageController::class, "shop"])->name("page.shop");
 Route::get("/category/{category}", [PageController::class, "category"])->name("page.category");
