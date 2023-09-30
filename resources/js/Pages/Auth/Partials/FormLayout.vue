@@ -12,15 +12,17 @@
         <div class="text-900 text-2xl font-medium my-5">{{ title }}</div>
         <slot></slot>
         <hr class="hr-text mb-4" data-content="OR">
-        <Button class="w-full mb-5"
-                icon="pi pi-google"
-                label="Continue with Google"
-                severity="secondary"></Button>
+        <a :href="route('oauth.google')">
+          <Button class="w-full mb-5"
+                  icon="pi pi-google"
+                  label="Continue with Google"
+                  severity="secondary"></Button>
+        </a>
         <div v-if="type === 'login'" class="text-center">
           <span class="text-600 font-medium line-height-3">Don't have an account?</span>
-          <Link :href="route('register')"
+          <a :href="route('register')"
                 class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Register Now!
-          </Link>
+          </a>
         </div>
         <div v-else class="text-center">
           <span class="text-600 font-medium line-height-3">Already has an account?</span>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Backend\AuthController;
 use Illuminate\Support\Facades\App;
+use App\Http\Controllers\Shared\OAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,12 +17,17 @@ use Illuminate\Support\Facades\App;
 |
 */
 
-
+// Language Route
 Route::get('lang/{lang}', function ($lang) {
     App::setLocale($lang);
     session()->put('locale', $lang);
     return redirect()->back();
 });
+
+// OAuth Routes
+Route::get("/oauth2/google", [OAuthController::class, 'redirectToGoogle'])->name('oauth.google');
+Route::get("/oauth2/google/callback", [OAuthController::class, 'handleGoogleCallback'])
+    ->name('oauth.google.callback');
 
 Route::get("/test", function () {
    return \Inertia\Inertia::render("Test");
