@@ -1,6 +1,9 @@
 <template>
+  <!-- FormLayout component for title and register redirect -->
   <FormLayout title="Login" type="login">
+    <!-- Login Form -->
     <form method="post" @submit.prevent="form.post(route('login'))">
+      <!-- Email Input -->
       <div class="mb-4">
         <label class="block text-900 font-medium mb-2" for="email">Email</label>
         <InputText id="email"
@@ -12,6 +15,7 @@
                    type="text"/>
         <div class="text-red-600 mt-1">{{ form.errors.email }}</div>
       </div>
+      <!-- Password Input -->
       <div class="mb-1">
         <label class="block text-900 font-medium mb-3" for="password">Password</label>
         <InputText id="password"
@@ -23,13 +27,16 @@
                    type="password"/>
         <div class="text-red-600 mt-1">{{ form.errors.password }}</div>
       </div>
+      <!-- Forgot Password Link -->
       <div class="flex align-items-center justify-content-end mb-5">
         <Link :href="route('password.request')"
               class="font-medium no-underline text-blue-500 text-right cursor-pointer">Forgot
           password?
         </Link>
       </div>
+      <!-- Submit Button -->
       <Button class="w-full mb-4" icon="pi pi-user" label="Sign In" type="submit"></Button>
+      <!-- StatusToast for displaying status message -->
       <StatusToast :status="status" :detail="status" summary="Password Reset" />
     </form>
   </FormLayout>
