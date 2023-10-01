@@ -2,3 +2,24 @@
 @import 'primevue/resources/themes/lara-light-purple/theme.css';
 @import 'primevue/resources/primevue.min.css';
 @import 'primeflex/primeflex.min.css';
+
+@font-face {
+    font-family : 'Quicksand';
+    src : url("/public/fonts/Quicksand/Quicksand-VariableFont_wght.ttf");
+}
+@font-face {
+    font-family : 'Poppins';
+    font-weight: normal;
+    src : url("/public/fonts/Poppins/Poppins-Regular.ttf");
+}
+@font-face {
+    font-family : 'Poppins';
+    font-weight: bold;
+    src : url("/public/fonts/Poppins/Poppins-Bold.ttf");
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+}
+

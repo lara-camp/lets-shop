@@ -16,16 +16,8 @@ class AdminAuthController extends Controller
 {
     public function loginView()
     {
-
-        if (session()->has('unauthorized_error')) {
-            $error = session('unauthorized_error');
-
-        } else {
-            $error = null;
-        }
-
         return Inertia::render('Auth/Admin/AdminLogin', [
-            'error' => $error,
+            'status' => session('status') ?? null,
         ]);
 
     }
@@ -42,6 +34,10 @@ class AdminAuthController extends Controller
         if (!Hash::check($request->password, $user->password)) {
             return redirect()->route('admin.loginView')
                 ->withErrors(['email' => "email or password is incorrect"]);
+        }
+
+        if ($user->role === "user") {
+            return redirect()->back()->with('status', 'You are not authorized to access this page');
         }
         Auth::login($user);
 
