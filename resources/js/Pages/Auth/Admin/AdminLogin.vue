@@ -29,9 +29,9 @@
               placeholder="Email address"
               type="text"
           />
-          <div v-if="form.errors.email" class="text-red-500 mb-4">{{ form.errors.email }}</div>
+          <div v-if="form.errors.email" class="text-red-600">{{ form.errors.email }}</div>
 
-          <label class="block text-900 font-medium mb-2" for="password1"
+          <label class="block text-900 font-medium mb-2 mt-3" for="password1"
           >Password</label
           >
           <InputText
@@ -43,13 +43,13 @@
               type="password"
 
           />
-          <div v-if="form.errors.password" class="text-red-500 mb-4">{{
+          <div v-if="form.errors.password" class="text-red-600">{{
               form.errors.password
             }}
           </div>
           <Toast/>
           <Button
-              class="w-full"
+              class="w-full mt-4"
               icon="pi pi-user"
               label="Sign In"
               type="submit"
