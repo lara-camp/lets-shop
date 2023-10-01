@@ -14,7 +14,7 @@
           Welcome Admin
         </div>
       </div>
-      <form @submit.prevent="form.post('/dashboard/login')">
+      <form @submit.prevent="form.post(route('admin.login'))">
 
         <div>
           <label class="block text-900 font-medium mb-2" for="email1"
@@ -47,6 +47,7 @@
               form.errors.password
             }}
           </div>
+          <Toast/>
           <Button
               class="w-full mt-4"
               icon="pi pi-user"
@@ -61,18 +62,28 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import Toast from 'primevue/toast'
 import AdminAuthLayoutVue from '../../../Layout/AdminAuthLayout.vue'
 import { useForm } from '@inertiajs/vue3'
+import { useToast } from 'primevue/usetoast'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 
 const props = defineProps({ error: String })
 const error = ref(props.error || null)
+const toast = useToast()
 
 watch(() => props.error, (newError) => {
   error.value = newError
   if (newError) {
     form.reset()
+    toast.add({
+      severity: 'error',
+      summary: 'Access Denied',
+      detail: 'You are unauthorized to access this page',
+      life: 3000
+    })
+    window.location.href = '/dashboard/login'
   }
 })
 

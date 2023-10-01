@@ -52,4 +52,3 @@ Route::post("/dashboard/login", [AuthController::class, "login"])->name('admin.l
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'isAdmin']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 });
-
