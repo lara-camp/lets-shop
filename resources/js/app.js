@@ -7,6 +7,7 @@ import PrimeVue from 'primevue/config'
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Checkbox from 'primevue/checkbox';
+import ToastService from 'primevue/toastservice';
 
 createInertiaApp({
   resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
@@ -14,6 +15,7 @@ createInertiaApp({
     return createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(PrimeVue,{ ripple: true })
+      .use(ToastService)
       .component("Button",Button)
       .component("InputText",InputText)
       .component("Checkbox",Checkbox)

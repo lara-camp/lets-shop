@@ -2,11 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsAuthenticated
+class IsAdmin
 {
     /**
      * Handle an incoming request.
@@ -15,9 +17,9 @@ class IsAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!request()->session()->get('auth')) {
-            return redirect()->route('auth.login');
+        if (Auth::check() && Auth::user()->role === "admin") {
+            return $next($request);
         }
-        return $next($request);
+        return redirect()->route('admin.loginView')->with('unauthorized_error','You are not authorized to access this page');
     }
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\App;
 
 /*
@@ -30,8 +31,13 @@ Route::get("/product/{product}", [PageController::class, "detail"])->name("page.
 Route::get("/flashsale", [PageController::class, "flashsale"])->name("page.flashsale");
 Route::get("/contact", [PageController::class, "contact"])->name("page.contact");
 
-Route::prefix('dashboard')->group(function () {
-    Route::get("/login", [AuthController::class, "loginView"])->name("admin.loginView");
-    Route::post("/login", [AuthController::class, "login"])->name('admin.login');
-    Route::get('/',[DashboardController::class,'index'])->name('admin.dashboard');
+
+Route::get("dashboard/login", [AuthController::class, "loginView"])->name("admin.loginView");
+Route::post("/dashboard/login", [AuthController::class, "login"])->name('admin.login');
+
+Route::group(['prefix'=>'dashboard','middleware'=>['auth', 'isAdmin']],function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::post('/logout',[AuthController::class,'logout'])->name('admin.logout');
+
 });
+
