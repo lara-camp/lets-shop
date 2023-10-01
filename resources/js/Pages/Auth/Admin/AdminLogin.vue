@@ -24,7 +24,7 @@
               id="email1"
               v-model="form.email"
               autofocus
-              class="w-full mb-3"
+              class="w-full mb-1"
               name="email"
               placeholder="Email address"
               type="text"
@@ -37,7 +37,7 @@
           <InputText
               id="password1"
               v-model="form.password"
-              class="w-full mb-3"
+              class="w-full mb-1"
               name="password"
               placeholder="Password"
               type="password"
