@@ -2,5 +2,5 @@
 
 return [
     'test' => 'This is testing',
-    'home' => 'main page'
+    'home' => 'main page',
 ];
