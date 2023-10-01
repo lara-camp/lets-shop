@@ -49,6 +49,6 @@ Route::get("/contact", [PageController::class, "contact"])->name("page.contact")
 Route::get("dashboard/login", [AuthController::class, "loginView"])->name("admin.loginView");
 Route::post("/dashboard/login", [AuthController::class, "login"])->name('admin.login');
 
-Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'isAdmin']], function () {
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','isAdmin']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 });

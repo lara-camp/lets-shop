@@ -83,7 +83,6 @@ watch(() => props.error, (newError) => {
       detail: 'You are unauthorized to access this page',
       life: 3000
     })
-    window.location.href = '/dashboard/login'
   }
 })
 
