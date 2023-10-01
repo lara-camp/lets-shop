@@ -47,7 +47,7 @@
               form.errors.password
             }}
           </div>
-          <StatusToast :detail="status" :status="status" summary="Unauthorized Access"/>
+          <StatusToast severity="error" :detail="status" :status="status" summary="Unauthorized Access"/>
           <Button
               class="w-full mt-4"
               icon="pi pi-user"
