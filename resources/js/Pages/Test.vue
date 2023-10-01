@@ -1,19 +1,21 @@
 <template>
-  <div>
-    FUCK
+
+  <div class="card">
+    <MegaMenu :model="items" orientation="vertical" />
   </div>
+  <Link href="/lang/en"> English </Link>
+  <Link href="/lang/my"> Myanmar</Link>
+  <p>{{ translations.home }}</p>
+  <h1>{{ translations.test }}</h1>
+
 </template>
 
 <script setup>
-import {onMounted} from 'vue'
+import { Link } from '@inertiajs/vue3'
 
-onMounted(() => {
-  Pusher.logToConsole = true;
-  Echo.channel("test-broadcast").listen('.App\\Events\\TestBroadcast', (payload) => {
-    console.log(payload)
-  })
-})
+defineProps({ translations: Object })
 </script>
 
+<style  scoped>
 
-
+</style>
