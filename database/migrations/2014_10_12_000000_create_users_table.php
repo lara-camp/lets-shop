@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->text('address')->nullable();
             $table->text('phone')->nullable();
             $table->enum('role', ['user', 'admin', 'superadmin']);
-            $table->string('google_id')->nullable();
+            $table->text('google_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

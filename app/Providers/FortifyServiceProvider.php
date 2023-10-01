@@ -89,10 +89,10 @@ class FortifyServiceProvider extends ServiceProvider
                 $request->ip()
             );
 
-            return Limit::perMinute(100)->by($throttleKey);
+            return Limit::perMinute(50)->by($throttleKey);
         });
         RateLimiter::for('two-factor', function (Request $request) {
-            return Limit::perMinute(5)->by($request->session()->get('login.id'));
+            return Limit::perMinute(50)->by($request->session()->get('login.id'));
         });
         Fortify::loginView(function () {
             return Inertia::render("Auth/User/UserLogin", [

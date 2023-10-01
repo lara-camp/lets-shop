@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Backend\AuthController;
+use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Shared\OAuthController;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,7 @@ use App\Http\Controllers\Shared\OAuthController;
 Route::get('lang/{lang}', function ($lang) {
     App::setLocale($lang);
     session()->put('locale', $lang);
+
     return redirect()->back();
 });
 
@@ -30,7 +33,7 @@ Route::get("/oauth2/google/callback", [OAuthController::class, 'handleGoogleCall
     ->name('oauth.google.callback');
 
 Route::get("/test", function () {
-   return \Inertia\Inertia::render("Test");
+    return Inertia::render("Test");
 });
 
 // Guest Routes
@@ -43,7 +46,11 @@ Route::get("/contact", [PageController::class, "contact"])->name("page.contact")
 
 
 // Admin Routes
-Route::prefix('dashboard')->group(function () {
-    Route::get("/login", [AuthController::class, "loginView"])->name("admin.login");
-    Route::post("/login", [AuthController::class, "login"]);
+Route::get("dashboard/login", [AuthController::class, "loginView"])->name("admin.loginView");
+Route::post("/dashboard/login", [AuthController::class, "login"])->name('admin.login');
+
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'isAdmin']], function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
+

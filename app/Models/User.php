@@ -47,6 +47,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function isAdmin() :bool
+    {
+        return $this->role === 'admin';
+    }
     public function carts()
     {
         return $this->hasMany(Cart::class);
@@ -72,7 +77,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function reviews() {
         return $this->hasMany(Review::class);
     }
-    
+
     public function orders() {
         return $this->hasMany(Order::class);
     }
