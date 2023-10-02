@@ -16,7 +16,6 @@ class AuthController extends Controller
         return Inertia::render('Auth/Admin/AdminLogin', [
             'status' => session('status') ?? null,
         ]);
-
     }
 
     public function login(Request $request)
@@ -35,8 +34,7 @@ class AuthController extends Controller
             return redirect()->route('admin.loginView')
                 ->withErrors(['email' => "email or password is incorrect"]);
         }
-
-        // Check user role if password match (Redirect if is not authorized role)
+         // Check user role if password match (Redirect if is not authorized role)
         if ($user->role === "user") {
             return redirect()->back()->with('status', 'You are not authorized to access this page');
         }

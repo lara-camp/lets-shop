@@ -1,18 +1,20 @@
 <template>
   <div class="flex relative">
     <!--Sidebar Section-->
-    <div class="sidebar-container h-screen overflow-y-scroll border-right-1 border-gray-300 sticky top-0">
-      <Sidebar></Sidebar>
+    <div class="sidebar-container h-screen overflow-y-scroll border-right-1 border-gray-300">
+        <Sidebar></Sidebar>
     </div>
     <!--Content Section-->
-    <div class="content-container ml-auto">
-      <slot></slot>
+    <div class="content-container">
+        <AdminNavbar />
+        <slot></slot>
     </div>
   </div>
 </template>
 
 <script setup>
 import Sidebar from '../Component/Sidebar.vue'
+import AdminNavbar from '../Component/AdminNavbar.vue'
 </script>
 
 <style scoped>
