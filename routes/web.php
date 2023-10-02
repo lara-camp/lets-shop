@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Shared\OAuthController;
 use Inertia\Inertia;
+use App\Http\Controllers\Backend\Product\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,4 +52,5 @@ Route::post("/dashboard/login", [AuthController::class, "login"])->name('admin.l
 
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'isAdmin']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::resource('products', ProductController::class);
 });

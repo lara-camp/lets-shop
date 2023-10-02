@@ -1,6 +1,9 @@
 <template>
+  <!-- FormLayout component for title and login redirect -->
   <FormLayout title="Register" type="register">
+    <!-- register Form -->
     <form method="post" @submit.prevent="form.post(route('register'))">
+      <!-- Username Input -->
       <div class="mb-4">
         <label class="block text-900 font-medium mb-2" for="name">Username</label>
         <InputText id="name"
@@ -11,6 +14,7 @@
                    type="text"/>
         <div class="text-red-600 mt-1">{{ form.errors.name }}</div>
       </div>
+      <!-- Email Input -->
       <div class="mb-4">
         <label class="block text-900 font-medium mb-2" for="email">Email</label>
         <InputText id="email"
@@ -21,6 +25,7 @@
                    type="text"/>
         <div class="text-red-600 mt-1">{{ form.errors.email }}</div>
       </div>
+      <!-- Password Input -->
       <div class="mb-4">
         <label class="block text-900 font-medium mb-3" for="password">Password</label>
         <InputText id="password"
@@ -31,6 +36,7 @@
                    type="password"/>
         <div class="text-red-600 mt-1">{{ form.errors.password }}</div>
       </div>
+      <!-- Confirm Password Input -->
       <div class="mb-5">
         <label class="block text-900 font-medium mb-2" for="password_confirmation">Confirm
           Password</label>
@@ -42,6 +48,7 @@
                    type="password"/>
         <div class="text-red-600 mt-1">{{ form.errors.password_confirmation }}</div>
       </div>
+      <!-- Submit Button -->
       <Button class="w-full mb-4" icon="pi pi-user" label="Register" type="submit"></Button>
     </form>
   </FormLayout>
