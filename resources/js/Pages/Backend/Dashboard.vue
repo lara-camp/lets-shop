@@ -1,11 +1,11 @@
 <template>
-  <h1>this is dashboard</h1>
-  <Link :href="route('logout')" method="post"><Button label="Logout" size="small"></Button></Link>
+    <NavbarVue />
 </template>
 
 <script setup>
 import {Link} from '@inertiajs/vue3'
 import Button from 'primevue/button'
+import NavbarVue from '../../Component/Navbar.vue'
 
 
 </script>

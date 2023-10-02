@@ -11,7 +11,7 @@ createInertiaApp({
   setup ({ el, App, props, plugin }) {
     return createApp({ render: () => h(App, props) })
       .use(plugin)
-      .use(PrimeVue)
+      .use(PrimeVue,{ripple:true})
       .use(ToastService)
       .component('Head', Head)
       .mixin({ methods: { route } })
