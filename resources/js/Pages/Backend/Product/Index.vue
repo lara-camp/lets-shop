@@ -1,6 +1,6 @@
 <template>
   <AdminLayout>
-    <div class="surface-section px-4 py-5 md:px-6 lg:px-8">
+    <div class=" px-4 py-5 md:px-6 lg:px-8">
       <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
         <li>
           <span class="text-900 line-height-3">Products</span>

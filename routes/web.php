@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Backend\AuthController;
+use App\Http\Controllers\Backend\Category\CategoryController;
 use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Shared\OAuthController;
@@ -53,4 +54,5 @@ Route::post("/dashboard/login", [AuthController::class, "login"])->name('admin.l
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','isAdmin']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('products', ProductController::class);
+    Route::resource('categories',CategoryController::class);
 });
