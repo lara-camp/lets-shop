@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->string("slug");
+            $table->string("truncate");
             $table->text("description");
             $table->double("price");
             $table->integer("stock");
