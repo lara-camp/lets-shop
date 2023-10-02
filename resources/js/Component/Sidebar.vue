@@ -17,21 +17,24 @@
              class="pi pi-angle-up"
              style="font-size:18px"></i>
           <i v-else-if="menu.nested_menus"
-             class="pi pi-angle-down inline-block ml-auto"
+             class="pi pi-angle-down"
              style="font-size:20px"></i>
         </div>
       </Link>
       <!--  Main Menu Item (No Link) -->
       <div v-else :class="menu.active ? 'active' : ''"
-           class="side-link-container"
+           class="side-link-container with-link"
            @click="showNestMenu(menu.name)">
-        <i :class="['pi', 'mr-3', menu.icon]" style="font-size:18px"></i>
-        <span>{{ menu.name }}</span>
+
+        <div>
+          <i :class="['pi', 'mr-3', menu.icon]" style="font-size:18px"></i>
+          <span>{{ menu.name }}</span>
+        </div>
         <i v-if="menu.nested_menus && menu.isOpen"
            class="pi pi-angle-up"
            style="font-size:18px"></i>
         <i v-else-if="menu.nested_menus"
-           class="pi pi-angle-down inline-block ml-auto"
+           class="pi pi-angle-down"
            style="font-size:20px"></i>
       </div>
       <!-- Nested Menu Section (with transition) -->
@@ -69,14 +72,18 @@ const menus = ref({
     name: 'Products',
     icon: 'pi-box',
     active: false,
-    isOpen: false,
+    isOpen: (router.page.url === '/dashboard/products' ?? false) || (router.page.url === '/dashboard/products/create' ?? false),
     nested_menus: [
       {
-        name: 'All', active: false, icon: 'pi-list',
-        route: route('products.index')
+        name: 'All',
+        active: router.page.url === '/dashboard/products' ?? false,
+        icon: 'pi-list',
+        route: route('products.index'),
       },
       {
-        name: 'Create', active: false, icon: 'pi-plus-circle',
+        name: 'Create',
+        active: router.page.url === '/dashboard/products/create' ?? false,
+        icon: 'pi-plus-circle',
         route: route('products.create')
       }
     ]
@@ -140,6 +147,29 @@ const menus = ref({
     name: 'Pages',
     icon: 'pi-file',
     active: false,
+    isOpen: false,
+    nested_menus: [
+      {
+        name: 'Hotslides',
+        active: false,
+        icon: 'pi-list',
+      },
+      {
+        name: 'Create Hotslide',
+        active: false,
+        icon: 'pi-plus-circle'
+      },
+      {
+        name: 'Banners',
+        active: false,
+        icon: 'pi-plus-circle'
+      },
+      {
+        name: 'Categories',
+        active: false,
+        icon: 'pi-plus-circle'
+      }
+    ]
   },
   accounts: {
     name: 'Accounts',
@@ -173,6 +203,12 @@ const showNestMenu = (menuName) => {
   transition: background 0.1s;
   cursor: pointer;
   border-radius: 20px;
+}
+
+.side-link-container.with-link {
+  display: flex;
+  justify-content: space-between;
+
 }
 
 .side-link-container:hover {
