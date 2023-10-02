@@ -1,6 +1,4 @@
 <template>
-    <!-- Navbar -->
-    <Navbar />
   <div class="flex">
     <!--Sidebar Section-->
     <div class="sidebar-container h-screen overflow-y-scroll border-right-1 border-gray-300">
@@ -14,7 +12,6 @@
 </template>
 
 <script setup>
-import Navbar from '../Component/Navbar.vue'
 import Sidebar from '../Component/Sidebar.vue'
 </script>
 
