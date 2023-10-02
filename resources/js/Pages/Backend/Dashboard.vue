@@ -1,15 +1,11 @@
 <template>
-    <NavbarVue />
+
+  <AdminLayout>
+fge
+  </AdminLayout>
 </template>
 
-<script setup>
-import {Link} from '@inertiajs/vue3'
-import Button from 'primevue/button'
-import NavbarVue from '../../Component/Navbar.vue'
-
+<script setup>import AdminLayout from '../../Layout/AdminLayout.vue'
+import { ref } from 'vue'
 
 </script>
-
-<style>
-
-</style>

@@ -1,6 +1,7 @@
 <template>
   <UserAuthLayout>
     <div class="grid shadow-2">
+      <!-- Left Form Container -->
       <div class="col-6 p-4 form-left-container">
         <div>Logo</div>
         <div>Welcome to Let's Shop</div>
@@ -8,9 +9,12 @@
           repellat
         </div>
       </div>
+      <!-- Right Form Container -->
       <div class=" col-6 bg-white pt-5 pb-5 px-7">
         <div class="text-900 text-2xl font-medium my-5">{{ title }}</div>
+        <!--Accept Dynamic Form Inputs-->
         <slot></slot>
+        <!--Continue with Google Link-->
         <hr class="hr-text mb-4" data-content="OR">
         <a :href="route('oauth.google')">
           <Button class="w-full mb-5"
@@ -18,12 +22,14 @@
                   label="Continue with Google"
                   severity="secondary"></Button>
         </a>
+        <!-- Login Redirect Message -->
         <div v-if="type === 'login'" class="text-center">
           <span class="text-600 font-medium line-height-3">Don't have an account?</span>
           <a :href="route('register')"
-                class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Register Now!
+             class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Register Now!
           </a>
         </div>
+        <!-- Registration Redirect Message -->
         <div v-else class="text-center">
           <span class="text-600 font-medium line-height-3">Already has an account?</span>
           <Link :href="route('login')"
