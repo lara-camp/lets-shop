@@ -111,16 +111,6 @@ const menus = ref({
       { name: 'Create', active: false, icon: 'pi-plus-circle' }
     ]
   },
-  flashsale: {
-    name: 'Flashsale',
-    icon: 'pi-box',
-    active: false,
-    isOpen: false,
-    nested_menus: [
-      { name: 'All', active: false, icon: 'pi-list' },
-      { name: 'Create', active: false, icon: 'pi-plus-circle' }
-    ]
-  },
   orders: {
     name: 'Orders',
     icon: 'pi-truck',

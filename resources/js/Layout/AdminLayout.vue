@@ -2,17 +2,19 @@
   <div class="flex">
     <!--Sidebar Section-->
     <div class="sidebar-container h-screen overflow-y-scroll border-right-1 border-gray-300">
-      <Sidebar></Sidebar>
+        <Sidebar></Sidebar>
     </div>
     <!--Content Section-->
     <div class="content-container">
-      <slot></slot>
+        <AdminNavbar />
+        <slot></slot>
     </div>
   </div>
 </template>
 
 <script setup>
 import Sidebar from '../Component/Sidebar.vue'
+import AdminNavbar from '../Component/AdminNavbar.vue'
 </script>
 
 <style scoped>
