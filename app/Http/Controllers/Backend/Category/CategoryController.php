@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Backend/Category/Index');
     }
 
     /**
@@ -23,7 +23,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Backend/Category/Create');
     }
 
     /**

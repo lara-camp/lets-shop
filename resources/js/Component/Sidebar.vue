@@ -92,10 +92,18 @@ const menus = ref({
     name: 'Categories',
     icon: 'pi-th-large',
     active: false,
-    isOpen: false,
+    isOpen: (router.page.url === '/dashboard/categories' ?? false) || (router.page.url === '/dashboard/categories/create' ?? false),
     nested_menus: [
-      { name: 'All', active: false, icon: 'pi-list' },
-      { name: 'Create', active: false, icon: 'pi-plus-circle' }
+        {   name: 'All',
+            active: router.page.url === '/dashboard/categories' ?? false,
+            icon: 'pi-list',
+            route: route('categories.index')
+        },
+        {   name: 'Create',
+            active: router.page.url === '/dashboard/categories/create' ?? false,
+            icon: 'pi-plus-circle',
+            route: route('categories.create')
+        }
     ]
   },
   timeline: {
