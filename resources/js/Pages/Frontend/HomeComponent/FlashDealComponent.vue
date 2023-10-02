@@ -1,5 +1,5 @@
 <template>
-    <div class="grid">
+    <div class="grid m-auto" style="max-width: 1100px;" >
         <div class="col-12">
             <h2 class="font-semibold text-center text-primary">Flash Deal</h2>
         </div>
@@ -10,7 +10,7 @@
             <div class="grid-nogutter flex justify-content-center align-items-center">
                 <div class="grid-nogutter ">
                     <div class="card col-2 w-13rem relative m-atuo">
-                        <div class="card-img">
+                        <div class="card-img w-full">
                             <img :src="asset('product_img/' + slotProps.data.image)" alt=""
                                 class="w-full h-10rem overflow-hidden border-round-md" style="object-fit: cover;">
                         </div>
@@ -98,6 +98,28 @@ const products = ref([
         id: 12,
         name: 'Health',
         image: 'health.jpg'
+    }
+]);
+const responsiveOptions = ref([
+    {
+        breakpoint: '1289px',
+        numVisible: 4,
+        numScroll: 1
+    },
+    {
+        breakpoint: '991px',
+        numVisible: 3,
+        numScroll: 1
+    },
+    {
+        breakpoint: '767px',
+        numVisible: 2,
+        numScroll: 1
+    },
+    {
+        breakpoint: '566px',
+        numVisible: 1,
+        numScroll: 1
     }
 ]);
 const truncateText = (text) => {

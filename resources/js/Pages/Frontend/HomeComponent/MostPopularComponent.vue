@@ -1,12 +1,12 @@
 <template>
-    <div class="grid">
-        <div class="col-12 flex justify-content-between align-items-center m-auto" style="max-width: 1400px;">
+    <div class="grid m-auto">
+        <div class="col-11 flex justify-content-between align-items-center m-auto">
             <h2 class="font-semibold text-center text-primary">Most Popular</h2>
             <Button label="See more" />
         </div>
     </div>
     <Carousel :showIndicators="false" :value="products" :numVisible="4" :numScroll="1"
-        :responsiveOptions="responsiveOptions" circular :autoplayInterval="3500">
+        :responsiveOptions="responsiveOptions" circular :autoplayInterval="4000">
         <template #item="slotProps">
             <div class="grid-nogutter">
                 <div class="card col-3 w-11 relative m-auto ">
@@ -15,7 +15,7 @@
                             class="w-full h-20rem overflow-hidden border-round-md" style="object-fit: cover;">
                     </div>
                     <div class="card-text">
-                        <h3 class="m-0 pt-1 w-full h-3rem text-gray-900 font-normal" style="white-space: wrap;">{{ truncateText(slotProps.data.name)
+                        <h3 class="m-0 pt-1 w-18rem h-4rem text-gray-900 font-normal" style="white-space: wrap;">{{ truncateText(slotProps.data.name)
                         }}</h3>
                          <Rating v-model="slotProps.data.stars" readonly :cancel="false"/>
                         <div class="flex">
@@ -109,6 +109,23 @@ const products = ref([
         name: 'Health',
         image: 'health.jpg',
         stars:5
+    }
+]);
+const responsiveOptions = ref([
+    {
+        breakpoint: '1199px',
+        numVisible: 3,
+        numScroll: 1
+    },
+    {
+        breakpoint: '991px',
+        numVisible: 2,
+        numScroll: 1
+    },
+    {
+        breakpoint: '767px',
+        numVisible: 1,
+        numScroll: 1
     }
 ]);
 const truncateText = (text) => {

@@ -14,7 +14,6 @@ import FlashDealComponent from './HomeComponent/FlashDealComponent.vue';
 import HeroSectionComponent from './HomeComponent/HeroSectionComponent.vue';
 import BannerComponent from './HomeComponent/BannerComponent.vue';
 import MostPopularComponent from './HomeComponent/MostPopularComponent.vue';
-
 import { asset } from '../../asset-helper.js';
 
 
