@@ -1,7 +1,7 @@
 <template>
     <div class="grid m-auto" style="max-width: 1100px;" >
         <div class="col-12">
-            <h2 class="font-semibold text-center text-primary">Flash Deal</h2>
+            <h2 class="font-semibold text-center text-primary text-4xl home-header">Flash Deal</h2>
         </div>
     </div>
     <Carousel :showIndicators="false" :value="products" :numVisible="6" :numScroll="1"

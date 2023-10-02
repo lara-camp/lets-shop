@@ -1,7 +1,7 @@
 <template>
     <div class="grid m-auto">
         <div class="col-11 flex justify-content-between align-items-center m-auto">
-            <h2 class="font-semibold text-center text-primary">Most Popular</h2>
+            <h2 class="font-semibold text-center text-primary text-4xl home-header">Most Popular</h2>
             <Button label="See more" />
         </div>
     </div>

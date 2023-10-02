@@ -5,7 +5,8 @@
     <FlashDealComponent />
     <BannerComponent image = 'banner.png'/>
     <MostPopularComponent />
-
+    <DynamicCategoryComponent/>
+    <ProductsComponent />
 </template>
 
 <script setup>
@@ -14,6 +15,8 @@ import FlashDealComponent from './HomeComponent/FlashDealComponent.vue';
 import HeroSectionComponent from './HomeComponent/HeroSectionComponent.vue';
 import BannerComponent from './HomeComponent/BannerComponent.vue';
 import MostPopularComponent from './HomeComponent/MostPopularComponent.vue';
+import ProductsComponent from './HomeComponent/ProductsComponent.vue';
+import DynamicCategoryComponent from './HomeComponent/DynamicCategoryComponent.vue';
 import { asset } from '../../asset-helper.js';
 
 

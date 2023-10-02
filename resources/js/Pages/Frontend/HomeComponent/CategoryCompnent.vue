@@ -1,7 +1,7 @@
 <template>
     <div class="grid m-auto">
-        <div class="col-11">
-            <h2 class="font-semibold text-center text-primary">CATEGORIES</h2>
+        <div class="col-11 m-auto">
+            <h2 class="font-semibold text-center text-primary text-4xl home-header">Categories</h2>
         </div>
             <!-- <img :src="asset('productP')" alt=""> -->
             <div class="col-6 md:col-4 lg:col-2 p-5 category-card flex justify-content-end align-items-center flex-column bg-white broder-round-sm h-15rem"
