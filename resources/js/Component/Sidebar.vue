@@ -75,7 +75,9 @@ const menus = ref({
     isOpen: (router.page.url === '/dashboard/products' ?? false) || (router.page.url === '/dashboard/products/create' ?? false),
     nested_menus: [
       {
-        name: 'All', active: router.page.url === '/dashboard/products' ?? false, icon: 'pi-list',
+        name: 'All',
+        active: router.page.url === '/dashboard/products' ?? false,
+        icon: 'pi-list',
         route: route('products.index'),
       },
       {
@@ -145,6 +147,29 @@ const menus = ref({
     name: 'Pages',
     icon: 'pi-file',
     active: false,
+    isOpen: false,
+    nested_menus: [
+      {
+        name: 'Hotslides',
+        active: false,
+        icon: 'pi-list',
+      },
+      {
+        name: 'Create Hotslide',
+        active: false,
+        icon: 'pi-plus-circle'
+      },
+      {
+        name: 'Banners',
+        active: false,
+        icon: 'pi-plus-circle'
+      },
+      {
+        name: 'Categories',
+        active: false,
+        icon: 'pi-plus-circle'
+      }
+    ]
   },
   accounts: {
     name: 'Accounts',
@@ -179,6 +204,7 @@ const showNestMenu = (menuName) => {
   cursor: pointer;
   border-radius: 20px;
 }
+
 .side-link-container.with-link {
   display: flex;
   justify-content: space-between;
