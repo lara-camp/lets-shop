@@ -68,7 +68,9 @@
                   header="Confirm">
             <div class="confirmation-content">
               <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"/>
-              <span v-if="products">Are you sure you want to delete <b>{{ products.name }}</b>?</span>
+              <span v-if="products">Are you sure you want to delete <b>{{
+                  products.name
+                }}</b>?</span>
             </div>
             <template #footer>
               <Button icon="pi pi-times" label="No" text @click="deleteProductDialog = false"/>
@@ -101,16 +103,17 @@
           <Column field="product_qty" header="Product Qty" sortable style="width: 10%"></Column>
           <Column field="action" header="Action" style="width: 10%">
             <template #body="slotProps">
-              <Button class="mr-2"
-                      icon="pi pi-pencil"
+              <Button class="mr-2" icon="pi pi-pencil"
                       outlined
                       rounded
-                      @click="editProduct(slotProps.data)" style="height: 40px; width: 40px"/>
+                      severity="warning"
+                      style="height: 40px; width: 40px" @click="editProduct(slotProps.data)"/>
               <Button icon="pi pi-trash"
                       outlined
                       rounded
                       severity="danger"
-                      @click="confirmDeleteProduct(slotProps.data)" style="height: 40px; width: 40px"/>
+                      style="height: 40px; width: 40px"
+                      @click="confirmDeleteProduct(slotProps.data)"/>
             </template>
           </Column>
         </DataTable>

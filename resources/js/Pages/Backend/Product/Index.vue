@@ -54,7 +54,13 @@
           </Column>
           <Column field="action" header="Action" style="width: 10%">
             <template #body="slotProps">
-              <Button class="mr-2"
+              <Button  class="mr-2"
+                       icon="pi pi-align-left"
+                       outlined rounded style="height: 40px; width: 40px"/>
+              <Button  severity="info" class="mr-2"
+                       icon="pi pi-tag"
+                       outlined rounded style="height: 40px; width: 40px"/>
+              <Button severity="warning" class="mr-2"
                       icon="pi pi-pencil"
                       outlined rounded style="height: 40px; width: 40px"/>
               <Button  icon="pi pi-trash "

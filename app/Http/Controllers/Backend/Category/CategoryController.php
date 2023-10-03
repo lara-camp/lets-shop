@@ -19,7 +19,6 @@ class CategoryController extends Controller
     {
         if (request()->expectsJson()) {
             $categories = DB::table('categories')->select('id', 'title')->get();
-
             return json_encode($categories);
         }
 
