@@ -230,28 +230,16 @@ const createNewDetailKey = () => {
 }
 // Get Details Lists
 const getDetails = () => {
-  [0]
   axios.get(route('details.index')).then((response) => {
     details.value = response.data
   }).catch((error) => {
-
+    console.log(error)
   })
 }
 
-const details = ref([
-  { id: 1, name: 'Men' },
-  { id: 2, name: 'Women' },
-  { id: 3, name: 'China' },
-  { id: 4, name: 'Egypt' },
-  { id: 5, name: 'France' },
-  { id: 6, name: 'Germany' },
-  { id: 7, name: 'India' },
-  { id: 8, name: 'Japan' },
-  { id: 9, name: 'Spain' },
-  { id: 10, name: 'United States' }
-])
+const details = ref([])
 
-// Categories LIsts
+// Categories Lists
 const categories = ref([
   { id: 1, name: 'Men' },
   { id: 2, name: 'Women' },
