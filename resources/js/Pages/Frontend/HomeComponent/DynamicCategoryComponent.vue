@@ -2,7 +2,13 @@
     <div class="grid">
         <div class="col-11 mt-6 mb-3  pr-3 m-auto flex justify-content-between align-items-center">
             <h2 class="font-semibold text-center text-primary m-0 text-4xl home-header">Popular Categories</h2>
-            <TabMenu v-model:activeIndex="active" :model="items" />
+            <!-- <TabMenu v-model:activeIndex="active" :model="items" /> -->
+            <div class="flex justify-content-around font-bold text-600 align-items-center w-4 cursor-pointer text-lg">
+                <div :id="index" v-for="(item, index) in items" :key="index"
+                    @click="menuClicked(index, $event)" :class="{'text-primary': selectedItemIndex == index }">
+                    {{ item.label }}
+                </div>
+            </div>
         </div>
         <div class="col-11 grid m-auto">
             <div class="col-12 md:col-3 lg:col-2" v-for="product in products" :key="product.id">
@@ -28,11 +34,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { asset } from '../../../asset-helper';
 import TabMenu from 'primevue/tabmenu';
 import Rating from 'primevue/rating';
 import { Link } from '@inertiajs/vue3';
+
 const products = ref([
     {
         id: 1,
@@ -108,6 +115,8 @@ const products = ref([
     }
 ]);
 const active = ref(0);
+
+console.log(active.value)
 const items = ref([
     {
         label: 'Men',
@@ -128,7 +137,19 @@ const truncateText = (text) => {
     }
     return text;
 };
-console.log(products.value)
+let selectedItemIndex = ref(0);
+const menuClicked = (index) => {
+    selectedItemIndex.value = index;
+}
+// const isSelected = computed(() => {
+//   return (index) => {
+//     console.log(selectedItemIndex.value === index);
+//     return selectedItemIndex.value === index;
+//   };
+// });
+
+
+// console.log(products.value)
 
 defineProps({ translations: Object })
 </script>
