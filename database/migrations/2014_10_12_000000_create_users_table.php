@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->text('phone')->nullable();
             $table->enum('role', ['user', 'admin', 'superadmin']);
             $table->text('google_id')->nullable();
+            $table->boolean('is_subscribed')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

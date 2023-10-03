@@ -7,15 +7,60 @@
         </li>
       </ul>
       <Divider/>
-      <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
-        <div class="font-medium text-3xl text-900">Categories</div>
-        <div class="mt-3 lg:mt-0">
-          <Link :href="route('categories.create')">
-            <Button icon="pi pi-plus" label="Create"></Button>
-          </Link>
-        </div>
-      </div>
+        <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
+            <div class="font-medium text-3xl text-900">Categories</div>
+            <div class="mt-3 lg:mt-0">
+                <Button icon="pi pi-plus" label="Create" @click="visible = true"></Button>
+                 <Dialog v-model:visible="visible"  modal header="Create Category" :dismissableMask="true" :style="{ width: '50vw'}">
+                    <div class=" justify-content-center" >
+                        <div class=" p-3">
+                            <div class="flex flex-column gap-2">
+                                <label class="text-xl font-medium" for="name">Category Name</label>
+                                <InputText id="name" v-model="title" name="title" aria-describedby="name-help"/>
+                                 <!-- Email Input Error Message -->
+                                <div class="text-red-600"></div>
+                            </div>
 
+                            <div class="flex flex-column gap-2">
+                               <div class="flex align-items-center my-3">
+                                    <Checkbox v-model="checked" :binary="true" />
+                                    <label class="text-xl font-medium ml-2" >Have parent category</label>
+                               </div>
+                                <Dropdown :disabled="!checked"  v-model="parentCategory" :options="categories" filter optionLabel="title" placeholder="Select a Category" class="w-full " >
+                                    <template #value="slotProps">
+                                        <div v-if="slotProps.value" class="flex align-items-center">
+                                            <div>{{ slotProps.value.title }}</div>
+                                        </div>
+                                        <span v-else>
+                                            {{ slotProps.placeholder }}
+                                        </span>
+                                    </template>
+                                    <template #option="slotProps">
+                                        <div class="flex align-items-center">
+                                            <div>{{ slotProps.option.title }}</div>
+                                        </div>
+                                    </template>
+                                </Dropdown>
+                                <!-- <div id="name-help" class="text-md">Error</div> -->
+                            </div>
+                            <div class="flex justify-content-end mt-2">
+                                <Button class="text-xl font-medium " @click="createCategory" label="Create"></Button>
+                            </div>
+                        </div>
+                    </div>
+                </Dialog>
+                <Dialog v-model:visible="deleteProductDialog" :dismissableMask="true" :style="{width: '450px'}" header="Confirm" :modal="true">
+                    <div class="confirmation-content">
+                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+                        <span v-if="products">Are you sure you want to delete <b>{{products.name}}</b>?</span>
+                    </div>
+                    <template #footer>
+                        <Button label="No" icon="pi pi-times" text @click="deleteProductDialog = false"/>
+                        <Button label="Yes" icon="pi pi-check" text @click="deleteProduct" />
+                    </template>
+                </Dialog>
+            </div>
+        </div>
       <div class="card mt-5">
         <DataTable v-model:filters="filters"
                    :globalFilterFields="['name']"
@@ -38,25 +83,80 @@
           <Column field="id" header="ID" sortable style="width: 1%"></Column>
           <Column field="name" header="Category Name" sortable style="width: 10%"></Column>
           <Column field="product_qty" header="Product Qty" sortable style="width: 10%"></Column>
-
+          <Column field="action" header="Action"  style="width: 10%">
+            <template #body="slotProps">
+                <Button icon="pi pi-pencil" outlined  class="mr-2" @click="editProduct(slotProps.data)" />
+                <Button icon="pi pi-trash" outlined  severity="danger" @click="confirmDeleteProduct(slotProps.data)" />
+            </template>
+          </Column>
         </DataTable>
       </div>
 
     </div>
   </AdminLayout>
+
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3'
+import { Link, useForm } from '@inertiajs/vue3'
 import Button from 'primevue/button'
 import AdminLayout from '../../../Layout/AdminLayout.vue'
 import { FilterMatchMode } from 'primevue/api'
-import { ref } from 'vue'
+import { defineProps,ref, watch } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import InputText from 'primevue/inputtext'
-import Tag from 'primevue/tag'
 import Divider from 'primevue/divider'
+import Dialog from 'primevue/dialog';
+import Checkbox from 'primevue/checkbox';
+import Dropdown from 'primevue/dropdown';
+
+const deleteProductsDialog = ref(false);
+const deleteProductDialog = ref(false);
+
+const confirmDeleteProduct = (prod) => {
+    products.value = prod;
+    deleteProductDialog.value = true;
+};
+const deleteProduct = () => {
+    products.value = products.value.filter(val => val.id !== products.value.id);
+    deleteProductDialog.value = false;
+    products.value = {};
+    toast.add({severity:'success', summary: 'Successful', detail: 'Product Deleted', life: 3000});
+};
+
+const visible = ref(false); //for Dialog
+
+
+
+const title=ref();
+const parentCategory=ref();
+const createCategory=()=>{
+    axios.post(route('categories.store'),{ title: title.value,parentCategory: parentCategory.value,})
+    .then((response) => {
+            if(response.data){
+                title.value=''
+                parentCategory.value=''
+                visible.value=false
+                checked.value=false
+            }
+        })
+    .catch((error) => {  })
+}
+
+
+const checked = ref(false);  //for checkbox
+
+
+
+//data for select box
+const categories = ref([
+    { id: 1, title: 'Electronic'},
+    { id: 2, title: 'Shirt' },
+    { id: 3, title: 'Pant' },
+    { id: 4, title: 'Accessories' },
+    { id: 5, title: 'Compouter' },
+]);
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -73,48 +173,33 @@ const getSeverity = (discount) => {
   }
 }
 
+
+
+//data for table
 const products = ref([
   {
     id:1,
     name: 'Aen T-Shirt',
-    truncate: 'lorem lorem lorem....',
-    price: 50,
-    quantity: 50,
-    category: 'Men',
-    discount: 'no-discount',
+    product_qty: 3,
+
   }, {
     id:2,
     name: 'Ben T-Shirt',
-    truncate: 'torem lorem lorem....',
-    price: 12,
-    quantity: 50,
-    category: 'Men',
-    discount: 'discount',
-  }, {
+    product_qty: 2,
+   }, {
     id:3,
     name: 'Cen T-Shirt',
-    truncate: 'dlorem lorem lorem....',
-    price: 53,
-    quantity: 50,
-    category: 'Men',
-    discount: 'no-discount',
+    product_qty: 4,
+
   }, {
     id:4,
     name: 'Den T-Shirt',
-    truncate: 'gorem lorem lorem....',
-    price: 63,
-    quantity: 50,
-    category: 'Men',
-    discount: 'discount',
-  }, {
+    product_qty: 10,
+   }, {
     id:5,
     name: 'Men T-Shirt',
-    truncate: 'horem lorem lorem....',
-    price: 46,
-    quantity: 50,
-    category: 'Men',
-    discount: 'discount',
-  },
+    product_qty: 7,
+   },
 ])
 </script>
 
