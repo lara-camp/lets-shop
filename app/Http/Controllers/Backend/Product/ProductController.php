@@ -18,6 +18,9 @@ class ProductController extends Controller
     {
         return Inertia::render("Backend/Product/Index", [
             "status" => session('status') ?? null,
+            "products" => Inertia::lazy(function () {
+                return Product::with('category')->get();
+            })
         ]);
     }
 

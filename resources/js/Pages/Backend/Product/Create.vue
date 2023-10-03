@@ -61,7 +61,7 @@
             <Dropdown v-model="selectedCategory"
                       :options="categories"
                       filter
-                      optionLabel="name"
+                      optionLabel="title"
                       placeholder="Select a Category"></Dropdown>
 
             <div v-if="productForm.errors.category" class="text-md text-red-600">
@@ -241,21 +241,18 @@ const getDetails = () => {
 const details = ref([])
 
 // Categories Lists
-const categories = ref([
-  { id: 1, name: 'Men' },
-  { id: 2, name: 'Women' },
-  { id: 3, name: 'China' },
-  { id: 4, name: 'Egypt' },
-  { id: 5, name: 'France' },
-  { id: 6, name: 'Germany' },
-  { id: 7, name: 'India' },
-  { id: 8, name: 'Japan' },
-  { id: 9, name: 'Spain' },
-  { id: 10, name: 'United States' }
-])
+const getCategories = () => {
+  axios.get(route('categories.index')).then((response) => {
+    categories.value = response.data
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+const categories = ref([])
 
 onMounted(() => {
   getDetails()
+  getCategories()
 })
 
 // Get Selected Category
