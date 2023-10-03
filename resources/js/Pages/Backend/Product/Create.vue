@@ -228,6 +228,7 @@ const createNewDetailKey = () => {
     newDetailKeyError.value = error.response.data.message
   })
 }
+
 // Get Details Lists
 const getDetails = () => {
   axios.get(route('details.index')).then((response) => {
@@ -272,7 +273,7 @@ const productForm = useForm({
   price: null,
   stock: null,
   category: selectedCategory.value.id ?? null,
-  details: [{ key: null, value: null, id: 0 }],
+  details: [],
   images: [],
 })
 
@@ -295,7 +296,7 @@ const removeAllImages = () => {
 }
 
 // Product Detail Count
-const detail = ref(1)
+const detail = ref(0)
 
 // Add detail creation input
 const createDetail = () => {
