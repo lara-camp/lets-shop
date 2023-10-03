@@ -16,7 +16,8 @@ export default {
     status: String,
     summary: String,
     detail: String,
-    severity: String
+    severity: String,
+    life: Number
   },
   setup (props) {
     const resentToast = useToast()
@@ -26,7 +27,8 @@ export default {
         resentToast.add({
           severity: props.severity ?? 'info',
           summary: props.summary,
-          detail: props.detail
+          detail: props.detail,
+          life: props.life ?? 10000
         })
       }
     }

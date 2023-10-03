@@ -1,7 +1,7 @@
 <template>
-  <div class="flex">
+  <div class="flex relative">
     <!--Sidebar Section-->
-    <div class="sidebar-container h-screen overflow-y-scroll border-right-1 border-gray-300">
+    <div class="sidebar-container h-screen overflow-y-scroll border-right-1 border-gray-300 sticky top-0">
         <Sidebar></Sidebar>
     </div>
     <!--Content Section-->
