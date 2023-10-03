@@ -1,6 +1,8 @@
 <template>
   <div class="container main-container min-h-screen bg-cover bg-center bg-no-repeat p-0 relative">
+    <!--Backdrop Cover-->
     <div class="back-cover absolute z-0 min-h-full min-w-full"></div>
+    <!--Main Layout-->
     <div class="grid justify-content-center align-items-center min-h-screen px-2">
       <div class="lg:col-10 col-12 z-1 grid justify-content-center">
         <slot></slot>

@@ -3,6 +3,7 @@
 @import 'primevue/resources/primevue.min.css';
 @import 'primeflex/primeflex.min.css';
 
+/* Custom Font Installation */
 @font-face {
     font-family : 'Quicksand';
     src : url("/public/fonts/Quicksand/Quicksand-VariableFont_wght.ttf");
@@ -27,3 +28,4 @@ body {
 .home-header{
     font-family : 'Poppins';
 }
+

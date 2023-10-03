@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
@@ -14,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render("Backend/Product/Index");
     }
 
     /**
@@ -22,7 +23,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("Backend/Product/Create");
     }
 
     /**

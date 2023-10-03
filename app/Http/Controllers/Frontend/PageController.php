@@ -13,7 +13,7 @@ class PageController extends Controller
         return Inertia::render('Frontend/Home');
     }
     public function shop () {
-
+        
     }
     public function category () {
 

@@ -2,10 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\PageController;
-use App\Http\Controllers\Backend\AdminAuthController;
+use App\Http\Controllers\Backend\AuthController;
+use App\Http\Controllers\Backend\Category\CategoryController;
+use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Shared\OAuthController;
 use Inertia\Inertia;
+use App\Http\Controllers\Backend\Product\ProductController;
+use App\Http\Controllers\Backend\Product\DetailController;
+use App\Http\Controllers\Backend\Product\ProductImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,11 +48,15 @@ Route::get("/product/{product}", [PageController::class, "detail"])->name("page.
 Route::get("/flashsale", [PageController::class, "flashsale"])->name("page.flashsale");
 Route::get("/contact", [PageController::class, "contact"])->name("page.contact");
 
+
 // Admin Routes
 Route::get("dashboard/login", [AuthController::class, "loginView"])->name("admin.loginView");
 Route::post("/dashboard/login", [AuthController::class, "login"])->name('admin.login');
 
-Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'isAdmin']], function () {
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','isAdmin']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
-
+    Route::resource('products', ProductController::class);
+    Route::resource('product-images', ProductImageController::class);
+    Route::resource('details', DetailController::class);
+    Route::resource('categories',CategoryController::class);
 });
