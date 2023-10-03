@@ -19,11 +19,11 @@ import AdminNavbar from '../Component/AdminNavbar.vue'
 
 <style scoped>
 .sidebar-container {
-  width: 15%;
+  width: 20%;
 }
 
 .content-container {
-  width: 85%;
+  width: 80%;
 }
 
 /* Custom scrollbar for Sidebar */

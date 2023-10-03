@@ -159,13 +159,15 @@ const menus = ref({
     nested_menus: [
       {
         name: 'Hotslides',
-        active: false,
+        active: router.page.url === '/dashboard/hot-slide' ?? false,
         icon: 'pi-list',
+        route: route('hot-slide.index')
       },
       {
-        name: 'Create Hotslide',
-        active: false,
-        icon: 'pi-plus-circle'
+        name: 'Add Hotslide',
+        active:router.page.url === '/dashboard/hot-slide/create' ?? false,
+        icon: 'pi-plus-circle',
+        route: route('hot-slide.create')
       },
       {
         name: 'Banners',

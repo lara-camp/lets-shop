@@ -1,4 +1,5 @@
 <template>
+    <UserNavbar/>
     <HeroSectionComponent/>
     <BannerComponent image = "banner.png"/>
     <CategoryCompnent />
@@ -17,6 +18,7 @@ import BannerComponent from './HomeComponent/BannerComponent.vue';
 import MostPopularComponent from './HomeComponent/MostPopularComponent.vue';
 import ProductsComponent from './HomeComponent/ProductsComponent.vue';
 import DynamicCategoryComponent from './HomeComponent/DynamicCategoryComponent.vue';
+import UserNavbar from '../../Component/UserNavbar.vue'
 import { asset } from '../../asset-helper.js';
 
 

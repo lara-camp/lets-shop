@@ -11,8 +11,8 @@
             </div>
         </div>
         <div class="col-11 grid m-auto">
-            <div class="col-12 md:col-3 lg:col-2" v-for="product in products" :key="product.id">
-                <div class="card w-14rem relative m-auto ">
+            <div class="col-12 md:col-3 " v-for="product in products" :key="product.id">
+                <div class="card  relative m-auto ">
                     <div class="card-img">
                         <img :src="asset('product_img/' + product.image)" alt=""
                             class="w-full h-20rem overflow-hidden border-round-md" style="object-fit: cover;">

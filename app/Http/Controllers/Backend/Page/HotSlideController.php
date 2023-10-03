@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Page;
 use App\Models\HotSlide;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
 
 class HotSlideController extends Controller
 {
@@ -13,7 +14,7 @@ class HotSlideController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Backend/Page/Hotslide/Index');
     }
 
     /**
@@ -21,7 +22,7 @@ class HotSlideController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Backend/Page/Hotslide/Create');
     }
 
     /**
@@ -29,7 +30,20 @@ class HotSlideController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'files' => 'required',
+            'files.*' => 'required|mimes:png,jpg,jpeg,svg',
+        ]);
+
+        $files = [];
+        if ($request->file('files')){
+            foreach($request->file('files') as $key => $file)
+            {
+                $fileName = time().rand(1,99).'.'.$file->extension();
+                $file->move(public_path('hot-slide'), $fileName);
+                $files[]['name'] = $fileName;
+            }
+        }
     }
 
     /**

@@ -5,6 +5,7 @@ use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\Category\CategoryController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\Page\HotSlideController;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Shared\OAuthController;
 use Inertia\Inertia;
@@ -59,4 +60,5 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','isAdmin']], func
     Route::resource('product-images', ProductImageController::class);
     Route::resource('details', DetailController::class);
     Route::resource('categories',CategoryController::class);
+    Route::resource('hot-slide', HotSlideController::class);
 });
