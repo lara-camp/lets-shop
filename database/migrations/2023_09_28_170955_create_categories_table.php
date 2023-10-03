@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("title");
             $table->string("slug");
-            $table->integer("level");
-            $table->integer('parent_id');
+            $table->integer('parent_id')->nullable();
             $table->timestamps();
         });
     }

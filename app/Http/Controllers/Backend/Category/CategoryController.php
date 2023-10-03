@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -31,7 +32,16 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        $category=new Category();
+        $category->title=$request->title;
+        $category->slug=Str::slug($request->title);
+        if($request->parentCategory){
+            $category->parent_id=$request->parentCategory['id'];
+        }
+        $category->save();
+        return json_encode([
+            'status'=>'Created Successfully'
+        ]);
     }
 
     /**
