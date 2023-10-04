@@ -11,6 +11,8 @@
         <div class="font-medium text-3xl text-900">Categories</div>
         <div class="mt-3 lg:mt-0">
           <Button icon="pi pi-plus" label="Create" @click="visible = true"></Button>
+          <!-- Status Toast for category created -->
+          <Toast/>
           <Dialog v-model:visible="visible"
                   :dismissableMask="true"
                   :style="{ width: '50vw'}"
@@ -20,9 +22,12 @@
               <div class=" p-3">
                 <div class="flex flex-column gap-2">
                   <label class="text-xl font-medium" for="name">Category Name</label>
-                  <InputText id="name" v-model="title" aria-describedby="name-help" name="title"/>
+                  <InputText id="name"
+                             v-model="title"
+                             aria-describedby="name-help"
+                             name="title"/>
                   <!-- Email Input Error Message -->
-                  <div class="text-red-600"></div>
+                  <div v-if="emailError" class="text-red-600">{{ emailError }}</div>
                 </div>
 
                 <div class="flex flex-column gap-2">
@@ -73,7 +78,10 @@
                 }}</b>?</span>
             </div>
             <template #footer>
-              <Button icon="pi pi-times" label="No" text @click="deleteProductDialog = false"/>
+              <Button icon="pi pi-times"
+                      label="No"
+                      text
+                      @click="deleteProductDialog = false"/>
               <Button icon="pi pi-check" label="Yes" text @click="deleteProduct"/>
             </template>
           </Dialog>
@@ -99,15 +107,23 @@
           <template #empty> No categories found.</template>
           <template #loading> Loading categories data. Please wait.</template>
           <Column field="id" header="ID" sortable style="width: 1%"></Column>
-          <Column field="name" header="Category Name" sortable style="width: 10%"></Column>
-          <Column field="product_qty" header="Product Qty" sortable style="width: 10%"></Column>
+          <Column field="name"
+                  header="Category Name"
+                  sortable
+                  style="width: 10%"></Column>
+          <Column field="product_qty"
+                  header="Product Qty"
+                  sortable
+                  style="width: 10%"></Column>
           <Column field="action" header="Action" style="width: 10%">
             <template #body="slotProps">
-              <Button class="mr-2" icon="pi pi-pencil"
+              <Button class="mr-2"
+                      icon="pi pi-pencil"
                       outlined
                       rounded
                       severity="warning"
-                      style="height: 40px; width: 40px" @click="editProduct(slotProps.data)"/>
+                      style="height: 40px; width: 40px"
+                      @click="editProduct(slotProps.data)"/>
               <Button icon="pi pi-trash"
                       outlined
                       rounded
@@ -128,7 +144,7 @@
 import Button from 'primevue/button'
 import AdminLayout from '../../../Layout/AdminLayout.vue'
 import { FilterMatchMode } from 'primevue/api'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import InputText from 'primevue/inputtext'
@@ -136,9 +152,12 @@ import Divider from 'primevue/divider'
 import Dialog from 'primevue/dialog'
 import Checkbox from 'primevue/checkbox'
 import Dropdown from 'primevue/dropdown'
+import axios from 'axios'
+import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 
 const deleteProductDialog = ref(false)
-
+const toast = useToast()
 const confirmDeleteProduct = (prod) => {
   products.value = prod
   deleteProductDialog.value = true
@@ -153,7 +172,9 @@ const deleteProduct = () => {
 const visible = ref(false) //for Dialog
 
 const title = ref()
+const emailError = ref(null)
 const parentCategory = ref()
+const newCategoryToast = useToast()
 const createCategory = () => {
   axios.post(route('categories.store'), {
     title: title.value,
@@ -165,21 +186,38 @@ const createCategory = () => {
           parentCategory.value = ''
           visible.value = false
           checked.value = false
+          newCategoryToast.add({
+            severity: 'success',
+            summary: 'New Category',
+            detail: `New Category (${response.data.title}) is created successfully`,
+            life: 5000
+          })
         }
       })
-      .catch((error) => { })
+      .catch((error) => {
+        if (error) {
+          emailError.value = error.response.data.errors.title[0]
+        }
+      })
 }
+//Getting categories from database
+const categories = ref([])
+const getCategories = () => {
+  axios.get(route('categories.index'))
+      .then((response) => {
+        if (response) {
+          categories.value = response.data
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+}
+onMounted(() => {
+  getCategories()
+})
 
 const checked = ref(false)  //for checkbox
-
-//data for select box
-const categories = ref([
-  { id: 1, title: 'Electronic' },
-  { id: 2, title: 'Shirt' },
-  { id: 3, title: 'Pant' },
-  { id: 4, title: 'Accessories' },
-  { id: 5, title: 'Compouter' },
-])
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
