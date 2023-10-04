@@ -91,15 +91,8 @@ const menus = ref({
   category: {
     name: 'Categories',
     icon: 'pi-th-large',
-    active: false,
-    isOpen: (router.page.url === '/dashboard/categories' ?? false) ,
-    nested_menus: [
-        {   name: 'All',
-            active: router.page.url === '/dashboard/categories' ?? false,
-            icon: 'pi-list',
-            route: route('categories.index')
-        }
-    ]
+    active: router.page.url === '/dashboard/categories' ?? false,
+    route: route('categories.index')
   },
   timeline: {
     name: 'Timelines',

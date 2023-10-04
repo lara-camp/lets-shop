@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 
@@ -16,6 +17,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        if(request()->expectsJson()){
+            $categories = DB::table('categories')->select('id', 'title')->get();
+
+            return json_encode($categories);
+        }
         return Inertia::render('Backend/Category/Index');
     }
 
@@ -40,7 +46,8 @@ class CategoryController extends Controller
         }
         $category->save();
         return json_encode([
-            'status'=>'Created Successfully'
+            'status'=>'Created Successfully',
+            'title'=>$request->title
         ]);
     }
 

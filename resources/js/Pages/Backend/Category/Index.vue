@@ -11,6 +11,8 @@
             <div class="font-medium text-3xl text-900">Categories</div>
             <div class="mt-3 lg:mt-0">
                 <Button icon="pi pi-plus" label="Create" @click="visible = true"></Button>
+                <!-- Status Toast for category created -->
+                <Toast />
                  <Dialog v-model:visible="visible"  modal header="Create Category" :dismissableMask="true" :style="{ width: '50vw'}">
                     <div class=" justify-content-center" >
                         <div class=" p-3">
@@ -18,7 +20,7 @@
                                 <label class="text-xl font-medium" for="name">Category Name</label>
                                 <InputText id="name" v-model="title" name="title" aria-describedby="name-help"/>
                                  <!-- Email Input Error Message -->
-                                <div class="text-red-600"></div>
+                                <div class="text-red-600" v-if="emailError">{{emailError}}</div>
                             </div>
 
                             <div class="flex flex-column gap-2">
@@ -98,11 +100,10 @@
 </template>
 
 <script setup>
-import { Link, useForm } from '@inertiajs/vue3'
 import Button from 'primevue/button'
 import AdminLayout from '../../../Layout/AdminLayout.vue'
 import { FilterMatchMode } from 'primevue/api'
-import { defineProps,ref, watch } from 'vue'
+import {  ref, watch } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import InputText from 'primevue/inputtext'
@@ -110,6 +111,9 @@ import Divider from 'primevue/divider'
 import Dialog from 'primevue/dialog';
 import Checkbox from 'primevue/checkbox';
 import Dropdown from 'primevue/dropdown';
+import axios from 'axios'
+import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 
 const deleteProductsDialog = ref(false);
 const deleteProductDialog = ref(false);
@@ -127,10 +131,10 @@ const deleteProduct = () => {
 
 const visible = ref(false); //for Dialog
 
-
-
 const title=ref();
+const emailError=ref(null);
 const parentCategory=ref();
+const newCategoryToast = useToast()
 const createCategory=()=>{
     axios.post(route('categories.store'),{ title: title.value,parentCategory: parentCategory.value,})
     .then((response) => {
@@ -139,40 +143,40 @@ const createCategory=()=>{
                 parentCategory.value=''
                 visible.value=false
                 checked.value=false
+                newCategoryToast.add({
+                    severity: 'success',
+                    summary: 'New Category',
+                    detail: `New Category (${response.data.title}) is created successfully`,
+                    life: 5000
+                })
             }
         })
-    .catch((error) => {  })
+    .catch((error) => {
+        if(error){
+            emailError.value=error.response.data.errors.title[0];
+        }
+    })
 }
-
+//Getting categories from database
+const categories=ref([])
+const getCategories=()=>{
+    axios.get(route('categories.index'))
+        .then((response)=>{
+            if(response){
+                categories.value=response.data
+            }
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+}
+getCategories(); //call the func
 
 const checked = ref(false);  //for checkbox
-
-
-
-//data for select box
-const categories = ref([
-    { id: 1, title: 'Electronic'},
-    { id: 2, title: 'Shirt' },
-    { id: 3, title: 'Pant' },
-    { id: 4, title: 'Accessories' },
-    { id: 5, title: 'Compouter' },
-]);
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })
-
-const getSeverity = (discount) => {
-  switch (discount) {
-    case 'no-discount':
-      return 'danger'
-
-    case 'discount':
-      return 'success'
-
-  }
-}
-
 
 
 //data for table
