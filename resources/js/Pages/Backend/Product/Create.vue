@@ -133,21 +133,27 @@
                           filter
                           optionLabel="key"
                           placeholder="Select a Detail"></Dropdown>
-                <div class="text-sm text-red-600"></div>
+                <div v-if="productDetailErrors[index].key"
+                     class="text-sm text-red-600">{{ productDetailErrors[index].key }}
+                </div>
                 <Toast/>
               </div>
-              <Divider layout="vertical"/>
+              <Divider class="h-3rem" layout="vertical"/>
               <!--Product Detail Value-->
               <div class="w-full">
                 <InputText id="value" v-model="detail.value" class="w-full" placeholder="Value"/>
-                <div class="text-sm text-red-600"></div>
+                <div v-if="productDetailErrors[index].value"
+                     class="text-sm text-red-600">{{ productDetailErrors[index].value }}
+                </div>
               </div>
+              {{ productDetailErrors[index] }}
               <Button
-                  class="ml-3 flex-shrink-0"
+                  class="ml-3 flex-shrink-0 h-3rem"
                   icon="pi pi-times"
                   outlined
                   severity="danger"
                   @click="deleteDetail(index)"/>
+
             </div>
           </div>
 
@@ -238,10 +244,10 @@ const removeAllImages = () => {
   productForm.images = []
 }
 
-
 // Add detail creation input
 const createDetail = () => {
-  productForm.details.push({ key: null, value: null})
+  productForm.details.push({ key: null, value: null })
+  productDetailErrors.value.push({ key: null, value: null })
 }
 
 // Remove detail creation input
@@ -249,7 +255,33 @@ const deleteDetail = (index) => {
   productForm.details.splice(index, 1)
 }
 
+// Get Product Details Errors
+const productDetailErrors = ref([])
+const detailErrorPlaceholder = () => {
+  for (let i = 0; i < productForm.details.length; i++) {
+    productDetailErrors.value.push({ key: null, value: null })
+  }
+}
+watch(() => productForm.errors, () => {
+  // Clear Old Error
+  productDetailErrors.value = []
 
+  // Insert error placeholder for each detail input
+  detailErrorPlaceholder()
+
+  // Get Error
+  if (productForm.errors) {
+    for (let key in productForm.errors) {
+      const parts = key.split('.')
+      const index = parseInt(parts[1])
+      const errorKey = parts[2]
+      if (!productDetailErrors.value[index]) {
+        productDetailErrors.value[index] = []
+      }
+      productDetailErrors.value[index][errorKey] = productForm.errors[key]
+    }
+  }
+})
 </script>
 
 <style scoped></style>

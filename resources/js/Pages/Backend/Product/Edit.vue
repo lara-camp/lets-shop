@@ -23,7 +23,7 @@
       <form
           id="productForm"
           class="grid justify-content-center"
-          @submit.prevent="productForm.post(route('products.update', data.product.id))"
+          @submit.prevent="productForm.post(route('products.update'))"
       >
         <!-- Left Column -->
         <div class="col-6 pr-5">
@@ -174,18 +174,22 @@
                     </div>
                   </template>
                 </Dropdown>
-                <div class="text-sm text-red-600"></div>
+                <div v-if="productDetailErrors[index].key"
+                     class="text-sm text-red-600">{{ productDetailErrors[index].key }}
+                </div>
                 <Toast/>
               </div>
-              <Divider layout="vertical"/>
+              <Divider class="h-3rem" layout="vertical"/>
               <!-- Detail Value Input -->
               <div class="w-full">
                 <InputText id="value" v-model="detail.value" class="w-full" placeholder="Value"/>
-                <div class="text-sm text-red-600"></div>
+                <div v-if="productDetailErrors[index].value"
+                     class="text-sm text-red-600">{{ productDetailErrors[index].value }}
+                </div>
               </div>
               <!-- Remove Detail Button -->
               <Button
-                  class="ml-3 flex-shrink-0"
+                  class="ml-3 flex-shrink-0 h-3rem"
                   icon="pi pi-times"
                   outlined
                   severity="danger"
@@ -220,7 +224,7 @@ import InputNumber from 'primevue/inputnumber'
 import Dropdown from 'primevue/dropdown'
 import Textarea from 'primevue/textarea'
 import DetailKeyDialog from './Partials/DetailKeyDialog.vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Link, useForm } from '@inertiajs/vue3'
 import axios from 'axios'
 import BreadList from '../Component/BreadList.vue'
@@ -232,6 +236,7 @@ const { data } = defineProps({ data: Object })
 
 // Creating a form using Inertia's useForm
 const productForm = useForm({
+  id: data.product.id,
   name: data.product.name,
   description: data.product.description,
   price: data.product.price,
@@ -282,6 +287,7 @@ const details = ref(data.details)
 // Add detail creation input
 const createDetail = () => {
   productForm.details.push({ detail_id: null, value: null })
+  productDetailErrors.value.push({ key: null, value: null })
 }
 
 // Remove detail creation input
@@ -304,4 +310,35 @@ const deleteProductDetail = (id) => {
   closeDialogDelete()
   productForm.details = productForm.details.filter(detail => detail.id !== id)
 }
+
+// Get Product Details Errors
+const productDetailErrors = ref([])
+// Insert error placeholder for created detail
+const detailErrorPlaceholder = () => {
+  for (let i = 0; i < productForm.details.length; i++) {
+    productDetailErrors.value.push({ key: null, value: null })
+  }
+}
+detailErrorPlaceholder()
+
+watch(() => productForm.errors, () => {
+  // Clear Old Error
+  productDetailErrors.value = []
+
+  // Insert error placeholder for each detail input
+  detailErrorPlaceholder()
+
+  // Get Error
+  if (productForm.errors) {
+    for (let key in productForm.errors) {
+      const parts = key.split('.')
+      const index = parseInt(parts[1])
+      const errorKey = parts[2]
+      if (!productDetailErrors.value[index]) {
+        productDetailErrors.value[index] = []
+      }
+      productDetailErrors.value[index][errorKey] = productForm.errors[key]
+    }
+  }
+})
 </script>
