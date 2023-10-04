@@ -5,7 +5,7 @@
         <li>
           <span class="text-900 line-height-3">Products</span>
         </li>
-      </ul>
+    </ul>
       <Divider/>
       <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
         <div class="font-medium text-3xl text-900">Products</div>
@@ -19,7 +19,7 @@
       <!--Product Table-->
       <div v-if="products" class="card mt-5">
         <DataTable v-model:filters="filters"
-                   :globalFilterFields="['discount']"
+                   :globalFilterFields="['discount','name','category.title']"
                    :rows="10"
                    :rowsPerPageOptions="[5, 10, 20, 50]"
                    :sortOrder="-1"

@@ -17,14 +17,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-
-        if (request()->expectsJson()) {
-            $categories = DB::table('categories')->select('id', 'title')->get();
-
-            return json_encode($categories);
-        }
-
-        return Inertia::render('Backend/Category/Index');
+        $categories = Category::withCount('products')->get();
+        return request()->expectsJson() ? json_encode($categories) : Inertia::render('Backend/Category/Index', [
+            "categories" => Inertia::lazy(
+                fn () =>$categories
+            ),
+        ]);
     }
 
     /**

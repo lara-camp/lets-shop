@@ -37,26 +37,12 @@
                   </div>
                   <Dropdown v-model="parentCategory"
                             :disabled="!checked"
-                            :options="categories"
+                            :options="SelectCategories"
                             class="w-full "
                             filter
                             optionLabel="title"
                             placeholder="Select a Category">
-                    <template #value="slotProps">
-                      <div v-if="slotProps.value" class="flex align-items-center">
-                        <div>{{ slotProps.value.title }}</div>
-                      </div>
-                      <span v-else>
-                                            {{ slotProps.placeholder }}
-                                        </span>
-                    </template>
-                    <template #option="slotProps">
-                      <div class="flex align-items-center">
-                        <div>{{ slotProps.option.title }}</div>
-                      </div>
-                    </template>
                   </Dropdown>
-                  <!-- <div id="name-help" class="text-md">Error</div> -->
                 </div>
                 <div class="flex justify-content-end mt-2">
                   <Button class="text-xl font-medium "
@@ -87,13 +73,13 @@
           </Dialog>
         </div>
       </div>
-      <div class="card mt-5">
+      <div v-if="categories" class="card mt-5">
         <DataTable v-model:filters="filters"
-                   :globalFilterFields="['name']"
+                   :globalFilterFields="['title']"
                    :rows="10"
                    :rowsPerPageOptions="[5, 10, 20, 50]"
                    :sortOrder="-1"
-                   :value="products"
+                   :value="categories"
                    paginator
                    tableStyle="min-width: 50rem">
           <template #header>
@@ -104,14 +90,16 @@
             </span>
             </div>
           </template>
-          <template #empty> No categories found.</template>
+          <template #empty>
+            <div class="text-lg font-medium text-center"> There is no category currently.</div>
+          </template>
           <template #loading> Loading categories data. Please wait.</template>
           <Column field="id" header="ID" sortable style="width: 1%"></Column>
-          <Column field="name"
+          <Column field="title"
                   header="Category Name"
                   sortable
                   style="width: 10%"></Column>
-          <Column field="product_qty"
+          <Column field="products_count"
                   header="Product Qty"
                   sortable
                   style="width: 10%"></Column>
@@ -134,7 +122,9 @@
           </Column>
         </DataTable>
       </div>
-
+    <div v-else>
+        <TableSkeleton ></TableSkeleton>
+    </div>
     </div>
   </AdminLayout>
 
@@ -144,7 +134,8 @@
 import Button from 'primevue/button'
 import AdminLayout from '../../../Layout/AdminLayout.vue'
 import { FilterMatchMode } from 'primevue/api'
-import { onMounted, ref } from 'vue'
+import { onMounted, onUpdated, ref, watch } from 'vue'
+import {router} from '@inertiajs/vue3'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import InputText from 'primevue/inputtext'
@@ -155,6 +146,7 @@ import Dropdown from 'primevue/dropdown'
 import axios from 'axios'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
+import TableSkeleton from '../Category/Partials/TableSkeleton.vue'
 
 const deleteProductDialog = ref(false)
 const toast = useToast()
@@ -169,10 +161,9 @@ const deleteProduct = () => {
   toast.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 })
 }
 
-const visible = ref(false) //for Dialog
-
+const visible = ref(false) //for Dialog close and open
 const title = ref()
-const emailError = ref(null)
+const emailError = ref()
 const parentCategory = ref()
 const newCategoryToast = useToast()
 const createCategory = () => {
@@ -182,15 +173,17 @@ const createCategory = () => {
   })
       .then((response) => {
         if (response.data) {
-          title.value = ''
-          parentCategory.value = ''
-          visible.value = false
-          checked.value = false
-          newCategoryToast.add({
-            severity: 'success',
-            summary: 'New Category',
-            detail: `New Category (${response.data.title}) is created successfully`,
-            life: 5000
+            emailError.value=''
+            title.value = ''
+            parentCategory.value = ''
+            visible.value = false
+            checked.value = false
+            getCategories()    //calling getCategories function
+            newCategoryToast.add({
+                severity: 'success',
+                summary: 'New Category',
+                detail: `New Category (${response.data.title}) is created successfully`,
+                life: 5000
           })
         }
       })
@@ -200,55 +193,35 @@ const createCategory = () => {
         }
       })
 }
+
 //Getting categories from database
-const categories = ref([])
+const categories=ref(undefined);
+const SelectCategories = ref(undefined)
 const getCategories = () => {
   axios.get(route('categories.index'))
       .then((response) => {
         if (response) {
-          categories.value = response.data
+          SelectCategories.value = response.data
+          categories.value=response.data
+          console.log(categories.value)
         }
       })
       .catch((error) => {
         console.log(error)
       })
 }
-onMounted(() => {
-  getCategories()
-})
 
-const checked = ref(false)  //for checkbox
+const checked = ref(false)  //for have parent checkbox true or false
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })
 
-//data for table
-const products = ref([
-  {
-    id: 1,
-    name: 'Aen T-Shirt',
-    product_qty: 3,
+onMounted(() => {
+  getCategories();
+  router.reload({ only: ['categories'] })
+})
 
-  }, {
-    id: 2,
-    name: 'Ben T-Shirt',
-    product_qty: 2,
-  }, {
-    id: 3,
-    name: 'Cen T-Shirt',
-    product_qty: 4,
-
-  }, {
-    id: 4,
-    name: 'Den T-Shirt',
-    product_qty: 10,
-  }, {
-    id: 5,
-    name: 'Men T-Shirt',
-    product_qty: 7,
-  },
-])
 </script>
 
 <style scoped></style>

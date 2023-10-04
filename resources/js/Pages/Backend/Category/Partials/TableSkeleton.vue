@@ -15,32 +15,12 @@
           <Skeleton></Skeleton>
         </template>
       </Column>
-      <Column field="name" header="Name">
+      <Column field="title" header="Category Name">
         <template #body>
           <Skeleton></Skeleton>
         </template>
       </Column>
-      <Column field="truncate" header="Description">
-        <template #body>
-          <Skeleton></Skeleton>
-        </template>
-      </Column>
-      <Column field="price" header="Price">
-        <template #body>
-          <Skeleton></Skeleton>
-        </template>
-      </Column>
-      <Column field="stock" header="Stocks">
-        <template #body>
-          <Skeleton></Skeleton>
-        </template>
-      </Column>
-      <Column field="category" header="Category">
-        <template #body>
-          <Skeleton></Skeleton>
-        </template>
-      </Column>
-      <Column field="discount" header="Discount">
+      <Column field="slug" header="Slug">
         <template #body>
           <Skeleton></Skeleton>
         </template>
