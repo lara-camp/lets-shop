@@ -60,5 +60,5 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','isAdmin']], func
     Route::resource('product-images', ProductImageController::class);
     Route::resource('details', DetailController::class);
     Route::resource('categories',CategoryController::class)->except('show', 'create');
-    Route::get('categories/{slug}', [CategoryController::class, 'detail'])->name('products.detail');
+    Route::get('categories/{slug}', [CategoryController::class, 'detail'])->name('categories.detail');
 });

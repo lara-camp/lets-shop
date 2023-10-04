@@ -66,9 +66,11 @@
                       outlined
                       rounded severity="info" style="height: 40px; width: 40px"/>
               <!--Edit Button-->
-              <Button class="mr-2" icon="pi pi-pencil"
-                      outlined
-                      rounded severity="warning" style="height: 40px; width: 40px"/>
+              <Link :href="route('products.edit', data.id)">
+                <Button class="mr-2" icon="pi pi-pencil"
+                        outlined
+                        rounded severity="warning" style="height: 40px; width: 40px"/>
+              </Link>
               <!--Delete Dialog Button-->
               <Button icon="pi pi-trash "
                       outlined

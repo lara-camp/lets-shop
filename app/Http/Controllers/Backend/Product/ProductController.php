@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
+use App\Models\Detail;
+use App\Models\Category;
 
 class ProductController extends Controller
 {
@@ -76,7 +78,18 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $data = [
+            "product"        => $product,
+            "category"       => $product->category,
+            "productImages"  => $product->productImages,
+            "productDetails" => $product->productDetails,
+            "details" => Detail::all(),
+            "categories" => Category::all()
+        ];
+
+        return Inertia::render("Backend/Product/Edit", [
+            'data' => $data,
+        ]);
     }
 
     /**
