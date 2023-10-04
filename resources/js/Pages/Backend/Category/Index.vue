@@ -137,7 +137,6 @@ import Dialog from 'primevue/dialog'
 import Checkbox from 'primevue/checkbox'
 import Dropdown from 'primevue/dropdown'
 
-const deleteProductsDialog = ref(false)
 const deleteProductDialog = ref(false)
 
 const confirmDeleteProduct = (prod) => {

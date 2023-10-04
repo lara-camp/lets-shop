@@ -16,6 +16,7 @@
         </div>
       </div>
 
+      <!--Product Table-->
       <div v-if="products" class="card mt-5">
         <DataTable v-model:filters="filters"
                    :globalFilterFields="['discount']"
@@ -53,22 +54,34 @@
             </template>
           </Column>
           <Column field="action" header="Action" style="width: 10%">
-            <template #body="slotProps">
-              <Button  class="mr-2"
-                       icon="pi pi-align-left"
-                       outlined rounded style="height: 40px; width: 40px"/>
-              <Button  severity="info" class="mr-2"
-                       icon="pi pi-tag"
-                       outlined rounded style="height: 40px; width: 40px"/>
-              <Button severity="warning" class="mr-2"
-                      icon="pi pi-pencil"
-                      outlined rounded style="height: 40px; width: 40px"/>
-              <Button  icon="pi pi-trash "
+            <template #body="{slotProps, data}">
+              <!--View Detail Button-->
+              <Link :href="route('products.detail', data.slug)">
+                <Button class="mr-2"
+                        icon="pi pi-align-left"
+                        outlined rounded style="height: 40px; width: 40px"/>
+              </Link>
+              <!--Give Discount Dialog Button-->
+              <Button class="mr-2" icon="pi pi-tag"
                       outlined
-                      rounded severity="danger" style="height: 40px; width: 40px"/>
+                      rounded severity="info" style="height: 40px; width: 40px"/>
+              <!--Edit Button-->
+              <Button class="mr-2" icon="pi pi-pencil"
+                      outlined
+                      rounded severity="warning" style="height: 40px; width: 40px"/>
+              <!--Delete Dialog Button-->
+              <Button icon="pi pi-trash "
+                      outlined
+                      rounded
+                      severity="danger"
+                      style="height: 40px; width: 40px"
+                      @click="deleteProductDialogView = true"/>
             </template>
           </Column>
         </DataTable>
+
+        <!--Delete Product Dialog Box-->
+        <DeleteProductDialog :dialog-view="deleteProductDialogView"/>
       </div>
       <TableSkeleton v-else></TableSkeleton>
     </div>
@@ -88,17 +101,20 @@ import InputText from 'primevue/inputtext'
 import Tag from 'primevue/tag'
 import Divider from 'primevue/divider'
 import TableSkeleton from './Partials/TableSkeleton.vue'
+import DeleteProductDialog from './Partials/DeleteProductDialog.vue'
 
+// Load Products
 let { products } = defineProps({ products: undefined })
-
 onMounted(() => {
   router.reload({ only: ['products'] })
 })
 
+// Filter Table
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })
 
+// Discount Status Badge Design
 const getSeverity = (discount) => {
   switch (discount) {
     case 'no-discount':
@@ -108,6 +124,9 @@ const getSeverity = (discount) => {
       return 'success'
   }
 }
+
+// Delete Product
+const deleteProductDialogView = ref(false)
 
 </script>
 

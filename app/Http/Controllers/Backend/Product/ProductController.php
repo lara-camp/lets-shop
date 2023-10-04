@@ -17,10 +17,10 @@ class ProductController extends Controller
     public function index()
     {
         return Inertia::render("Backend/Product/Index", [
-            "status" => session('status') ?? null,
+            "status"   => session('status') ?? null,
             "products" => Inertia::lazy(function () {
                 return Product::with('category')->get();
-            })
+            }),
         ]);
     }
 
@@ -64,11 +64,11 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show the product detail with slug
      */
-    public function show(Product $product)
+    public function detail($slug)
     {
-        //
+        return Inertia::render("Backend/Product/Show");
     }
 
     /**

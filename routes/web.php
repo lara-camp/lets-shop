@@ -55,8 +55,10 @@ Route::post("/dashboard/login", [AuthController::class, "login"])->name('admin.l
 
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','isAdmin']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::resource('products', ProductController::class);
+    Route::resource('products', ProductController::class)->except('show');
+    Route::get('products/{slug}', [ProductController::class, 'detail'])->name('products.detail');
     Route::resource('product-images', ProductImageController::class);
     Route::resource('details', DetailController::class);
-    Route::resource('categories',CategoryController::class);
+    Route::resource('categories',CategoryController::class)->except('show');
+    Route::get('categories/{slug}', [CategoryController::class, 'detail'])->name('products.detail');
 });
