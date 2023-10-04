@@ -1,19 +1,10 @@
 <template>
   <AdminLayout>
     <div class="px-4 py-5 md:px-6 lg:px-8">
-      <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
-        <li>
-          <Link :href="route('products.index')"
-                class="text-500 no-underline line-height-3 cursor-pointer">Products
-          </Link>
-        </li>
-        <li class="px-2">
-          <i class="pi pi-angle-right text-500 line-height-3"></i>
-        </li>
-        <li>
-          <span class="text-900 line-height-3">Create</span>
-        </li>
-      </ul>
+      <BreadList :primary-route="route('products.index')"
+                 :secondary="true"
+                 primary-name="Products"
+                 secondary-name="Create"/>
       <Divider/>
       <div class="font-medium text-3xl text-900 mb-4">Create Product</div>
       <!--Product Form Section-->
@@ -176,10 +167,11 @@ import InputNumber from 'primevue/inputnumber'
 import Dropdown from 'primevue/dropdown'
 import Button from 'primevue/button'
 import Toast from 'primevue/toast'
-import { Link, useForm } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 import { onMounted, ref, watch } from 'vue'
 import axios from 'axios'
 import DetailKeyDialog from './Partials/DetailKeyDialog.vue'
+import BreadList from '../Component/BreadList.vue'
 
 const { status } = defineProps({ status: String })
 

@@ -1,20 +1,12 @@
 <template>
   <AdminLayout>
     <div class="px-4 py-5 md:px-6 lg:px-8">
-      <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
-        <li>
-          <span class="text-900 line-height-3">Products</span>
-        </li>
-        <li class="px-2">
-          <i class="pi pi-angle-right text-500 line-height-3"></i>
-        </li>
-        <li>
-          <span class="text-900 line-height-3">#ID - </span>
-        </li>
-      </ul>
+      <BreadList :primary-route="route('products.index')"
+                 :secondary="true"
+                 :secondary-name="`#ID - ${data.product.id}`"
+                 primary-name="Products"/>
       <Divider/>
-      <Divider/>
-      <div class="font-medium text-3xl text-900 mb-4">Create Product</div>
+      <div class="font-medium text-3xl text-900 mb-4">Edit Product</div>
       <!--Product Form Section-->
       <form id="productForm"
             class="grid justify-content-center"
@@ -24,20 +16,20 @@
           <!--Product Name Input-->
           <div class="flex flex-column mb-4">
             <label class="text-xl font-medium mb-2" for="name">Product Name</label>
-            <InputText id="name" placeholder="Name"/>
-            <div class="text-md text-red-600">
-              Error
+            <InputText id="name" v-model="productForm.name" placeholder="Name"/>
+            <div v-if="productForm.errors.name" class="text-md text-red-600">
+              {{ productForm.errors.name }}
             </div>
           </div>
 
           <!--Product Price Input-->
           <div class="flex flex-column mb-4">
             <label class="text-xl font-medium mb-2" for="currency-mmk"> Price </label>
-            <InputNumber currency="MMK"
+            <InputNumber v-model="productForm.price" currency="MMK"
                          mode="currency"
                          placeholder="MMK"/>
-            <div class="text-md text-red-600">
-              Error
+            <div v-if="productForm.errors.price" class="text-md text-red-600">
+              {{ productForm.errors.price }}
             </div>
           </div>
 
@@ -45,11 +37,13 @@
           <div class="flex flex-column mb-4">
             <label class="text-xl font-medium mb-2" for="minmax-buttons"> Stocks </label>
             <InputNumber
+                v-model="productForm.stock"
                 :max="10000"
                 :min="1"
                 mode="decimal"
                 showButtons/>
-            <div class="text-md text-red-600">Error
+            <div v-if="productForm.errors.stock" class="text-md text-red-600">
+              {{ productForm.errors.stock }}
             </div>
           </div>
 
@@ -57,22 +51,24 @@
           <div class="flex flex-column mb-4">
             <label class="text-xl font-medium mb-2" for="minmax-buttons"> Category </label>
             <Dropdown
+                v-model="productForm.category"
                 :options="data.categories"
                 filter
+                option-value="id"
                 optionLabel="title"
                 placeholder="Select a Category"></Dropdown>
 
-            <div class="text-md text-red-600">
-              Error
+            <div v-if="productForm.errors.category" class="text-md text-red-600">
+              {{ productForm.errors.category }}
             </div>
           </div>
 
           <!--Product Description Input-->
           <div class="flex flex-column mb-5">
             <label class="text-xl font-medium mb-2" for="description">Description</label>
-            <Textarea id="description" cols="30" rows="5"/>
-            <div class="text-md text-red-600">
-              Error
+            <Textarea id="description" v-model="productForm.description" cols="30" rows="5"/>
+            <div v-if="productForm.errors.description" class="text-md text-red-600">
+              {{ productForm.errors.description }}
             </div>
           </div>
 
@@ -185,15 +181,17 @@ import DetailKeyDialog from './Partials/DetailKeyDialog.vue'
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import axios from 'axios'
+import BreadList from '../Component/BreadList.vue'
 
-const { user, data } = defineProps({ user: Object, data: Object })
+const { data } = defineProps({ data: Object })
+console.log(data.product)
 
 const productForm = useForm({
-  name: null,
-  description: null,
-  price: null,
-  stock: null,
-  category: null,
+  name: data.product.name,
+  description: data.product.description,
+  price: data.product.price,
+  stock: data.product.stock,
+  category: data.product.category_id,
   details: [...data.productDetails],
   images: []
 })
