@@ -9,8 +9,8 @@
       <div class="font-medium text-3xl text-900 mb-4">Edit Product</div>
       <GalleryComponent :galleries="currentImages" @delete-image="removeImage"/>
       <!--Product Form Section-->
-      <form id="productForm"
-            class="grid justify-content-center"
+      <form id="productForm" class="grid justify-content-center"
+            @submit.prevent="productForm.post(route('products.update', data.product.id))"
       >
         <div class="col-6 pr-5">
 
@@ -132,7 +132,7 @@
               <Button icon="pi pi-plus" rounded severity="help" size="small" @click="createDetail"/>
             </div>
             <!--Product Detail Key-->
-            <div v-for="detail in productForm.details" :key="detail.id" class="flex mb-3">
+            <div v-for="(detail,index) in productForm.details" :key="detail.id" class="flex mb-3">
               <div class="w-full">
                 <Dropdown v-model="detail.detail_id"
                           :options="details"
@@ -161,7 +161,7 @@
                   icon="pi pi-times"
                   outlined
                   severity="danger"
-                  @click="removeDetail(detail.id)"
+                  @click="removeDetail(index)"
               />
             </div>
           </div>
@@ -240,17 +240,14 @@ const getDetails = () => {
 // Detail Options
 const details = ref(data.details)
 
-// Product Detail Count
-const detail = ref(productForm.details.length)
-
 // Add detail creation input
 const createDetail = () => {
-  productForm.details.push({ detail_id: null, value: null, id: detail.value })
+  productForm.details.push({ detail_id: null, value: null })
 }
 
 // Remove detail creation input
-const removeDetail = (id) => {
-  productForm.details = productForm.details.filter((detail) => detail.id !== id)
+const removeDetail = (index) => {
+  productForm.details = productForm.details.filter((detail, i) => i !== index)
 }
 
 </script>
