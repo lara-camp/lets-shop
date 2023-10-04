@@ -1,8 +1,8 @@
 <template>
-  <Dialog :visible="dialogView"
+  <Dialog  :visible="dialogView"
           :dismissableMask="true"
-          :modal="true"
-          :style="{width: '450px'}"
+           :closable="false"
+          :style="{width: '650px'}"
           header="Confirm">
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"/>
@@ -11,8 +11,8 @@
         }}</b>?</span>
     </div>
     <template #footer>
-      <Button icon="pi pi-times" label="No" text/>
-      <Button icon="pi pi-check" label="Yes" text @click="deleteProduct"/>
+      <Button icon="pi pi-times" label="No" text @click="close"/>
+      <Button icon="pi pi-check" label="Yes" text />
     </template>
   </Dialog>
 </template>
@@ -22,6 +22,11 @@ import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 
 const { product, dialogView } = defineProps({ product: Object, dialogView: Boolean })
+
+const noDeleteEmit = defineEmits(['closeDelete'])
+const close = () => {
+  noDeleteEmit('closeDelete')
+}
 
 const deleteProduct = () => {
 

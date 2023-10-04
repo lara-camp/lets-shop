@@ -85,6 +85,7 @@ class ProductDetailController extends Controller
      */
     public function destroy(ProductDetail $productDetail)
     {
-        //
+        $productDetail->delete();
+        return json_encode(['status'=> 'product-detail-delete-success']);
     }
 }

@@ -11,6 +11,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Backend\Product\ProductController;
 use App\Http\Controllers\Backend\Product\DetailController;
 use App\Http\Controllers\Backend\Product\ProductImageController;
+use App\Http\Controllers\Backend\Product\ProductDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','isAdmin']], func
     Route::resource('products', ProductController::class)->except('show', 'update');
     Route::post('products/{id}', [ProductController::class,'updateProduct'])->name('products.update');
     Route::get('products/{slug}', [ProductController::class, 'detail'])->name('products.detail');
+    Route::delete('product-details/{productDetail}', [ProductDetailController::class, 'destroy'])->name('product-detail.destroy');
     Route::resource('product-images', ProductImageController::class);
     Route::resource('details', DetailController::class);
     Route::resource('categories',CategoryController::class)->except('show', 'create');

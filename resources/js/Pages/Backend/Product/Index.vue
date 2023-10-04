@@ -1,7 +1,7 @@
 <template>
   <AdminLayout>
     <div class="px-4 py-5 md:px-6 lg:px-8">
-      <BreadList primary-name="Products" />
+      <BreadList primary-name="Products"/>
       <Divider/>
       <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
         <div class="font-medium text-3xl text-900">Products</div>
@@ -50,7 +50,7 @@
             </template>
           </Column>
           <Column field="action" header="Action" style="width: 10%">
-            <template #body="{slotProps, data}">
+            <template #body="{ data}">
               <!--View Detail Button-->
               <Link :href="route('products.detail', data.slug)">
                 <Button class="mr-2"
@@ -71,15 +71,16 @@
               <Button icon="pi pi-trash "
                       outlined
                       rounded
-                      severity="danger"
-                      style="height: 40px; width: 40px"
-                      @click="deleteProductDialogView = true"/>
+                      severity="danger" style="height: 40px; width: 40px"
+                      @click="showDeleteDialog(data)"/>
+
+              <!--Delete Product Dialog Box-->
             </template>
           </Column>
         </DataTable>
+        <DeleteProductDialog @close-delete="closeDeleteDialog" :dialog-view="deleteProductDialog"
+                             :product="deleteProduct"></DeleteProductDialog>
 
-        <!--Delete Product Dialog Box-->
-        <DeleteProductDialog :dialog-view="deleteProductDialogView"/>
       </div>
       <TableSkeleton v-else></TableSkeleton>
     </div>
@@ -125,8 +126,17 @@ const getSeverity = (discount) => {
 }
 
 // Delete Product
-const deleteProductDialogView = ref(false)
+const deleteProduct = ref(null)
+const deleteProductDialog = ref(false)
 
+const closeDeleteDialog = () => {
+  deleteProductDialog.value = false
+  deleteProduct.value = null
+}
+const showDeleteDialog = (product) => {
+  deleteProduct.value = product
+  deleteProductDialog.value = true
+}
 </script>
 
 <style scoped></style>

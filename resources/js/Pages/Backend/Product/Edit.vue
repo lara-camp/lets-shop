@@ -73,8 +73,12 @@
             </div>
           </div>
 
-
-          <Button form="productForm" label="Save Edit" type="submit"/>
+          <div class="flex justify-content-between align-items-center">
+            <Link :href="route('products.index')">
+              <Button label="Cancle" outlined/>
+            </Link>
+            <Button form="productForm" label="Save Edit" type="submit"/>
+          </div>
         </div>
         <div class="col-6 pl-5">
 
@@ -161,9 +165,14 @@
                   icon="pi pi-times"
                   outlined
                   severity="danger"
-                  @click="removeDetail(index)"
+                  @click="showDialogDelete(detail, index)"
               />
             </div>
+
+            <DeleteProductDetailDialog :dialog-view="deleteProductDetailDialog"
+                                       :product-detail="productDetail"
+                                       @close-delete="closeDialogDelete"
+                                       @delete-product-detail="deleteProductDetail"></DeleteProductDetailDialog>
           </div>
         </div>
       </form>
@@ -183,10 +192,11 @@ import Dropdown from 'primevue/dropdown'
 import Textarea from 'primevue/textarea'
 import DetailKeyDialog from './Partials/DetailKeyDialog.vue'
 import { ref } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import { Link, useForm } from '@inertiajs/vue3'
 import axios from 'axios'
 import BreadList from '../Component/BreadList.vue'
 import GalleryComponent from './Partials/GalleryComponent.vue'
+import DeleteProductDetailDialog from './Partials/DeleteProductDetailDialog.vue'
 
 const { data } = defineProps({ data: Object })
 
@@ -246,8 +256,29 @@ const createDetail = () => {
 }
 
 // Remove detail creation input
-const removeDetail = (index) => {
-  productForm.details = productForm.details.filter((detail, i) => i !== index)
+const productDetail = ref(null)
+const deleteProductDetailDialog = ref(false)
+
+const closeDialogDelete = () => {
+  deleteProductDetailDialog.value = false
+  productDetail.value = null
 }
+const showDialogDelete = (detail, index) => {
+  if (productForm.details[index].hasOwnProperty('product_id')) {
+    productDetail.value = detail
+    deleteProductDetailDialog.value = true
+  } else {
+    productForm.details = productForm.details.filter((detail, i) => i !== index)
+  }
+}
+const deleteProductDetail = (id) => {
+  closeDialogDelete()
+  for (let i = 0; i < productForm.details.length; i++) {
+    if (productForm.details[i].id === id) {
+      productForm.details.splice(i,1)
+    }
+  }
+}
+
 
 </script>

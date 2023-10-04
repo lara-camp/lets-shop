@@ -1,5 +1,5 @@
 <template>
-  <div class="card flex justify-content-center mb-6">
+  <div v-if="galleries.length > 0" class="card flex justify-content-center mb-6">
     <Galleria :numVisible="5"
               :responsiveOptions="responsiveOptions"
               :value="galleries">
@@ -31,6 +31,10 @@
     </Galleria>
 
   </div>
+  <div v-else
+       class="card py-7 text-2xl font-bold text-center border-1 border-400 border-round-2xl text-black-alpha-50 my-4">
+    No Image
+  </div>
 </template>
 
 <script setup>
@@ -61,14 +65,14 @@ const responsiveOptions = ref([
 
 // Delete Product Image Confirm Dialog
 const deleteDialog = ref(false)
-const deleteEmit = defineEmits(["deleteImage"])
+const deleteEmit = defineEmits(['deleteImage'])
 
 // Delete Product Image Function
 const deleteToast = useToast()
-const deleteImage = (productId) => {
+const deleteImage = (imageId) => {
   deleteDialog.value = false
-  deleteEmit("deleteImage", productId)
-  axios.delete(route('product-images.destroy', productId)).then((response) => {
+  deleteEmit('deleteImage', imageId)
+  axios.delete(route('product-images.destroy', imageId)).then((response) => {
     deleteToast.add({
       severity: 'success',
       summary: 'Image Delete',
@@ -79,5 +83,4 @@ const deleteImage = (productId) => {
     console.log(error)
   })
 }
-
 </script>
