@@ -15,7 +15,7 @@
       <!--Product Table-->
       <div v-if="products" class="card mt-5">
         <DataTable v-model:filters="filters"
-                   :globalFilterFields="['discount']"
+                   :globalFilterFields="['name','description','price','id']"
                    :rows="10"
                    :rowsPerPageOptions="[5, 10, 20, 50]"
                    :sortOrder="-1"
@@ -78,8 +78,8 @@
             </template>
           </Column>
         </DataTable>
-        <DeleteProductDialog @close-delete="closeDeleteDialog" :dialog-view="deleteProductDialog"
-                             :product="deleteProduct"></DeleteProductDialog>
+        <DeleteProductDialog :dialog-view="deleteProductDialog" :product="deleteProduct"
+                             @close-delete="closeDeleteDialog"></DeleteProductDialog>
 
       </div>
       <TableSkeleton v-else></TableSkeleton>
