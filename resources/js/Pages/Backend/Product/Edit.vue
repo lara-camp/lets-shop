@@ -1,20 +1,34 @@
 <template>
+  <!-- Main layout -->
   <AdminLayout>
+    <!-- Content container -->
     <div class="px-4 py-5 md:px-6 lg:px-8">
-      <BreadList :primary-route="route('products.index')"
-                 :secondary="true"
-                 :secondary-name="`#ID - ${data.product.id}`"
-                 primary-name="Products"/>
+
+      <!-- Breadcrumb List -->
+      <BreadList
+          :primary-route="route('products.index')"
+          :secondary="true"
+          :secondary-name="`#ID - ${data.product.id}`"
+          primary-name="Products"
+      />
       <Divider/>
+
+      <!-- Edit Product Title -->
       <div class="font-medium text-3xl text-900 mb-4">Edit Product</div>
+
+      <!-- Image Gallery Component -->
       <GalleryComponent :galleries="currentImages" @delete-image="removeImage"/>
-      <!--Product Form Section-->
-      <form id="productForm" class="grid justify-content-center"
-            @submit.prevent="productForm.post(route('products.update', data.product.id))"
+
+      <!-- Product Form Section -->
+      <form
+          id="productForm"
+          class="grid justify-content-center"
+          @submit.prevent="productForm.post(route('products.update', data.product.id))"
       >
+        <!-- Left Column -->
         <div class="col-6 pr-5">
 
-          <!--Product Name Input-->
+          <!-- Product Name Input -->
           <div class="flex flex-column mb-4">
             <label class="text-xl font-medium mb-2" for="name">Product Name</label>
             <InputText id="name" v-model="productForm.name" placeholder="Name"/>
@@ -23,7 +37,7 @@
             </div>
           </div>
 
-          <!--Product Price Input-->
+          <!-- Product Price Input -->
           <div class="flex flex-column mb-4">
             <label class="text-xl font-medium mb-2" for="currency-mmk"> Price </label>
             <InputNumber v-model="productForm.price" currency="MMK"
@@ -34,7 +48,7 @@
             </div>
           </div>
 
-          <!--Product Stock Input-->
+          <!-- Product Stock Input -->
           <div class="flex flex-column mb-4">
             <label class="text-xl font-medium mb-2" for="minmax-buttons"> Stocks </label>
             <InputNumber
@@ -48,7 +62,7 @@
             </div>
           </div>
 
-          <!--Product Category Input-->
+          <!-- Product Category Input -->
           <div class="flex flex-column mb-4">
             <label class="text-xl font-medium mb-2" for="minmax-buttons"> Category </label>
             <Dropdown
@@ -57,14 +71,15 @@
                 filter
                 option-value="id"
                 optionLabel="title"
-                placeholder="Select a Category"></Dropdown>
+                placeholder="Select a Category">
+            </Dropdown>
 
             <div v-if="productForm.errors.category" class="text-md text-red-600">
               {{ productForm.errors.category }}
             </div>
           </div>
 
-          <!--Product Description Input-->
+          <!-- Product Description Input -->
           <div class="flex flex-column mb-5">
             <label class="text-xl font-medium mb-2" for="description">Description</label>
             <Textarea id="description" v-model="productForm.description" cols="30" rows="5"/>
@@ -73,31 +88,37 @@
             </div>
           </div>
 
+          <!-- Save and Cancel Buttons -->
           <div class="flex justify-content-between align-items-center">
             <Link :href="route('products.index')">
-              <Button label="Cancle" outlined/>
+              <Button label="Cancel" outlined/>
             </Link>
             <Button form="productForm" label="Save Edit" type="submit"/>
           </div>
         </div>
+
+        <!-- Right Column -->
         <div class="col-6 pl-5">
 
-          <!--Product Pictures Input-->
+          <!-- Add Image Section -->
           <div class="flex flex-column mb-4">
             <div class="font-medium text-xl mb-2">Add Image</div>
             <div class="card">
               <Toast/>
-              <FileUpload :maxFileSize="1000000"
-                          :multiple="true"
-                          :show-upload-button="false"
-                          accept="image/*"
-                          @clear="removeAllUploadImages"
-                          @input="addUploadImage($event.target.files)"
+              <FileUpload
+                  :maxFileSize="1000000"
+                  :multiple="true"
+                  :show-upload-button="false"
+                  accept="image/*"
+                  @clear="removeAllUploadImages"
+                  @input="addUploadImage($event.target.files)"
               >
-
+                <!-- Drag and drop files message -->
                 <template #empty>
-                  <p>Drag and drop files to here to upload.</p>
+                  <p>Drag and drop files here to upload.</p>
                 </template>
+
+                <!-- Uploaded files display -->
                 <template #content="{ files, removeFileCallback }">
                   <div v-if="files.length > 0">
                     <div class="flex flex-column">
@@ -126,17 +147,19 @@
             </div>
           </div>
 
-          <!--Product Detail Input-->
+          <!-- Product Detail Input -->
           <DetailKeyDialog @get-detail="getDetails"></DetailKeyDialog>
 
-          <!--Product Detail Input-->
+          <!-- Product Details List -->
           <div class="flex flex-column mb-4">
             <div class="flex  justify-content-between align-items-center mb-3">
               <div class="font-medium text-xl mb-2">Details</div>
               <Button icon="pi pi-plus" rounded severity="help" size="small" @click="createDetail"/>
             </div>
-            <!--Product Detail Key-->
+
+            <!-- Product Detail Key-Value Pairs -->
             <div v-for="(detail,index) in productForm.details" :key="detail.id" class="flex mb-3">
+              <!-- Detail Key Dropdown -->
               <div class="w-full">
                 <Dropdown v-model="detail.detail_id"
                           :options="details"
@@ -155,11 +178,12 @@
                 <Toast/>
               </div>
               <Divider layout="vertical"/>
-              <!--Product Detail Value-->
+              <!-- Detail Value Input -->
               <div class="w-full">
                 <InputText id="value" v-model="detail.value" class="w-full" placeholder="Value"/>
                 <div class="text-sm text-red-600"></div>
               </div>
+              <!-- Remove Detail Button -->
               <Button
                   class="ml-3 flex-shrink-0"
                   icon="pi pi-times"
@@ -169,10 +193,13 @@
               />
             </div>
 
-            <DeleteProductDetailDialog :dialog-view="deleteProductDetailDialog"
-                                       :product-detail="productDetail"
-                                       @close-delete="closeDialogDelete"
-                                       @delete-product-detail="deleteProductDetail"></DeleteProductDetailDialog>
+            <!-- Delete Detail Dialog -->
+            <DeleteProductDetailDialog
+                :dialog-view="deleteProductDetailDialog"
+                :product-detail="productDetail"
+                @close-delete="closeDialogDelete"
+                @delete-product-detail="deleteProductDetail">
+            </DeleteProductDetailDialog>
           </div>
         </div>
       </form>
@@ -180,7 +207,9 @@
   </AdminLayout>
 </template>
 
+<!-- Script Section -->
 <script setup>
+// Importing necessary components and libraries
 import AdminLayout from '../../../Layout/AdminLayout.vue'
 import Button from 'primevue/button'
 import Divider from 'primevue/divider'
@@ -198,8 +227,10 @@ import BreadList from '../Component/BreadList.vue'
 import GalleryComponent from './Partials/GalleryComponent.vue'
 import DeleteProductDetailDialog from './Partials/DeleteProductDetailDialog.vue'
 
+// Destructuring data from props
 const { data } = defineProps({ data: Object })
 
+// Creating a form using Inertia's useForm
 const productForm = useForm({
   name: data.product.name,
   description: data.product.description,
@@ -212,17 +243,14 @@ const productForm = useForm({
 
 // Add Upload Images
 const addUploadImage = (image) => {
-  for (let i = 0; i < image.length; i++) {
-    productForm.images.push(image[i])
-  }
+  productForm.images.push(...image)
 }
 
 // Remove Upload Images
 const removeUploadImage = (file, removeFileCallback, index) => {
-  for (let i = 0; i < productForm.images.length; i++) {
-    if (productForm.images[i] === file) {
-      productForm.images.splice(i, 1)
-    }
+  const imageIndex = productForm.images.indexOf(file)
+  if (imageIndex !== -1) {
+    productForm.images.splice(imageIndex, 1)
   }
   removeFileCallback(index)
 }
@@ -239,12 +267,13 @@ const removeImage = (id) => {
 }
 
 // Get Details Lists
-const getDetails = () => {
-  axios.get(route('details.index')).then((response) => {
+const getDetails = async () => {
+  try {
+    const response = await axios.get(route('details.index'))
     details.value = response.data
-  }).catch((error) => {
-    console.log(error)
-  })
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 // Detail Options
@@ -268,17 +297,11 @@ const showDialogDelete = (detail, index) => {
     productDetail.value = detail
     deleteProductDetailDialog.value = true
   } else {
-    productForm.details = productForm.details.filter((detail, i) => i !== index)
+    productForm.details.splice(index, 1)
   }
 }
 const deleteProductDetail = (id) => {
   closeDialogDelete()
-  for (let i = 0; i < productForm.details.length; i++) {
-    if (productForm.details[i].id === id) {
-      productForm.details.splice(i,1)
-    }
-  }
+  productForm.details = productForm.details.filter(detail => detail.id !== id)
 }
-
-
 </script>

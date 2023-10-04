@@ -125,7 +125,7 @@
               <Button icon="pi pi-plus" rounded severity="help" size="small" @click="createDetail"/>
             </div>
             <!--Product Detail Key-->
-            <div v-for="detail in productForm.details" :key="detail.id" class="flex mb-3">
+            <div v-for="(detail,index) in productForm.details" :key="detail.id" class="flex mb-3">
               <div class="w-full">
                 <Dropdown v-model="detail.key"
                           :options="details"
@@ -147,7 +147,7 @@
                   icon="pi pi-times"
                   outlined
                   severity="danger"
-                  @click="deleteDetail(detail.id)"/>
+                  @click="deleteDetail(index)"/>
             </div>
           </div>
 
@@ -176,23 +176,25 @@ import BreadList from '../Component/BreadList.vue'
 const { status } = defineProps({ status: String })
 
 // Get Details Lists
-const getDetails = () => {
-  axios.get(route('details.index')).then((response) => {
+const getDetails = async () => {
+  try {
+    const response = await axios.get(route('details.index'))
     details.value = response.data
-  }).catch((error) => {
-    console.log(error)
-  })
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 const details = ref([])
 
 // Categories Lists
-const getCategories = () => {
-  axios.get(route('categories.index')).then((response) => {
+const getCategories = async () => {
+  try {
+    const response = await axios.get(route('categories.index'))
     categories.value = response.data
-  }).catch((error) => {
-    console.log(error)
-  })
+  } catch (error) {
+    console.error(error)
+  }
 }
 const categories = ref([])
 
@@ -222,15 +224,13 @@ const productForm = useForm({
 
 // Product Images
 const addImage = (image) => {
-  for (let i = 0; i < image.length; i++) {
-    productForm.images.push(image[i])
-  }
+  productForm.images.push(...image)
 }
+
 const removeImage = (file, removeFileCallback, index) => {
-  for (let i = 0; i < productForm.images.length; i++) {
-    if (productForm.images[i] === file) {
-      productForm.images.splice(i, 1)
-    }
+  const imageIndex = productForm.images.indexOf(file)
+  if (imageIndex !== -1) {
+    productForm.images.splice(imageIndex, 1)
   }
   removeFileCallback(index)
 }
@@ -238,18 +238,15 @@ const removeAllImages = () => {
   productForm.images = []
 }
 
-// Product Detail Count
-const detail = ref(0)
 
 // Add detail creation input
 const createDetail = () => {
-  productForm.details.push({ key: null, value: null, id: detail.value })
-  detail.value++
+  productForm.details.push({ key: null, value: null})
 }
 
 // Remove detail creation input
-const deleteDetail = (id) => {
-  productForm.details = productForm.details.filter((detail) => detail.id !== id)
+const deleteDetail = (index) => {
+  productForm.details.splice(index, 1)
 }
 
 
