@@ -34,7 +34,9 @@
                         </FileUpload>
                     </div>
                     <div class="flex justify-content-end my-3">
-                        <button>submit</button>
+                        <button type="button" style="background-color: transparent; outline: none;border: none;">
+                            <Button type="submit" label="Submit" />
+                        </button>
                     </div>
                 </form>
             </div>

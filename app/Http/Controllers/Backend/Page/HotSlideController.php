@@ -6,6 +6,7 @@ use App\Models\HotSlide;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 class HotSlideController extends Controller
 {
@@ -14,7 +15,9 @@ class HotSlideController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Backend/Page/Hotslide/Index');
+        return Inertia::render('Backend/Page/Hotslide/Index',[
+            'slides' => Inertia::lazy(fn () =>  HotSlide::all()),
+        ]);
     }
 
     /**
@@ -39,11 +42,19 @@ class HotSlideController extends Controller
         if ($request->file('files')){
             foreach($request->file('files') as $key => $file)
             {
-                $fileName = time().rand(1,99).'.'.$file->extension();
+                $fileName = time().rand(1,99).'-'.Carbon::now()->format('Y_m_d_H_i_s').'.'.$file->extension();
                 $file->move(public_path('hot-slide'), $fileName);
                 $files[]['name'] = $fileName;
             }
         }
+
+        foreach ($files as $file) {
+            HotSlide::create([
+                'image' => $file['name']
+            ]);
+        }
+
+        return redirect()->route('hot-slide.index');
     }
 
     /**

@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('hot_slides', function (Blueprint $table) {
             $table->id();
             $table->string("image");
-            $table->foreignId("product_id");
-            $table->string("url");
+            $table->foreignId("product_id")->nullable();
+            $table->string("url")->nullable();
+            $table->enum("is_show",[0,1])->default(0);
             $table->timestamps();
         });
     }
