@@ -74,6 +74,8 @@ class DetailController extends Controller
      */
     public function destroy(Detail $detail)
     {
-        //
+        $key = $detail->key;
+        $detail->delete();
+        return json_encode(['status'=> 'detail-delete-success', 'key' => $key]);
     }
 }

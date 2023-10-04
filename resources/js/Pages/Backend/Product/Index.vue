@@ -1,11 +1,7 @@
 <template>
   <AdminLayout>
     <div class="px-4 py-5 md:px-6 lg:px-8">
-      <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
-        <li>
-          <span class="text-900 line-height-3">Products</span>
-        </li>
-    </ul>
+      <BreadList primary-name="Products" />
       <Divider/>
       <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
         <div class="font-medium text-3xl text-900">Products</div>
@@ -66,9 +62,11 @@
                       outlined
                       rounded severity="info" style="height: 40px; width: 40px"/>
               <!--Edit Button-->
-              <Button class="mr-2" icon="pi pi-pencil"
-                      outlined
-                      rounded severity="warning" style="height: 40px; width: 40px"/>
+              <Link :href="route('products.edit', data.id)">
+                <Button class="mr-2" icon="pi pi-pencil"
+                        outlined
+                        rounded severity="warning" style="height: 40px; width: 40px"/>
+              </Link>
               <!--Delete Dialog Button-->
               <Button icon="pi pi-trash "
                       outlined
@@ -102,6 +100,7 @@ import Tag from 'primevue/tag'
 import Divider from 'primevue/divider'
 import TableSkeleton from './Partials/TableSkeleton.vue'
 import DeleteProductDialog from './Partials/DeleteProductDialog.vue'
+import BreadList from '../Component/BreadList.vue'
 
 // Load Products
 let { products } = defineProps({ products: undefined })

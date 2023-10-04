@@ -1,19 +1,10 @@
 <template>
   <AdminLayout>
     <div class="px-4 py-5 md:px-6 lg:px-8">
-      <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
-        <li>
-          <Link :href="route('products.index')"
-                class="text-500 no-underline line-height-3 cursor-pointer">Products
-          </Link>
-        </li>
-        <li class="px-2">
-          <i class="pi pi-angle-right text-500 line-height-3"></i>
-        </li>
-        <li>
-          <span class="text-900 line-height-3">Create</span>
-        </li>
-      </ul>
+      <BreadList :primary-route="route('products.index')"
+                 :secondary="true"
+                 primary-name="Products"
+                 secondary-name="Create"/>
       <Divider/>
       <div class="font-medium text-3xl text-900 mb-4">Create Product</div>
       <!--Product Form Section-->
@@ -106,7 +97,7 @@
                           <img :alt="file.name"
                                :src="file.objectURL"
                                class="shadow-2"
-                               height="50"
+                               height="70"
                                role="presentation"
                                width="100"/>
                           <span class="font-semibold ml-3">{{ file.name }}</span>
@@ -125,29 +116,7 @@
           </div>
 
           <!--Product Detail Input-->
-          <div class="flex flex-column mb-4">
-            <div class="flex justify-content-between align-items-center">
-              <div class="font-medium text-xl mb-2">New Detail Key</div>
-              <Button label="Create"
-                      rounded
-                      severity="help"
-                      size="small"
-                      @click="newDetailKeyDialog = true"/>
-            </div>
-            <Dialog v-model:visible="newDetailKeyDialog"
-                    :style="{ width: '30vw' }"
-                    header="Create Detail Key">
-              <div class="flex flex-column mb-2">
-                <label class="text-xl font-medium mb-2" for="minmax-buttons"> New Key </label>
-                <InputText v-model="newDetailKey"/>
-                <div v-if="newDetailKeyError" class="text-md text-red-600 mt-1">
-                  {{ newDetailKeyError }}
-                </div>
-                <Button class="mt-4" label="Create" @click="createNewDetailKey"/>
-              </div>
-            </Dialog>
-
-          </div>
+          <DetailKeyDialog @get-detail="getDetails"></DetailKeyDialog>
 
           <!--Product Detail Input-->
           <div class="flex flex-column mb-4">
@@ -197,37 +166,14 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import Dropdown from 'primevue/dropdown'
 import Button from 'primevue/button'
-import Dialog from 'primevue/dialog'
 import Toast from 'primevue/toast'
-import { useToast } from 'primevue/usetoast'
-import { Link, useForm } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 import { onMounted, ref, watch } from 'vue'
 import axios from 'axios'
+import DetailKeyDialog from './Partials/DetailKeyDialog.vue'
+import BreadList from '../Component/BreadList.vue'
 
 const { status } = defineProps({ status: String })
-
-// Create New Detail Key
-const newDetailKeyDialog = ref(false)
-const newDetailKey = ref(null)
-const newDetailKeyError = ref(null)
-const newDetailKeyToast = useToast()
-const createNewDetailKey = () => {
-  axios.post(route('details.store'), {
-    key: newDetailKey.value
-  }).then((response) => {
-    newDetailKeyError.value = null
-    newDetailKeyToast.add({
-      severity: 'success',
-      summary: 'New Detail Key',
-      detail: `New Detail Key (${response.data.key}) is created successfully`,
-      life: 5000
-    })
-    getDetails()
-    newDetailKeyDialog.value = false
-  }).catch((error) => {
-    newDetailKeyError.value = error.response.data.message
-  })
-}
 
 // Get Details Lists
 const getDetails = () => {

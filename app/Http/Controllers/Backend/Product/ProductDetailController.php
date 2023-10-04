@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Backend\Product;
 
 use App\Models\ProductDetail;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class ProductDetailController extends Controller
@@ -12,14 +11,6 @@ class ProductDetailController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
     {
         //
     }
@@ -42,6 +33,14 @@ class ProductDetailController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
      * Display the specified resource.
      */
     public function show(ProductDetail $productDetail)
@@ -60,9 +59,25 @@ class ProductDetailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProductDetail $productDetail)
+    public function update($details, $productId)
     {
-        //
+        if ($details) {
+            foreach ($details as $detail) {
+                if (!isset($detail['product_id'])) {
+                    ProductDetail::create([
+                        'detail_id'  => $detail['detail_id'],
+                        'value'      => $detail['value'],
+                        'product_id' => $productId,
+                    ]);
+                } else {
+                    $productDetail = ProductDetail::find($detail['id']);
+                    $productDetail->value = $detail['value'];
+                    $productDetail->detail_id = $detail['detail_id'];
+                    $productDetail->save();
+                }
+            }
+        }
+
     }
 
     /**

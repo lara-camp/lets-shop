@@ -8,6 +8,9 @@ use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
+use App\Models\Detail;
+use App\Models\Category;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -76,15 +79,47 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $product->productImages;
+        $product->category;
+        $product->productDetails;
+        $data = [
+            "product"        => $product,
+            "details" => Detail::all(),
+            "categories" => Category::all(),
+        ];
+
+        return Inertia::render("Backend/Product/Edit", [
+            'data' => $data,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function updateProduct($id, Request $request)
     {
-        //
+        $product = Product::find($id);
+        // Edit Product
+        $product->name = $request->name;
+        $product->slug = Str::slug($request->name);
+        $product->description = $request->description;
+        $product->truncate =  Str::words($request->description, 30, "...");
+        $product->category_id = $request->category;
+        $product->price = $request->price;
+        $product->stock = $request->stock;
+        $product->save();
+
+        // Edit Product Details
+        $productDetailController = new ProductDetailController();
+        $productDetailController->update($request->details, $product->id);
+
+        // Store Product Images
+        if (isset($request->allFiles()['images'])) {
+            $productImageController = new ProductImageController();
+            $productImageController->store($request->allFiles()['images'], $product->id);
+        }
+
+        return redirect()->route('products.index')->with('status', 'product-update-success');
     }
 
     /**
@@ -92,6 +127,5 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
     }
 }

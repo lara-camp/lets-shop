@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Auth;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -44,7 +45,8 @@ class HandleInertiaRequests extends Middleware
         $translations = Lang::get('messages');
 
         return array_merge(parent::share($request), [
-            'translations' => $translations
+            'translations' => $translations,
+            'user' => Auth::user() ?? null
         ]);
     }
 }
