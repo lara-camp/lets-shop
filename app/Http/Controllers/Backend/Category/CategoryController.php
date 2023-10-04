@@ -6,7 +6,9 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -15,15 +17,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Backend/Category/Index');
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return Inertia::render('Backend/Category/Create');
+        if (request()->expectsJson()) {
+            $categories = DB::table('categories')->select('id', 'title')->get();
+
+            return json_encode($categories);
+        }
+
+        return Inertia::render('Backend/Category/Index');
     }
 
     /**
@@ -31,13 +32,25 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        $category = new Category();
+        $category->title = $request->title;
+        $category->slug = Str::slug($request->title);
+        if ($request->parentCategory) {
+            $category->parent_id = $request->parentCategory['id'];
+        }
+        $category->save();
+
+        return json_encode([
+
+            'status' => 'Created Successfully',
+            'title'  => $request->title,
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function detail($slug)
     {
         //
     }

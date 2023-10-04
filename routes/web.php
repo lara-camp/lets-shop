@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Shared\OAuthController;
 use Inertia\Inertia;
 use App\Http\Controllers\Backend\Product\ProductController;
+use App\Http\Controllers\Backend\Product\DetailController;
+use App\Http\Controllers\Backend\Product\ProductImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +55,10 @@ Route::post("/dashboard/login", [AuthController::class, "login"])->name('admin.l
 
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','isAdmin']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::resource('products', ProductController::class);
-    Route::resource('categories',CategoryController::class);
+    Route::resource('products', ProductController::class)->except('show');
+    Route::get('products/{slug}', [ProductController::class, 'detail'])->name('products.detail');
+    Route::resource('product-images', ProductImageController::class);
+    Route::resource('details', DetailController::class);
+    Route::resource('categories',CategoryController::class)->except('show', 'create');
+    Route::get('categories/{slug}', [CategoryController::class, 'detail'])->name('products.detail');
 });
