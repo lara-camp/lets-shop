@@ -78,11 +78,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        $product->productImages;
+        $product->category;
+        $product->productDetails;
         $data = [
             "product"        => $product,
-            "category"       => $product->category,
-            "productImages"  => $product->productImages,
-            "productDetails" => $product->productDetails,
             "details" => Detail::all(),
             "categories" => Category::all()
         ];
@@ -105,6 +105,5 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
     }
 }

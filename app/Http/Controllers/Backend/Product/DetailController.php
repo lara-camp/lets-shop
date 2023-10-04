@@ -76,6 +76,6 @@ class DetailController extends Controller
     {
         $key = $detail->key;
         $detail->delete();
-        return json_encode(['status'=> 'detail-create-success', 'key' => $key]);
+        return json_encode(['status'=> 'detail-delete-success', 'key' => $key]);
     }
 }

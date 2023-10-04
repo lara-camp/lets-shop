@@ -25,7 +25,7 @@ class ProductImageController extends Controller
         foreach ($images as $image) {
             $image_name = time().rand(1, 99).'.'.$image->extension();
             $image->move(public_path('product_img'), $image_name);
-            $path = "/product_img/".$image_name;
+            $path = "product_img/".$image_name;
             $files[]['path'] = $path;
         }
 
@@ -76,6 +76,7 @@ class ProductImageController extends Controller
      */
     public function destroy(ProductImage $productImage)
     {
-        //
+        $productImage->delete();
+        return json_encode(['status'=> 'product-image-delete-success']);
     }
 }

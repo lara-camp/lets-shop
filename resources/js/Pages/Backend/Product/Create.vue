@@ -97,7 +97,7 @@
                           <img :alt="file.name"
                                :src="file.objectURL"
                                class="shadow-2"
-                               height="50"
+                               height="70"
                                role="presentation"
                                width="100"/>
                           <span class="font-semibold ml-3">{{ file.name }}</span>
