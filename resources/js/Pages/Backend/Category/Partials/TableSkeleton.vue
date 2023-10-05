@@ -10,17 +10,22 @@
             </span>
         </div>
       </template>
-      <Column field="id" header="#ID" style="width: 10%">
+      <Column field="id" header="#ID" style="width: 1%">
         <template #body>
           <Skeleton></Skeleton>
         </template>
       </Column>
-      <Column field="title" header="Category Name">
+      <Column field="title" header="Category Name" style="width:10%">
         <template #body>
           <Skeleton></Skeleton>
         </template>
       </Column>
-      <Column field="slug" header="Slug">
+      <Column field="products_count" header="Product Qty" style="width:10%">
+        <template #body>
+          <Skeleton></Skeleton>
+        </template>
+      </Column>
+       <Column field="Action" header="Action" style="width:10%">
         <template #body>
           <Skeleton></Skeleton>
         </template>

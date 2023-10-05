@@ -13,6 +13,46 @@
           <Button icon="pi pi-plus" label="Create" @click="visible = true"></Button>
           <!-- Status Toast for category created -->
           <Toast/>
+
+          <!-- Dialog for edit category -->
+          <Dialog v-model:visible="categoryDialog" :dismissableMask="true" :style="{width: '50vw'}" header="Category Edit" :modal="true" class="p-fluid">
+                <div class=" justify-content-center">
+                    <div class=" p-3">
+                        <div class="flex flex-column gap-2">
+                            <label class="text-xl font-medium" for="name">Category Name</label>
+                            <InputText id="name"
+                                        v-model="category.title"
+                                        aria-describedby="name-help"
+                                        name="title"/>
+                            <!-- title Input Error Message -->
+                            <div v-if="titleError" class="text-red-600">{{ titleError }}</div>
+                        </div>
+
+                        <div class="flex flex-column gap-2">
+                            <div class="flex align-items-center my-3">
+                                <Checkbox v-model="editChecked"  :binary="true"/>
+                                <label class="text-xl font-medium ml-2">Have parent category</label>
+                            </div>
+                            <Dropdown v-model="category.parent_id"
+                                        :disabled="!editChecked"
+                                        :options="SelectCategories"
+                                        class="w-full "
+                                        optionValue="id"
+                                        filter
+                                        optionLabel="title"
+                                        placeholder="Select a Category">
+                            </Dropdown>
+                        </div>
+                        <div class="flex justify-content-end mt-2">
+                            <Button class="text-xl font-medium "
+                                label="Edit"
+                                @click="updateCategory"></Button>
+                        </div>
+                    </div>
+                </div>
+          </Dialog>
+
+            <!-- For category create dialog -->
           <Dialog v-model:visible="visible"
                   :dismissableMask="true"
                   :style="{ width: '50vw'}"
@@ -26,8 +66,8 @@
                              v-model="title"
                              aria-describedby="name-help"
                              name="title"/>
-                  <!-- Email Input Error Message -->
-                  <div v-if="emailError" class="text-red-600">{{ emailError }}</div>
+                  <!-- title Input Error Message -->
+                  <div v-if="titleError" class="text-red-600">{{ titleError }}</div>
                 </div>
 
                 <div class="flex flex-column gap-2">
@@ -52,6 +92,8 @@
               </div>
             </div>
           </Dialog>
+
+          <!-- For Category Delete Dialog -->
           <Dialog v-model:visible="deleteProductDialog"
                   :dismissableMask="true"
                   :modal="true"
@@ -59,8 +101,8 @@
                   header="Confirm">
             <div class="confirmation-content">
               <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"/>
-              <span v-if="products">Are you sure you want to delete <b>{{
-                  products.name
+              <span v-if="category">Are you sure you want to delete <b>{{
+                  category.title
                 }}</b>?</span>
             </div>
             <template #footer>
@@ -111,7 +153,7 @@
                       rounded
                       severity="warning"
                       style="height: 40px; width: 40px"
-                      @click="editProduct(slotProps.data)"/>
+                      @click="editCategory(slotProps.data)"/>
               <Button icon="pi pi-trash"
                       outlined
                       rounded
@@ -148,22 +190,41 @@ import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 import TableSkeleton from '../Category/Partials/TableSkeleton.vue'
 
+
+//edit category dialog
+const editChecked = ref(false)
+const categoryDialog = ref(false);
+const category=ref({})
+const editCategory = (prod) => {
+    category.value = {...prod};
+    editChecked.value=category.value.parent_id ? true : false
+    categoryDialog.value = true;
+};
+
+//delete category dialog
 const deleteProductDialog = ref(false)
-const toast = useToast()
 const confirmDeleteProduct = (prod) => {
-  products.value = prod
+  category.value = {...prod};
   deleteProductDialog.value = true
 }
 const deleteProduct = () => {
-  products.value = products.value.filter(val => val.id !== products.value.id)
-  deleteProductDialog.value = false
-  products.value = {}
-  toast.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 })
-}
+    deleteProductDialog.value = false;
+    axios.delete(route('categories.destroy',category.value.id))
+    .then((response)=>{
+        getCategories();
+        newCategoryToast.add({
+                    severity: 'success',
+                    summary: 'Delete Category',
+                    detail: `${response.data.title} is deleted successfully`,
+                    life: 5000
+                })
+    })
+};
+
 
 const visible = ref(false) //for Dialog close and open
 const title = ref()
-const emailError = ref()
+const titleError = ref()
 const parentCategory = ref()
 const newCategoryToast = useToast()
 const createCategory = () => {
@@ -173,7 +234,7 @@ const createCategory = () => {
   })
       .then((response) => {
         if (response.data) {
-            emailError.value=''
+            titleError.value=''
             title.value = ''
             parentCategory.value = ''
             visible.value = false
@@ -189,10 +250,41 @@ const createCategory = () => {
       })
       .catch((error) => {
         if (error) {
-          emailError.value = error.response.data.errors.title[0]
+          titleError.value = error.response.data.errors.title[0]
         }
       })
 }
+
+const updateCategory=()=>{
+    axios.put(route('categories.update',category.value.id),{
+        title:category.value.title,
+        parentCategory:category.value.parent_id,
+        id:category.value.id
+    })
+    .then((response)=>{
+        if(response.data){
+            categoryDialog.value=false;
+            getCategories();
+            if(response.data.error){
+                 newCategoryToast.add({
+                    severity: 'warn',
+                    summary: 'Error',
+                    detail: `${response.data.error}`,
+                    life: 5000
+                })
+            }else{
+                newCategoryToast.add({
+                    severity: 'success',
+                    summary: 'Edit Category',
+                    detail: `${response.data.title} is updated successfully`,
+                    life: 5000
+                })
+            }
+        }
+    })
+    .catch((error)=>console.log(error))
+}
+
 
 //Getting categories from database
 const categories=ref(undefined);
@@ -203,7 +295,6 @@ const getCategories = () => {
         if (response) {
           SelectCategories.value = response.data
           categories.value=response.data
-          console.log(categories.value)
         }
       })
       .catch((error) => {
@@ -211,8 +302,8 @@ const getCategories = () => {
       })
 }
 
-const checked = ref(false)  //for have parent checkbox true or false
 
+const checked = ref(false)  //for have parent checkbox true or false
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })

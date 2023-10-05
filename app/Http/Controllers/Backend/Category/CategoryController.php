@@ -6,7 +6,7 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 
@@ -39,7 +39,6 @@ class CategoryController extends Controller
         $category->save();
 
         return json_encode([
-
             'status' => 'Created Successfully',
             'title'  => $request->title,
         ]);
@@ -66,7 +65,21 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $category=Category::find($request->id);
+        $category->title=$request->title;
+        $category->slug = Str::slug($request->title);
+        if($request->parentCategory && $request->parentCategory == $request->id){
+            return json_encode([
+                'error'=>'cannot select same category'
+            ]);
+        }else{
+            $category->parent_id=$request->parentCategory;
+        }
+        $category->save();
+        return json_encode([
+            'status' => 'Updated Successfully',
+            'title'  => $request->title,
+        ]);
     }
 
     /**
@@ -74,6 +87,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return json_encode([
+            'status' => 'Deleted Successfully',
+            'title'  => $category->title,
+        ]);
     }
 }
