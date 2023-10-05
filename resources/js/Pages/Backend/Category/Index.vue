@@ -267,10 +267,9 @@ const updateCategory=()=>{
             getCategories();
             if(response.data.error){
                  newCategoryToast.add({
-                    severity: 'warn',
+                    severity: 'error',
                     summary: 'Error',
                     detail: `${response.data.error}`,
-                    life: 5000
                 })
             }else{
                 newCategoryToast.add({
