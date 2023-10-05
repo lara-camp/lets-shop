@@ -33,7 +33,7 @@ class ProductController extends Controller
     /**
      * Show the product detail with slug
      */
-    public function detail($slug)
+    public function show(Product $product)
     {
         return Inertia::render("Backend/Product/Show");
     }

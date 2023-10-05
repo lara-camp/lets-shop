@@ -20,6 +20,11 @@ class Product extends Model
         "category_id",
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function category():BelongsTo
     {
         return $this->belongsTo(Category::class);

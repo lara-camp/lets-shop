@@ -53,7 +53,7 @@
           <Column field="action" header="Action" style="width: 10%">
             <template #body="{ data}">
               <!--View Detail Button-->
-              <Link :href="route('products.detail', data.slug)">
+              <Link :href="route('products.show', data.slug)">
                 <Button class="mr-2"
                         icon="pi pi-align-left"
                         outlined rounded style="height: 40px; width: 40px"/>
@@ -63,7 +63,7 @@
                       outlined
                       rounded severity="info" style="height: 40px; width: 40px"/>
               <!--Edit Button-->
-              <Link :href="route('products.edit', data.id)">
+              <Link :href="route('products.edit',data.slug)">
                 <Button class="mr-2" icon="pi pi-pencil"
                         outlined
                         rounded severity="warning" style="height: 40px; width: 40px"/>
