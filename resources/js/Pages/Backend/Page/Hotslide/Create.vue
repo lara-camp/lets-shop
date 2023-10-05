@@ -1,6 +1,6 @@
 <template>
     <AdminLayout>
-        <div class="grid m-auto">
+        <div class="grid m-auto mt-3">
             <div class="col-11 m-auto">
                 <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
                     <li>
@@ -35,7 +35,7 @@
                     </div>
                     <div class="flex justify-content-end my-3">
                         <button type="button" style="background-color: transparent; outline: none;border: none;">
-                            <Button type="submit" label="Submit" />
+                            <Button type="submit" label="Upload" />
                         </button>
                     </div>
                 </form>

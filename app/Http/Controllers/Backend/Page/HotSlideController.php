@@ -13,8 +13,23 @@ class HotSlideController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function lists(){
+
+    }
+    /**
+     * Summary of index
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $delete
+     * @return \Inertia\Response
+     */
+    public function index(Request $request,$delete = 0)
     {
+        $delete = $request->input('delete');
+        if($delete == 1){
+            return Inertia::render('Backend/Page/Hotslide/Index',[
+                'slides' => HotSlide::all(),
+            ]);
+        }
         return Inertia::render('Backend/Page/Hotslide/Index',[
             'slides' => Inertia::lazy(fn () =>  HotSlide::all()),
         ]);
@@ -86,6 +101,8 @@ class HotSlideController extends Controller
      */
     public function destroy(HotSlide $hotSlide)
     {
-        //
+        $hotSlide->delete();
+        return redirect()->route('hot-slide.index', ['delete' => 1]);
     }
+
 }
