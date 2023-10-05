@@ -1,7 +1,6 @@
 <template>
-
   <AdminAuthLayoutVue>
-    <Head title="Login"/>
+    <Head title="Dashboard Login"/>
     <!-- Card for Login Form -->
     <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
       <div class="text-center mb-5">

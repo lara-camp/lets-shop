@@ -57,7 +57,7 @@ Route::post("/dashboard/login", [AuthController::class, "login"])->name('admin.l
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','isAdmin']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('products', ProductController::class)->except('show', 'update');
-    Route::post('products', [ProductController::class,'updateProduct'])->name('products.update');
+    Route::post('products/{product}', [ProductController::class,'updateProduct'])->name('products.update');
     Route::get('products/{slug}', [ProductController::class, 'detail'])->name('products.detail');
     Route::delete('product-details/{productDetail}', [ProductDetailController::class, 'destroy'])->name('product-detail.destroy');
     Route::resource('product-images', ProductImageController::class);

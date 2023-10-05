@@ -1,5 +1,6 @@
 <template>
   <AdminLayout>
+    <Head title="Products"/>
     <div class="px-4 py-5 md:px-6 lg:px-8">
       <BreadList primary-name="Products"/>
       <Divider/>
@@ -79,7 +80,7 @@
           </Column>
         </DataTable>
         <DeleteProductDialog :dialog-view="deleteProductDialog" :product="deleteProduct"
-                             @close-delete="closeDeleteDialog"></DeleteProductDialog>
+                             @close-delete="closeDeleteDialog" @delete-product="deleteProductFn"></DeleteProductDialog>
 
       </div>
       <TableSkeleton v-else></TableSkeleton>
@@ -93,7 +94,7 @@ import { Link, router } from '@inertiajs/vue3'
 import Button from 'primevue/button'
 import AdminLayout from '../../../Layout/AdminLayout.vue'
 import { FilterMatchMode } from 'primevue/api'
-import { onMounted, ref } from 'vue'
+import { onMounted, onUpdated, ref } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import InputText from 'primevue/inputtext'
@@ -125,10 +126,11 @@ const getSeverity = (discount) => {
   }
 }
 
-// Delete Product
+// Selected Delete Product
 const deleteProduct = ref(null)
-const deleteProductDialog = ref(false)
 
+// Product Delete Confirm Dialog
+const deleteProductDialog = ref(false)
 const closeDeleteDialog = () => {
   deleteProductDialog.value = false
   deleteProduct.value = null
@@ -137,6 +139,12 @@ const showDeleteDialog = (product) => {
   deleteProduct.value = product
   deleteProductDialog.value = true
 }
+
+// Delete Product
+const deleteProductFn = (product) => {
+  router.delete(route('products.destroy', product))
+}
+
 </script>
 
 <style scoped></style>

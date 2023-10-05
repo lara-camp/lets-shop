@@ -1,4 +1,5 @@
 <template>
+  <Head title="Product - Create"/>
   <AdminLayout>
     <div class="px-4 py-5 md:px-6 lg:px-8">
       <BreadList :primary-route="route('products.index')"
@@ -10,7 +11,7 @@
       <!--Product Form Section-->
       <form id="productForm"
             class="grid justify-content-center"
-            @submit.prevent="productForm.post(route('products.store'))">
+            @submit.prevent="productForm.post(route('products.store'), {preserveScroll : true})">
         <div class="col-6 pr-5">
 
           <!--Product Name Input-->
@@ -90,23 +91,27 @@
                 <template #content="{ files, removeFileCallback }">
                   <div v-if="files.length > 0">
                     <div class="flex flex-column">
-                      <div v-for="(file, index) of files"
-                           :key="file.name + file.type + file.size"
-                           class="card mb-3 flex p-2 w-full justify-content-between border-1 surface-border align-items-center">
-                        <div class="flex align-items-center">
-                          <img :alt="file.name"
-                               :src="file.objectURL"
-                               class="shadow-2"
-                               height="70"
-                               role="presentation"
-                               width="100"/>
-                          <span class="font-semibold ml-3">{{ file.name }}</span>
+                      <div v-for="(file, index) of files" :key="file.name + file.type + file.size"
+                           class="mb-3">
+                        <div class="card  flex p-2 w-full justify-content-between border-1 surface-border align-items-center">
+                          <div class="flex align-items-center">
+                            <img :alt="file.name"
+                                 :src="file.objectURL"
+                                 class="shadow-2"
+                                 height="70"
+                                 role="presentation"
+                                 width="100"/>
+                            <span class="font-semibold ml-3">{{ file.name }}</span>
+                          </div>
+                          <Button icon="pi pi-times"
+                                  outlined
+                                  rounded
+                                  severity="danger"
+                                  @click="removeImage(file, removeFileCallback, index)"/>
                         </div>
-                        <Button icon="pi pi-times"
-                                outlined
-                                rounded
-                                severity="danger"
-                                @click="removeImage(file, removeFileCallback, index)"/>
+                        <div v-if="imageErrors[index]"
+                             class="text-sm text-red-600">{{ imageErrors[index] }}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -146,7 +151,6 @@
                      class="text-sm text-red-600">{{ productDetailErrors[index].value }}
                 </div>
               </div>
-              {{ productDetailErrors[index] }}
               <Button
                   class="ml-3 flex-shrink-0 h-3rem"
                   icon="pi pi-times"
@@ -156,6 +160,7 @@
 
             </div>
           </div>
+          {{ productForm.errors }}
 
         </div>
       </form>
@@ -255,33 +260,42 @@ const deleteDetail = (index) => {
   productForm.details.splice(index, 1)
 }
 
-// Get Product Details Errors
+// Initialize Product Detail Errors and Image Errors
 const productDetailErrors = ref([])
+const imageErrors = ref([])
+
+// Function to set error placeholders for product details
 const detailErrorPlaceholder = () => {
   for (let i = 0; i < productForm.details.length; i++) {
     productDetailErrors.value.push({ key: null, value: null })
   }
 }
-watch(() => productForm.errors, () => {
-  // Clear Old Error
-  productDetailErrors.value = []
 
-  // Insert error placeholder for each detail input
+// Watch for changes in productForm.errors
+watch(() => productForm.errors, () => {
+  // Clear old errors
+  productDetailErrors.value = []
+  imageErrors.value = []
+
+  // Set error placeholders for product details
   detailErrorPlaceholder()
 
-  // Get Error
+  // Populate errors
   if (productForm.errors) {
     for (let key in productForm.errors) {
       const parts = key.split('.')
       const index = parseInt(parts[1])
-      const errorKey = parts[2]
-      if (!productDetailErrors.value[index]) {
-        productDetailErrors.value[index] = []
+      if (parts.length > 2) {
+        // parts[2] is error key such as (key error, value error)
+        productDetailErrors.value[index][parts[2]] = productForm.errors[key]
+      } else if (parts.length > 1) {
+        imageErrors.value[index] = productForm.errors[key]
       }
-      productDetailErrors.value[index][errorKey] = productForm.errors[key]
     }
   }
 })
+
+
 </script>
 
 <style scoped></style>

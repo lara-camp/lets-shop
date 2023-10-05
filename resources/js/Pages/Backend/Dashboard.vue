@@ -1,4 +1,5 @@
 <template>
+  <Head title="Dashboard"/>
   <AdminLayout>
 
   </AdminLayout>

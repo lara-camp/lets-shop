@@ -12,7 +12,7 @@
     </div>
     <template #footer>
       <Button icon="pi pi-times" label="No" text @click="close"/>
-      <Button icon="pi pi-check" label="Yes" text />
+      <Button icon="pi pi-check" label="Yes" @click="deleteProduct(product)" text />
     </template>
   </Dialog>
 </template>
@@ -23,12 +23,13 @@ import Dialog from 'primevue/dialog'
 
 const { product, dialogView } = defineProps({ product: Object, dialogView: Boolean })
 
-const noDeleteEmit = defineEmits(['closeDelete'])
+const noDeleteEmit = defineEmits(['closeDelete','deleteProduct'])
 const close = () => {
   noDeleteEmit('closeDelete')
 }
 
-const deleteProduct = () => {
+const deleteProduct = (product) => {
+  noDeleteEmit('deleteProduct', product)
 
 }
 </script>

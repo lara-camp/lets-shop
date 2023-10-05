@@ -1,4 +1,5 @@
 <template>
+  <Head title="Product - Detail"/>
   <AdminLayout>
 
   </AdminLayout>

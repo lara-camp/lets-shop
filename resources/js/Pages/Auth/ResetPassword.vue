@@ -1,4 +1,5 @@
 <template>
+  <Head title="Reset Password"/>
   <UserAuthLayout>
     <!-- Card Container -->
     <div class="surface-card p-4 shadow-2 border-round w-full xl:w-6 lg:w-9 md:w-10">

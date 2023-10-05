@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreProductDetailRequest;
 use App\Http\Requests\UpdateProductDetailRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\StoreProductImageRequest;
 
 class ProductController extends Controller
 {
@@ -62,6 +63,7 @@ class ProductController extends Controller
     public function updateProduct(Request $request,
         UpdateProductRequest $updateProductRequest,
         UpdateProductDetailRequest $updateProductDetailRequest,
+        StoreProductImageRequest $storeProductImageRequest,
         ProductImageController $productImageController,
         ProductDetailController $productDetailController)
     {
@@ -93,6 +95,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request,
         StoreProductDetailRequest $detailRequest,
+        StoreProductImageRequest $storeProductImageRequest,
         ProductImageController $productImageController,
         ProductDetailController $productDetailController)
     {
@@ -133,5 +136,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        return redirect()->route('products.index')->with('success', 'product-delete-success');
+
     }
 }

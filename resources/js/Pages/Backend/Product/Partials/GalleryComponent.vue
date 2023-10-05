@@ -1,11 +1,11 @@
 <template>
   <div v-if="galleries.length > 0" class="card flex justify-content-center mb-6">
-    <Galleria :numVisible="5"
+    <Galleria :numVisible="3"
               :responsiveOptions="responsiveOptions"
               :value="galleries">
       <template #item="slotProps">
         <div class="bg-black-alpha-90 p-3 relative">
-          <img :src="asset(slotProps.item.image)" class="h-30rem"/>
+          <img :src="asset(slotProps.item.image)" :alt="slotProps.item.image"  class="h-30rem"/>
           <Button class="absolute"
                   icon="pi pi-trash"
                   rounded
@@ -26,7 +26,7 @@
         </Dialog>
       </template>
       <template #thumbnail="slotProps">
-        <img :src="asset(slotProps.item.image)" class="h-5rem mx-1"/>
+        <img :src="asset(slotProps.item.image)"  :alt="slotProps.item.image" class="h-5rem mx-1"/>
       </template>
     </Galleria>
 
