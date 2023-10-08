@@ -61,7 +61,7 @@
               <!--Give Discount Dialog Button-->
               <Button class="mr-2" icon="pi pi-tag"
                       outlined
-                      rounded severity="info" style="height: 40px; width: 40px"/>
+                      rounded severity="info" style="height: 40px; width: 40px"  @click="showFlashDialog(data)"/>
               <!--Edit Button-->
               <Link :href="route('products.edit',data.slug)">
                 <Button class="mr-2" icon="pi pi-pencil"
@@ -81,6 +81,11 @@
         </DataTable>
         <DeleteProductDialog :dialog-view="deleteProductDialog" :product="deleteProduct"
                              @close-delete="closeDeleteDialog" @delete-product="deleteProductFn"></DeleteProductDialog>
+
+        <FlashsaleDialog :dialog-view="flashProductDialog"
+                         :product="flashProduct"
+                         @close-flash="closeFlashDialog"
+                         @flash-product="flashProductFn"></FlashsaleDialog>
 
       </div>
       <TableSkeleton v-else></TableSkeleton>
@@ -103,12 +108,14 @@ import Divider from 'primevue/divider'
 import TableSkeleton from './Partials/TableSkeleton.vue'
 import DeleteProductDialog from './Partials/DeleteProductDialog.vue'
 import BreadList from '../Component/BreadList.vue'
+import FlashsaleDialog from './Partials/FlashsaleDialog.vue'
 
 // Load Products
 let { products } = defineProps({ products: undefined })
 onMounted(() => {
   router.reload({ only: ['products'] })
 })
+
 
 // Filter Table
 const filters = ref({
@@ -143,6 +150,24 @@ const showDeleteDialog = (product) => {
 // Delete Product
 const deleteProductFn = (product) => {
   router.delete(route('products.destroy', product))
+  deleteProductDialog.value = false
+  deleteProduct.value = null
+}
+
+// Flash Product Dialog
+const flashProductDialog = ref(false)
+const flashProduct = ref(null)
+const closeFlashDialog = () => {
+  flashProduct.value = null
+  flashProductDialog.value = false
+}
+const showFlashDialog = (product) => {
+  flashProduct.value = product
+  flashProductDialog.value = true
+}
+
+const flashProductFn = (product) => {
+  console.log(product)
 }
 
 </script>

@@ -23,13 +23,13 @@ import Dialog from 'primevue/dialog'
 
 const { product, dialogView } = defineProps({ product: Object, dialogView: Boolean })
 
-const noDeleteEmit = defineEmits(['closeDelete','deleteProduct'])
+const noDeleteEmit = defineEmits(['closeFlash','flashProduct'])
 const close = () => {
-  noDeleteEmit('closeDelete')
+  noDeleteEmit('closeFlash')
 }
 
 const deleteProduct = (product) => {
-  noDeleteEmit('deleteProduct', product)
+  noDeleteEmit('flashProduct', product)
 
 }
 </script>
