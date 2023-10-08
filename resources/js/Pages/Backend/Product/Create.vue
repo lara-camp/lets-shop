@@ -1,25 +1,17 @@
 <template>
+  <Head title="Product - Create"/>
   <AdminLayout>
     <div class="px-4 py-5 md:px-6 lg:px-8">
-      <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
-        <li>
-          <Link :href="route('products.index')"
-                class="text-500 no-underline line-height-3 cursor-pointer">Products
-          </Link>
-        </li>
-        <li class="px-2">
-          <i class="pi pi-angle-right text-500 line-height-3"></i>
-        </li>
-        <li>
-          <span class="text-900 line-height-3">Create</span>
-        </li>
-      </ul>
+      <BreadList :primary-route="route('products.index')"
+                 :secondary="true"
+                 primary-name="Products"
+                 secondary-name="Create"/>
       <Divider/>
       <div class="font-medium text-3xl text-900 mb-4">Create Product</div>
       <!--Product Form Section-->
       <form id="productForm"
             class="grid justify-content-center"
-            @submit.prevent="productForm.post(route('products.store'))">
+            @submit.prevent="productForm.post(route('products.store'), {preserveScroll : true})">
         <div class="col-6 pr-5">
 
           <!--Product Name Input-->
@@ -99,23 +91,27 @@
                 <template #content="{ files, removeFileCallback }">
                   <div v-if="files.length > 0">
                     <div class="flex flex-column">
-                      <div v-for="(file, index) of files"
-                           :key="file.name + file.type + file.size"
-                           class="card mb-3 flex p-2 w-full justify-content-between border-1 surface-border align-items-center">
-                        <div class="flex align-items-center">
-                          <img :alt="file.name"
-                               :src="file.objectURL"
-                               class="shadow-2"
-                               height="50"
-                               role="presentation"
-                               width="100"/>
-                          <span class="font-semibold ml-3">{{ file.name }}</span>
+                      <div v-for="(file, index) of files" :key="file.name + file.type + file.size"
+                           class="mb-3">
+                        <div class="card  flex p-2 w-full justify-content-between border-1 surface-border align-items-center">
+                          <div class="flex align-items-center">
+                            <img :alt="file.name"
+                                 :src="file.objectURL"
+                                 class="shadow-2"
+                                 height="70"
+                                 role="presentation"
+                                 width="100"/>
+                            <span class="font-semibold ml-3">{{ file.name }}</span>
+                          </div>
+                          <Button icon="pi pi-times"
+                                  outlined
+                                  rounded
+                                  severity="danger"
+                                  @click="removeImage(file, removeFileCallback, index)"/>
                         </div>
-                        <Button icon="pi pi-times"
-                                outlined
-                                rounded
-                                severity="danger"
-                                @click="removeImage(file, removeFileCallback, index)"/>
+                        <div v-if="imageErrors[index]"
+                             class="text-sm text-red-600">{{ imageErrors[index] }}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -125,29 +121,7 @@
           </div>
 
           <!--Product Detail Input-->
-          <div class="flex flex-column mb-4">
-            <div class="flex justify-content-between align-items-center">
-              <div class="font-medium text-xl mb-2">New Detail Key</div>
-              <Button label="Create"
-                      rounded
-                      severity="help"
-                      size="small"
-                      @click="newDetailKeyDialog = true"/>
-            </div>
-            <Dialog v-model:visible="newDetailKeyDialog"
-                    :style="{ width: '30vw' }"
-                    header="Create Detail Key">
-              <div class="flex flex-column mb-2">
-                <label class="text-xl font-medium mb-2" for="minmax-buttons"> New Key </label>
-                <InputText v-model="newDetailKey"/>
-                <div v-if="newDetailKeyError" class="text-md text-red-600 mt-1">
-                  {{ newDetailKeyError }}
-                </div>
-                <Button class="mt-4" label="Create" @click="createNewDetailKey"/>
-              </div>
-            </Dialog>
-
-          </div>
+          <DetailKeyDialog @get-detail="getDetails"></DetailKeyDialog>
 
           <!--Product Detail Input-->
           <div class="flex flex-column mb-4">
@@ -156,7 +130,7 @@
               <Button icon="pi pi-plus" rounded severity="help" size="small" @click="createDetail"/>
             </div>
             <!--Product Detail Key-->
-            <div v-for="detail in productForm.details" :key="detail.id" class="flex mb-3">
+            <div v-for="(detail,index) in productForm.details" :key="detail.id" class="flex mb-3">
               <div class="w-full">
                 <Dropdown v-model="detail.key"
                           :options="details"
@@ -164,23 +138,29 @@
                           filter
                           optionLabel="key"
                           placeholder="Select a Detail"></Dropdown>
-                <div class="text-sm text-red-600"></div>
+                <div v-if="productDetailErrors[index].key"
+                     class="text-sm text-red-600">{{ productDetailErrors[index].key }}
+                </div>
                 <Toast/>
               </div>
-              <Divider layout="vertical"/>
+              <Divider class="h-3rem" layout="vertical"/>
               <!--Product Detail Value-->
               <div class="w-full">
                 <InputText id="value" v-model="detail.value" class="w-full" placeholder="Value"/>
-                <div class="text-sm text-red-600"></div>
+                <div v-if="productDetailErrors[index].value"
+                     class="text-sm text-red-600">{{ productDetailErrors[index].value }}
+                </div>
               </div>
               <Button
-                  class="ml-3 flex-shrink-0"
+                  class="ml-3 flex-shrink-0 h-3rem"
                   icon="pi pi-times"
                   outlined
                   severity="danger"
-                  @click="deleteDetail(detail.id)"/>
+                  @click="deleteDetail(index)"/>
+
             </div>
           </div>
+          {{ productForm.errors }}
 
         </div>
       </form>
@@ -197,56 +177,35 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import Dropdown from 'primevue/dropdown'
 import Button from 'primevue/button'
-import Dialog from 'primevue/dialog'
 import Toast from 'primevue/toast'
-import { useToast } from 'primevue/usetoast'
-import { Link, useForm } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 import { onMounted, ref, watch } from 'vue'
 import axios from 'axios'
+import DetailKeyDialog from './Partials/DetailKeyDialog.vue'
+import BreadList from '../Component/BreadList.vue'
 
 const { status } = defineProps({ status: String })
 
-// Create New Detail Key
-const newDetailKeyDialog = ref(false)
-const newDetailKey = ref(null)
-const newDetailKeyError = ref(null)
-const newDetailKeyToast = useToast()
-const createNewDetailKey = () => {
-  axios.post(route('details.store'), {
-    key: newDetailKey.value
-  }).then((response) => {
-    newDetailKeyError.value = null
-    newDetailKeyToast.add({
-      severity: 'success',
-      summary: 'New Detail Key',
-      detail: `New Detail Key (${response.data.key}) is created successfully`,
-      life: 5000
-    })
-    getDetails()
-    newDetailKeyDialog.value = false
-  }).catch((error) => {
-    newDetailKeyError.value = error.response.data.message
-  })
-}
-
 // Get Details Lists
-const getDetails = () => {
-  axios.get(route('details.index')).then((response) => {
+const getDetails = async () => {
+  try {
+    const response = await axios.get(route('details.index'))
     details.value = response.data
-  }).catch((error) => {
-    console.log(error)
-  })
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 const details = ref([])
 
 // Categories Lists
-const getCategories = () => {
-  axios.get(route('categories.index')).then((response) => {
+const getCategories = async () => {
+  try {
+    const response = await axios.get(route('categories.index'))
     categories.value = response.data
-  }).catch((error) => {
-    console.log(error)
-  })
+  } catch (error) {
+    console.error(error)
+  }
 }
 const categories = ref([])
 
@@ -276,15 +235,13 @@ const productForm = useForm({
 
 // Product Images
 const addImage = (image) => {
-  for (let i = 0; i < image.length; i++) {
-    productForm.images.push(image[i])
-  }
+  productForm.images.push(...image)
 }
+
 const removeImage = (file, removeFileCallback, index) => {
-  for (let i = 0; i < productForm.images.length; i++) {
-    if (productForm.images[i] === file) {
-      productForm.images.splice(i, 1)
-    }
+  const imageIndex = productForm.images.indexOf(file)
+  if (imageIndex !== -1) {
+    productForm.images.splice(imageIndex, 1)
   }
   removeFileCallback(index)
 }
@@ -292,19 +249,51 @@ const removeAllImages = () => {
   productForm.images = []
 }
 
-// Product Detail Count
-const detail = ref(0)
-
 // Add detail creation input
 const createDetail = () => {
-  productForm.details.push({ key: null, value: null, id: detail.value })
-  detail.value++
+  productForm.details.push({ key: null, value: null })
+  productDetailErrors.value.push({ key: null, value: null })
 }
 
 // Remove detail creation input
-const deleteDetail = (id) => {
-  productForm.details = productForm.details.filter((detail) => detail.id !== id)
+const deleteDetail = (index) => {
+  productForm.details.splice(index, 1)
 }
+
+// Initialize Product Detail Errors and Image Errors
+const productDetailErrors = ref([])
+const imageErrors = ref([])
+
+// Function to set error placeholders for product details
+const detailErrorPlaceholder = () => {
+  for (let i = 0; i < productForm.details.length; i++) {
+    productDetailErrors.value.push({ key: null, value: null })
+  }
+}
+
+// Watch for changes in productForm.errors
+watch(() => productForm.errors, () => {
+  // Clear old errors
+  productDetailErrors.value = []
+  imageErrors.value = []
+
+  // Set error placeholders for product details
+  detailErrorPlaceholder()
+
+  // Populate errors
+  if (productForm.errors) {
+    for (let key in productForm.errors) {
+      const parts = key.split('.')
+      const index = parseInt(parts[1])
+      if (parts.length > 2) {
+        // parts[2] is error key such as (key error, value error)
+        productDetailErrors.value[index][parts[2]] = productForm.errors[key]
+      } else if (parts.length > 1) {
+        imageErrors.value[index] = productForm.errors[key]
+      }
+    }
+  }
+})
 
 
 </script>

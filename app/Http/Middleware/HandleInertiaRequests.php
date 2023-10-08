@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Auth;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -21,7 +22,9 @@ class HandleInertiaRequests extends Middleware
      * Determines the current asset version.
      *
      * @see https://inertiajs.com/asset-versioning
-     * @param  \Illuminate\Http\Request  $request
+     *
+     * @param  Request  $request
+     *
      * @return string|null
      */
     public function version(Request $request): ?string
@@ -33,18 +36,21 @@ class HandleInertiaRequests extends Middleware
      * Defines the props that are shared by default.
      *
      * @see https://inertiajs.com/shared-data
-     * @param  \Illuminate\Http\Request  $request
+     *
+     * @param  Request  $request
+     *
      * @return array
      */
     public function share(Request $request): array
     {
-        if(session()->has('locale')){
+        if (session()->has('locale')) {
             App::setLocale(session()->get('locale'));
         }
         $translations = Lang::get('messages');
 
         return array_merge(parent::share($request), [
-            'translations' => $translations
+            'translations' => $translations,
+            'user'         => Auth::user() ?? null,
         ]);
     }
 }

@@ -132,7 +132,8 @@ const menus = ref({
   chat: {
     name: 'Chat',
     icon: 'pi-comment',
-    active: false,
+    active: router.page.url === '/dashboard/chat' ?? false,
+    route: route('admin-chat.view')
   },
   reviews: {
     name: 'Reviews',

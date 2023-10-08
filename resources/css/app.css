@@ -6,17 +6,20 @@
 /* Custom Font Installation */
 @font-face {
     font-family : 'Quicksand';
-    src : url("/public/fonts/Quicksand/Quicksand-VariableFont_wght.ttf");
+    src : url("/public/fonts/Quicksand/Quicksand-VariableFont_wght.ttf"), url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');;
+    font-display:swap;
 }
 @font-face {
     font-family : 'Poppins';
     font-weight: normal;
     src : url("/public/fonts/Poppins/Poppins-Regular.ttf");
+    font-display:swap;
 }
 @font-face {
     font-family : 'Poppins';
     font-weight: bold;
     src : url("/public/fonts/Poppins/Poppins-Bold.ttf");
+    font-display:swap;
 }
 
 body {

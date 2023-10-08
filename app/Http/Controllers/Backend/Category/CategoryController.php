@@ -50,7 +50,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function detail($slug)
+    public function show(Category $category)
     {
         //
     }

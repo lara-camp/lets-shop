@@ -1,4 +1,5 @@
 <template>
+  <Head title="Categories"/>
   <AdminLayout>
     <div class="px-4 py-5 md:px-6 lg:px-8">
       <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">

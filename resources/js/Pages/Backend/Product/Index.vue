@@ -1,11 +1,8 @@
 <template>
   <AdminLayout>
+    <Head title="Products"/>
     <div class="px-4 py-5 md:px-6 lg:px-8">
-      <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
-        <li>
-          <span class="text-900 line-height-3">Products</span>
-        </li>
-      </ul>
+      <BreadList primary-name="Products"/>
       <Divider/>
       <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
         <div class="font-medium text-3xl text-900">Products</div>
@@ -19,7 +16,7 @@
       <!--Product Table-->
       <div v-if="products" class="card mt-5">
         <DataTable v-model:filters="filters"
-                   :globalFilterFields="['discount']"
+                   :globalFilterFields="['name','description','price','id']"
                    :rows="10"
                    :rowsPerPageOptions="[5, 10, 20, 50]"
                    :sortOrder="-1"
@@ -54,9 +51,9 @@
             </template>
           </Column>
           <Column field="action" header="Action" style="width: 10%">
-            <template #body="{slotProps, data}">
+            <template #body="{ data}">
               <!--View Detail Button-->
-              <Link :href="route('products.detail', data.slug)">
+              <Link :href="route('products.show', data.slug)">
                 <Button class="mr-2"
                         icon="pi pi-align-left"
                         outlined rounded style="height: 40px; width: 40px"/>
@@ -64,24 +61,32 @@
               <!--Give Discount Dialog Button-->
               <Button class="mr-2" icon="pi pi-tag"
                       outlined
-                      rounded severity="info" style="height: 40px; width: 40px"/>
+                      rounded severity="info" style="height: 40px; width: 40px"  @click="showFlashDialog(data)"/>
               <!--Edit Button-->
-              <Button class="mr-2" icon="pi pi-pencil"
-                      outlined
-                      rounded severity="warning" style="height: 40px; width: 40px"/>
+              <Link :href="route('products.edit',data.slug)">
+                <Button class="mr-2" icon="pi pi-pencil"
+                        outlined
+                        rounded severity="warning" style="height: 40px; width: 40px"/>
+              </Link>
               <!--Delete Dialog Button-->
               <Button icon="pi pi-trash "
                       outlined
                       rounded
-                      severity="danger"
-                      style="height: 40px; width: 40px"
-                      @click="deleteProductDialogView = true"/>
+                      severity="danger" style="height: 40px; width: 40px"
+                      @click="showDeleteDialog(data)"/>
+
+              <!--Delete Product Dialog Box-->
             </template>
           </Column>
         </DataTable>
+        <DeleteProductDialog :dialog-view="deleteProductDialog" :product="deleteProduct"
+                             @close-delete="closeDeleteDialog" @delete-product="deleteProductFn"></DeleteProductDialog>
 
-        <!--Delete Product Dialog Box-->
-        <DeleteProductDialog :dialog-view="deleteProductDialogView"/>
+        <FlashsaleDialog :dialog-view="flashProductDialog"
+                         :product="flashProduct"
+                         @close-flash="closeFlashDialog"
+                         @flash-product="flashProductFn"></FlashsaleDialog>
+
       </div>
       <TableSkeleton v-else></TableSkeleton>
     </div>
@@ -94,7 +99,7 @@ import { Link, router } from '@inertiajs/vue3'
 import Button from 'primevue/button'
 import AdminLayout from '../../../Layout/AdminLayout.vue'
 import { FilterMatchMode } from 'primevue/api'
-import { onMounted, ref } from 'vue'
+import { onMounted, onUpdated, ref } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import InputText from 'primevue/inputtext'
@@ -102,12 +107,15 @@ import Tag from 'primevue/tag'
 import Divider from 'primevue/divider'
 import TableSkeleton from './Partials/TableSkeleton.vue'
 import DeleteProductDialog from './Partials/DeleteProductDialog.vue'
+import BreadList from '../Component/BreadList.vue'
+import FlashsaleDialog from './Partials/FlashsaleDialog.vue'
 
 // Load Products
 let { products } = defineProps({ products: undefined })
 onMounted(() => {
   router.reload({ only: ['products'] })
 })
+
 
 // Filter Table
 const filters = ref({
@@ -125,8 +133,42 @@ const getSeverity = (discount) => {
   }
 }
 
+// Selected Delete Product
+const deleteProduct = ref(null)
+
+// Product Delete Confirm Dialog
+const deleteProductDialog = ref(false)
+const closeDeleteDialog = () => {
+  deleteProductDialog.value = false
+  deleteProduct.value = null
+}
+const showDeleteDialog = (product) => {
+  deleteProduct.value = product
+  deleteProductDialog.value = true
+}
+
 // Delete Product
-const deleteProductDialogView = ref(false)
+const deleteProductFn = (product) => {
+  router.delete(route('products.destroy', product))
+  deleteProductDialog.value = false
+  deleteProduct.value = null
+}
+
+// Flash Product Dialog
+const flashProductDialog = ref(false)
+const flashProduct = ref(null)
+const closeFlashDialog = () => {
+  flashProduct.value = null
+  flashProductDialog.value = false
+}
+const showFlashDialog = (product) => {
+  flashProduct.value = product
+  flashProductDialog.value = true
+}
+
+const flashProductFn = (product) => {
+  console.log(product)
+}
 
 </script>
 

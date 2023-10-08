@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProductRequest extends FormRequest
+class UpdateProductDetailRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,13 +21,16 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->request->get('id');
         return [
-            'name' => "required|min:3|max:100|unique:products,name,$id",
-            'description' => 'required|min:10|max:1000',
-            'price' => 'required|numeric|min:500|max:10000000',
-            'stock' => 'required|numeric|min:1',
-            'category' => 'required',
+            'details.*.value' => 'required|max:255',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'details.*.value.required' => 'Value field is required',
+            'details.*.value.max' => 'Value field cannot greater than 255 characters'
         ];
     }
 }

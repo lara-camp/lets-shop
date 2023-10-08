@@ -11,6 +11,9 @@ use Inertia\Inertia;
 use App\Http\Controllers\Backend\Product\ProductController;
 use App\Http\Controllers\Backend\Product\DetailController;
 use App\Http\Controllers\Backend\Product\ProductImageController;
+use App\Http\Controllers\Backend\Product\ProductDetailController;
+use App\Http\Controllers\Shared\ChatController;
+use App\Http\Controllers\Backend\AdminChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,12 +56,21 @@ Route::get("/contact", [PageController::class, "contact"])->name("page.contact")
 Route::get("dashboard/login", [AuthController::class, "loginView"])->name("admin.loginView");
 Route::post("/dashboard/login", [AuthController::class, "login"])->name('admin.login');
 
-Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','isAdmin']], function () {
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'isAdmin']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::resource('products', ProductController::class)->except('show');
-    Route::get('products/{slug}', [ProductController::class, 'detail'])->name('products.detail');
+
+    // Product Routes
+    Route::resource('products', ProductController::class)->except('update');
+    Route::post('products/{product}', [ProductController::class, 'updateProduct'])
+        ->name('products.update');
+    Route::delete('product-details/{productDetail}', [ProductDetailController::class, 'destroy'])
+        ->name('product-detail.destroy');
     Route::resource('product-images', ProductImageController::class);
     Route::resource('details', DetailController::class);
-    Route::resource('categories',CategoryController::class)->except('show', 'create');
-    Route::get('categories/{slug}', [CategoryController::class, 'detail'])->name('products.detail');
+
+    // Category Routes
+    Route::resource('categories', CategoryController::class)->except('create');
+
+    // Chat Routes
+    Route::get('chat', [AdminChatController::class, 'view'])->name('admin-chat.view');
 });

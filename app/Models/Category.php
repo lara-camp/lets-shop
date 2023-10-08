@@ -17,4 +17,9 @@ class Category extends Model
     public function categorySection() {
         return $this->hasOne(CategorySection::class);
     }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }

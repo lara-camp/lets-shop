@@ -1,4 +1,5 @@
 <template>
+  <Head title="Register" />
   <!-- FormLayout component for title and login redirect -->
   <FormLayout title="Register" type="register">
     <!-- register Form -->
