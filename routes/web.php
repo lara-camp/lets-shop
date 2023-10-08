@@ -5,6 +5,7 @@ use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\Category\CategoryController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\Discount\CouponController;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Shared\OAuthController;
 use Inertia\Inertia;
@@ -62,4 +63,6 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','isAdmin']], func
     Route::resource('details', DetailController::class);
     Route::resource('categories',CategoryController::class)->except('show', 'create');
     Route::get('categories/{slug}', [CategoryController::class, 'detail'])->name('categories.detail');
+    Route::resource('coupons',CouponController::class)->except('show');
+    Route::get('coupons/{coupon_code}',[CouponController::class,'show'])->name('coupons.show');
 });

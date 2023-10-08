@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->double("min_purchase");
             $table->double("discount");
+            $table->text('coupon_code');
             $table->foreignId("discounttimeline_id")->nullable();
-            $table->boolean("is_used");
+            $table->boolean("is_used")->default(false);
             $table->timestamps();
         });
     }

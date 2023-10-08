@@ -108,10 +108,20 @@ const menus = ref({
     name: 'Coupons',
     icon: 'pi-ticket',
     active: false,
-    isOpen: false,
+    isOpen: (router.page.url === '/dashboard/coupons' ?? false) || (router.page.url === '/dashboard/coupons/create' ?? false),
     nested_menus: [
-      { name: 'All', active: false, icon: 'pi-list' },
-      { name: 'Create', active: false, icon: 'pi-plus-circle' }
+        {
+            name: 'All',
+            active: router.page.url === '/dashboard/coupons' ?? false,
+            icon: 'pi-list',
+            route: route('coupons.index')
+        },
+        {
+            name: 'Create',
+            active: router.page.url === '/dashboard/coupons/create' ?? false,
+            icon: 'pi-plus-circle',
+            route: route('coupons.create')
+        },
     ]
   },
   orders: {

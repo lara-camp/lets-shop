@@ -118,7 +118,7 @@
       <div v-if="categories" class="card mt-5">
         <DataTable v-model:filters="filters"
                    :globalFilterFields="['title']"
-                   :rows="10"
+                   :rows="3"
                    :rowsPerPageOptions="[5, 10, 20, 50]"
                    :sortOrder="-1"
                    :value="categories"
