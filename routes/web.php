@@ -11,6 +11,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Backend\Product\ProductController;
 use App\Http\Controllers\Backend\Product\DetailController;
 use App\Http\Controllers\Backend\Product\ProductImageController;
+use App\Models\Category;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,4 +63,5 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','isAdmin']], func
     Route::resource('details', DetailController::class);
     Route::resource('categories',CategoryController::class)->except('show', 'create');
     Route::get('categories/{slug}', [CategoryController::class, 'detail'])->name('categories.detail');
+    Route::delete('category/image/{id}',[CategoryController::class,'destroyImage'])->name('categoryImage.destroy');
 });

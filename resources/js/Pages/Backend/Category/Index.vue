@@ -14,11 +14,36 @@
           <!-- Status Toast for category created -->
           <Toast/>
 
+            <!-- Dialog for detail category -->
+            <Dialog v-model:visible="detailDialog" :dismissableMask="true" :style="{width: '50vw'}" header="Detail Category" :modal="true" class="p-fluid">
+                <div class="flex">
+                    <div class="col-5" v-if="category.image">
+                        <Image :src="asset(category.image)" width="300"  preview/>
+                    </div>
+                     <div v-else class="col-5">
+                        <img src="https://st2.depositphotos.com/38069286/47731/v/450/depositphotos_477315358-stock-illustration-picture-isolated-background-gallery-symbol.jpg" width="300"  alt="">
+                    </div>
+                    <div class="col-6">
+                        <p class="text-xl font-medium">Category Name - <b>{{category.title}}</b></p>
+                        <p class="text-xl font-medium">Product Count - <b>{{category.products_count}}</b></p>
+                    </div>
+                </div>
+          </Dialog>
+
           <!-- Dialog for edit category -->
           <Dialog v-model:visible="categoryDialog" :dismissableMask="true" :style="{width: '50vw'}" header="Category Edit" :modal="true" class="p-fluid">
                 <div class=" justify-content-center">
                     <div class=" p-3">
-                        <div class="flex flex-column gap-2">
+                        <div v-if="category.image"  class="flex justify-content-center bg-black-alpha-90 p-3 relative">
+                            <Image :src="asset(category.image)" width="250"/>
+                            <Button class="absolute"
+                                    icon="pi pi-trash"
+                                    rounded
+                                    severity="danger"
+                                    style="top: 20px;right: 20px"
+                                    @click="deleteImage(category.id)"></Button>
+                        </div>
+                        <div class="flex flex-column gap-2 mt-3">
                             <label class="text-xl font-medium" for="name">Category Name</label>
                             <InputText id="name"
                                         v-model="category.title"
@@ -42,6 +67,52 @@
                                         optionLabel="title"
                                         placeholder="Select a Category">
                             </Dropdown>
+                        </div>
+                        <!-- File upload -->
+                        <div class="flex flex-column gap-2">
+                            <div class="font-medium text-xl my-2">Image <span class="text-red-500" v-if="category.image">(You need to delete an old image first)</span></div>
+                                <div class="card">
+                                    <FileUpload   :showUploadButton="false" @input="addImage($event.target.files)" :multiple="true" accept="image/jpeg, image/png" :maxFileSize="1000000">
+                                        <template #empty>
+                                            <p>Drag and drop files to here to upload.</p>
+                                        </template>
+                                        <template #header="{ chooseCallback, clearCallback, files }">
+                                            <div class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
+                                                <div class="flex gap-2">
+                                                    <Button :disabled="category.image" @click="chooseFile(chooseCallback, files)" icon="pi pi-images" class="p-3"  rounded outlined></Button>
+
+                                                    <Button @click="clearCallback()" icon="pi pi-times" class="p-3"  rounded outlined severity="danger" :disabled="!files || files.length === 0"></Button>
+                                                </div>
+                                            </div>
+                                        </template>
+                                        <template #content="{ files, removeFileCallback }">
+                                            <div v-if="files.length > 0">
+                                                <div class="flex flex-column">
+                                                <div v-for="(file, index) of files"
+                                                    :key="file.name + file.type + file.size"
+                                                    class="card mb-3 flex p-2 w-full justify-content-between border-1 surface-border align-items-center">
+                                                    <div class="flex align-items-center">
+                                                    <img :alt="file.name"
+                                                        :src="file.objectURL"
+                                                        class="shadow-2"
+                                                        height="70"
+                                                        role="presentation"
+                                                        width="100"/>
+                                                    <span class="font-semibold ml-3">{{ file.name }}</span>
+                                                    </div>
+                                                    <Button icon="pi pi-times"
+                                                            class="p-3"
+                                                            outlined
+                                                            rounded
+                                                            severity="danger"
+                                                            @click="removeImage( removeFileCallback, index)"/>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </FileUpload>
+
+                                </div>
                         </div>
                         <div class="flex justify-content-end mt-2">
                             <Button class="text-xl font-medium "
@@ -83,6 +154,51 @@
                             optionLabel="title"
                             placeholder="Select a Category">
                   </Dropdown>
+                </div>
+                <!-- Category image input -->
+                <div class="flex flex-column my-4">
+                    <div class="font-medium text-xl mb-2">Image (Optional)</div>
+                    <div class="card">
+                        <FileUpload  url="./upload.php" :showUploadButton="false" @input="addImage($event.target.files)" :multiple="true" accept="image/jpeg, image/png" :maxFileSize="1000000">
+                            <template #empty>
+                                <p>Drag and drop files to here to upload.</p>
+                            </template>
+                            <template #header="{ chooseCallback, clearCallback, files }">
+                                <div class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
+                                    <div class="flex gap-2">
+                                        <Button @click="chooseFile(chooseCallback, files)" icon="pi pi-images" rounded outlined></Button>
+
+                                        <Button @click="clearCallback()" icon="pi pi-times" rounded outlined severity="danger" :disabled="!files || files.length === 0"></Button>
+                                    </div>
+                                </div>
+                            </template>
+                             <template #content="{ files, removeFileCallback }">
+                                <div v-if="files.length > 0">
+                                    <div class="flex flex-column">
+                                    <div v-for="(file, index) of files"
+                                        :key="file.name + file.type + file.size"
+                                        class="card mb-3 flex p-2 w-full justify-content-between border-1 surface-border align-items-center">
+                                        <div class="flex align-items-center">
+                                        <img :alt="file.name"
+                                            :src="file.objectURL"
+                                            class="shadow-2"
+                                            height="70"
+                                            role="presentation"
+                                            width="100"/>
+                                        <span class="font-semibold ml-3">{{ file.name }}</span>
+                                        </div>
+                                        <Button icon="pi pi-times"
+                                                outlined
+                                                rounded
+                                                severity="danger"
+                                                @click="removeImage( removeFileCallback, index)"/>
+                                    </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </FileUpload>
+
+                    </div>
                 </div>
                 <div class="flex justify-content-end mt-2">
                   <Button class="text-xl font-medium "
@@ -160,6 +276,13 @@
                       severity="danger"
                       style="height: 40px; width: 40px"
                       @click="confirmDeleteProduct(slotProps.data)"/>
+                <Button icon="pi pi-align-left"
+                        class="ml-2"
+                        outlined
+                        rounded
+                        severity="success"
+                        style="height: 40px; width: 40px"
+                        @click="detailCategory(slotProps.data)"/>
             </template>
           </Column>
         </DataTable>
@@ -189,6 +312,9 @@ import axios from 'axios'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 import TableSkeleton from '../Category/Partials/TableSkeleton.vue'
+import FileUpload from 'primevue/fileupload'
+import Image from 'primevue/image';
+import { asset } from '../../../asset-helper.js'
 
 
 //edit category dialog
@@ -211,8 +337,9 @@ const deleteProduct = () => {
     deleteProductDialog.value = false;
     axios.delete(route('categories.destroy',category.value.id))
     .then((response)=>{
+        console.log(response.data)
         getCategories();
-        newCategoryToast.add({
+        CategoryToast.add({
                     severity: 'success',
                     summary: 'Delete Category',
                     detail: `${response.data.title} is deleted successfully`,
@@ -223,24 +350,30 @@ const deleteProduct = () => {
 
 
 const visible = ref(false) //for Dialog close and open
-const title = ref()
-const titleError = ref()
-const parentCategory = ref()
-const newCategoryToast = useToast()
+const title = ref(null)
+const titleError = ref(null)
+const parentCategory = ref(null)
+const image = ref([])
+const CategoryToast = useToast()
+
 const createCategory = () => {
-  axios.post(route('categories.store'), {
-    title: title.value,
-    parentCategory: parentCategory.value,
-  })
+    const formdata=new FormData()
+    formdata.set('title',title.value)
+    parentCategory.value ? formdata.set('parentCategory',parseInt(parentCategory.value.id)) : '';
+    formdata.set('image',image.value)
+
+  axios.post(route('categories.store'), formdata ,{headers:{'Content-Type': 'multipart/form-data'}})
       .then((response) => {
         if (response.data) {
+            console.log(response.data)
+            image.value=[];
             titleError.value=''
             title.value = ''
             parentCategory.value = ''
             visible.value = false
             checked.value = false
             getCategories()    //calling getCategories function
-            newCategoryToast.add({
+            CategoryToast.add({
                 severity: 'success',
                 summary: 'New Category',
                 detail: `New Category (${response.data.title}) is created successfully`,
@@ -250,29 +383,77 @@ const createCategory = () => {
       })
       .catch((error) => {
         if (error) {
+            console.log(error.response.data)
           titleError.value = error.response.data.errors.title[0]
         }
       })
 }
 
-const updateCategory=()=>{
-    axios.put(route('categories.update',category.value.id),{
-        title:category.value.title,
-        parentCategory:category.value.parent_id,
-        id:category.value.id
+
+const detailDialog=ref(false);
+const detailCategory =(prod) =>{
+    category.value = {...prod};
+    detailDialog.value=true
+}
+
+
+//choosing file for file upload
+const chooseFile = (chooseCallback,files) =>{
+    if(files.length > 0){
+        CategoryToast.add({
+                    severity: 'error',
+                    summary: 'File Upload Error',
+                    detail: `Cannot upload more than one image`,
+                    life: 5000
+                })
+    }else{
+        chooseCallback();
+    }
+}
+//add category image
+const addImage =(i)=>{
+    image.value = i[0]
+}
+//remove image
+const removeImage = ( removeFileCallback, index) => {
+  removeFileCallback(index)
+}
+const deleteImage = (id)=>{
+    axios.delete(route('categoryImage.destroy',id))
+    .then((response)=>{
+        category.value.image=null;
+        getCategories();
     })
+}
+
+
+
+
+//Update category
+const updateCategory=()=>{
+    const formdata=new FormData()
+    formdata.append('_method', 'put');
+    formdata.append('title',category.value.title)
+    // formdata.append('parentCategory',category.value.parent_id)
+    category.value.parent_id ? formdata.append('parentCategory',parseInt(category.value.parent_id)) : '';
+    formdata.append('id',category.value.id)
+    formdata.append('image',image.value)
+
+ axios.post(route('categories.update',category.value.id),formdata,{headers:{'Content-Type': 'multipart/form-data'}})
     .then((response)=>{
         if(response.data){
-            categoryDialog.value=false;
+            console.log(response.data)
             getCategories();
             if(response.data.error){
-                 newCategoryToast.add({
+                 CategoryToast.add({
                     severity: 'error',
                     summary: 'Error',
                     detail: `${response.data.error}`,
+                    life:5000
                 })
             }else{
-                newCategoryToast.add({
+                categoryDialog.value=false;
+                CategoryToast.add({
                     severity: 'success',
                     summary: 'Edit Category',
                     detail: `${response.data.title} is updated successfully`,
@@ -281,6 +462,7 @@ const updateCategory=()=>{
             }
         }
     })
+
     .catch((error)=>console.log(error))
 }
 

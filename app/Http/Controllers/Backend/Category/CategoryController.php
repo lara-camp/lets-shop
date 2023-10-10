@@ -6,7 +6,9 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 
@@ -30,11 +32,19 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
+
         $category = new Category();
         $category->title = $request->title;
         $category->slug = Str::slug($request->title);
-        if ($request->parentCategory) {
-            $category->parent_id = $request->parentCategory['id'];
+        if(isset($request->parentCategory)){
+            $category->parent_id= $request->parentCategory;
+        }
+        if($request->image){
+            $image=$request->image;
+            $image_name = time().rand(1, 99).'.'.$image->extension();
+            $image->move(public_path('category_img'), $image_name);
+            $path = "category_img/".$image_name;
+            $category->image=$path;
         }
         $category->save();
 
@@ -65,17 +75,23 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $category=Category::find($request->id);
         $category->title=$request->title;
         $category->slug = Str::slug($request->title);
-        if($request->parentCategory && $request->parentCategory == $request->id){
+        if(!is_null($request->parentCategory) && $request->parentCategory == $request->id){
             return json_encode([
-                'error'=>'cannot select same category'
+                'error'=>'Cannot select same category'
             ]);
-        }else{
+        }elseif(isset($request->parentCategory)){
             $category->parent_id=$request->parentCategory;
         }
-        $category->save();
+        if($request->image){
+            $image=$request->image;
+            $image_name = time().rand(1, 99).'.'.$image->extension();
+            $image->move(public_path('category_img'), $image_name);
+            $path = "category_img/".$image_name;
+            $category->image=$path;
+        }
+        $category->update();
         return json_encode([
             'status' => 'Updated Successfully',
             'title'  => $request->title,
@@ -88,9 +104,22 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
+        if(Storage::exists($category->image)) {
+            Storage::delete($category->image);
+        }
         return json_encode([
             'status' => 'Deleted Successfully',
             'title'  => $category->title,
         ]);
+    }
+
+    public function destroyImage($id)
+    {
+        $category=Category::find($id);
+        if(Storage::exists($category->image)) {
+            Storage::delete($category->image);
+        }
+        $category->image=null;
+        $category->update();
     }
 }
