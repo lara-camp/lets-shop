@@ -76,6 +76,7 @@ return [
         public_path('bank_img') => storage_path('app/bank_img'),
         public_path('product_img') => storage_path('app/product_img'),
         public_path('hot-slide') => storage_path('app/hot-slide'),
+        public_path('banner_img') => storage_path('app/banner_img')
     ],
 
 ];

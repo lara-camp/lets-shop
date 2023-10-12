@@ -1,12 +1,12 @@
 <template>
-    <UserNavbar/>
-    <HeroSectionComponent/>
-    <BannerComponent image = "banner.png"/>
+    <UserNavbar />
+    <HeroSectionComponent :slides="slides" />
+    <BannerComponent image="banner.png" />
     <CategoryCompnent />
     <FlashDealComponent />
-    <BannerComponent image = 'banner.png'/>
+    <BannerComponent image='banner.png' />
     <MostPopularComponent />
-    <DynamicCategoryComponent/>
+    <DynamicCategoryComponent />
     <ProductsComponent />
 </template>
 
@@ -22,7 +22,12 @@ import UserNavbar from '../../Component/UserNavbar.vue'
 import { asset } from '../../asset-helper.js';
 
 
-defineProps({ translations: Object })
+const {translations, slides} = defineProps({
+    translations: Object,
+    slides: Array
+})
+
+console.log(slides)
 </script>
 
 <style>

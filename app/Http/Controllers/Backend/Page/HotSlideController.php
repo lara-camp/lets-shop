@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Page;
 
 use App\Models\HotSlide;
+use File;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
@@ -13,25 +14,20 @@ class HotSlideController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function lists(){
-
-    }
     /**
      * Summary of index
      * @param \Illuminate\Http\Request $request
      * @param mixed $delete
      * @return \Inertia\Response
      */
-    public function index(Request $request,$delete = 0)
+    public function index(Request $request)
     {
-        $delete = $request->input('delete');
-        if($delete == 1){
-            return Inertia::render('Backend/Page/Hotslide/Index',[
-                'slides' => HotSlide::all(),
-            ]);
-        }
-        return Inertia::render('Backend/Page/Hotslide/Index',[
-            'slides' => Inertia::lazy(fn () =>  HotSlide::all()),
+        $slides =  $request->input('action') == 1
+            ? HotSlide::latest()->get()
+            : Inertia::lazy(fn () => HotSlide::latest()->get());
+
+        return Inertia::render('Backend/Page/Hotslide/Index', [
+            'slides' => $slides,
         ]);
     }
 
@@ -54,10 +50,9 @@ class HotSlideController extends Controller
         ]);
 
         $files = [];
-        if ($request->file('files')){
-            foreach($request->file('files') as $key => $file)
-            {
-                $fileName = time().rand(1,99).'-'.Carbon::now()->format('Y_m_d_H_i_s').'.'.$file->extension();
+        if ($request->file('files')) {
+            foreach ($request->file('files') as $key => $file) {
+                $fileName = time() . rand(1, 99) . '-' . Carbon::now()->format('Y_m_d_H_i_s') . '.' . $file->extension();
                 $file->move(public_path('hot-slide'), $fileName);
                 $files[]['name'] = $fileName;
             }
@@ -77,32 +72,52 @@ class HotSlideController extends Controller
      */
     public function show(HotSlide $hotSlide)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(HotSlide $hotSlide)
-    {
-        //
+        return json_encode($hotSlide);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HotSlide $hotSlide)
+    public function isShow(Request $request)
     {
-        //
+        $hotSlide = HotSlide::find($request->id);
+        $hotSlide->is_show = $hotSlide->is_show == '1' ? '0' : '1';
+        $hotSlide->update();
+        return redirect()->route('hot-slide.index', ['action' => 1]);
     }
+
+    public function customUpdate(Request $request)
+    {
+        $request->validate([
+            'files' => 'required',
+            'files.*' => 'required|mimes:png,jpg,jpeg,svg',
+        ]);
+        $hotSlide = HotSlide::find($request->id);
+
+        $file = $request->file('files')[0];
+        $fileName = time() . rand(1, 99) . '-' . Carbon::now()->format('Y_m_d_H_i_s') . '.' . $file->extension();
+        $file->move(public_path('hot-slide'), $fileName);
+
+        // if (File::exists(public_path('hot-slide/' . $hotSlide->image))) {
+        //     unlink(public_path('hot-slide/' . $hotSlide->image));
+        // }
+        if (File::exists(public_path('hot-slide/' . $hotSlide->image))) {
+            unlink(public_path('hot-slide/' . $hotSlide->image));
+        }
+        $hotSlide->update(['image' => $fileName]);
+        return redirect()->route('hot-slide.index', ['action' => 1]);
+    }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(HotSlide $hotSlide)
     {
-        $hotSlide->delete();
-        return redirect()->route('hot-slide.index', ['delete' => 1]);
+        if (File::exists(public_path('hot-slide/' . $hotSlide->image))) {
+            unlink(public_path('hot-slide/' . $hotSlide->image));
+            $hotSlide->delete();
+        }
+        return redirect()->route('hot-slide.index', ['action' => 1]);
     }
-
 }

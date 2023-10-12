@@ -17,17 +17,32 @@ class ProductImageController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created resource in storage.
      */
-    public function create()
+    public function store($images, $productId)
     {
-        //
+        $files = [];
+        foreach ($images as $image) {
+            $image_name = time().rand(1, 99).'.'.$image->extension();
+            $image->move(public_path('product_img'), $image_name);
+            $path = "/product_img/".$image_name;
+            $files[]['path'] = $path;
+        }
+
+        // Create Product Images
+        foreach ($files as $file) {
+            ProductImage::create([
+                "image"      => $file['path'],
+                "product_id" => $productId,
+            ]);
+        }
+
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Show the form for creating a new resource.
      */
-    public function store(Request $request)
+    public function create()
     {
         //
     }

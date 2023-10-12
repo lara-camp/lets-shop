@@ -5,7 +5,7 @@
                 <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
                     <li>
                         <Link :href="route('hot-slide.index')" class="text-500 no-underline line-height-3 cursor-pointer">
-                            Pages
+                        Pages
                         </Link>
                     </li>
                     <li class="px-2">
@@ -23,6 +23,10 @@
                 <form @submit.prevent="submit" method="post">
                     <div class="card">
                         <Toast />
+                        <div v-if="form.errors.files">
+                            <InlineMessage severity="error" class="w-full my-3">{{ form.errors.files }}</InlineMessage>
+                        </div>
+
                         <FileUpload name="files[]" :showUploadButton="false" @select="onSelect" :multiple="true"
                             accept="image/*" :maxFileSize="1000000">
                             <template #empty>
@@ -53,10 +57,13 @@ import Button from 'primevue/button';
 import { asset } from '../../../../asset-helper'
 import { useForm } from '@inertiajs/vue3'
 import { Link } from '@inertiajs/vue3'
+import Toast from 'primevue/toast';
+import InlineMessage from 'primevue/inlinemessage';
+import { useToast } from "primevue/usetoast";
 const form = useForm({
     files: [],
 });
-
+const toast = useToast();
 
 const onSelect = (event) => {
     form.files = [...event.files];
@@ -64,6 +71,12 @@ const onSelect = (event) => {
 
 const submit = () => {
     form.post('/dashboard/hot-slide')
+    if(form.files.length > 0){
+        toast.add({ severity: 'success', summary: 'Upload slide', detail: 'Slides are created', life: 3500 })
+    }
+
+
+
 }
 defineProps({ translations: Object })
 </script>
