@@ -160,7 +160,6 @@
 
             </div>
           </div>
-          {{ productForm.errors }}
 
         </div>
       </form>

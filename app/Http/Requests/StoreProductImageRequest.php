@@ -22,14 +22,14 @@ class StoreProductImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'images.*' => 'required|image|dimensions:min_width=800,min_height=800|mimes:jpg,png,jpeg,jpe'
+            'images.*' => 'image|dimensions:min_width=800,min_height=800|mimes:jpg,png,jpeg,jpe'
         ];
     }
 
     public function messages()
     {
         return [
-            'images.*.required' => 'The image has invalid image dimension'
+            'images.*.dimensions' => 'The image has invalid image dimension'
         ];
     }
 }

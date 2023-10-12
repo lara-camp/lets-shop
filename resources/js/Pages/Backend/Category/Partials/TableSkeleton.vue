@@ -10,37 +10,22 @@
             </span>
         </div>
       </template>
-      <Column field="id" header="#ID" style="width: 10%">
+      <Column field="id" header="#ID" style="width: 1%">
         <template #body>
           <Skeleton></Skeleton>
         </template>
       </Column>
-      <Column field="name" header="Name">
+      <Column field="title" header="Category Name" style="width:10%">
         <template #body>
           <Skeleton></Skeleton>
         </template>
       </Column>
-      <Column field="truncate" header="Description">
+      <Column field="products_count" header="Product Qty" style="width:10%">
         <template #body>
           <Skeleton></Skeleton>
         </template>
       </Column>
-      <Column field="price" header="Price">
-        <template #body>
-          <Skeleton></Skeleton>
-        </template>
-      </Column>
-      <Column field="stock" header="Stocks">
-        <template #body>
-          <Skeleton></Skeleton>
-        </template>
-      </Column>
-      <Column field="category" header="Category">
-        <template #body>
-          <Skeleton></Skeleton>
-        </template>
-      </Column>
-      <Column field="discount" header="Discount">
+       <Column field="Action" header="Action" style="width:10%">
         <template #body>
           <Skeleton></Skeleton>
         </template>

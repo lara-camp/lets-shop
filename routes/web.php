@@ -12,7 +12,6 @@ use App\Http\Controllers\Backend\Product\ProductController;
 use App\Http\Controllers\Backend\Product\DetailController;
 use App\Http\Controllers\Backend\Product\ProductImageController;
 use App\Http\Controllers\Backend\Product\ProductDetailController;
-use App\Http\Controllers\Shared\ChatController;
 use App\Http\Controllers\Backend\AdminChatController;
 
 /*
@@ -69,7 +68,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'isAdmin']], fun
     Route::resource('details', DetailController::class);
 
     // Category Routes
-    Route::resource('categories', CategoryController::class)->except('create');
+    Route::resource('categories', CategoryController::class)->except('create', 'edit');
+    Route::delete('category/image/{id}', [CategoryController::class, 'destroyImage'])
+        ->name('categoryImage.destroy');
 
     // Chat Routes
     Route::get('chat', [AdminChatController::class, 'view'])->name('admin-chat.view');

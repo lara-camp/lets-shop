@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 class PageController extends Controller
 {
     public function home () {
-        Auth::logout();
         return Inertia::render('Frontend/Home');
     }
     public function shop () {
