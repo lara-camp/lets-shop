@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend\Discount;
 use App\Models\DiscountTimeline;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use DateTime;
+use Inertia\Inertia;
 
 class DiscountTimelineController extends Controller
 {
@@ -13,7 +15,7 @@ class DiscountTimelineController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Backend/Timeline/Index');
     }
 
     /**
@@ -21,7 +23,7 @@ class DiscountTimelineController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("Backend/Timeline/Create");
     }
 
     /**
@@ -29,7 +31,17 @@ class DiscountTimelineController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'startTime'=> "required",
+            'endTime'=> "required"
+        ]);
+        $startTimeline=new DateTime($request->startTime);
+        $endTimeline=new DateTime($request->endTime);
+        $timeline=new DiscountTimeline();
+        $timeline->start=$startTimeline;
+        $timeline->end=$endTimeline;
+        $timeline->save();
+        return redirect()->route('discount_timelines.index')->with('status','created Timeline successfully');
     }
 
     /**

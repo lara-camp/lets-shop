@@ -98,10 +98,20 @@ const menus = ref({
     name: 'Timelines',
     icon: 'pi-calendar',
     active: false,
-    isOpen: false,
+    isOpen: (router.page.url === '/dashboard/discount_timelines' ?? false) || (router.page.url === '/dashboard/discount_timelines/create' ?? false),
     nested_menus: [
-      { name: 'All', active: false, icon: 'pi-list' },
-      { name: 'Create', active: false, icon: 'pi-plus-circle' }
+        {
+            name: 'All',
+            active: router.page.url === '/dashboard/discount_timelines' ?? false,
+            icon: 'pi-list',
+            route: route('discount_timelines.index')
+        },
+        {
+            name: 'Create',
+            active: router.page.url === '/dashboard/discount_timelines/create' ?? false,
+            icon: 'pi-list',
+            route: route('discount_timelines.create')
+        },
     ]
   },
   coupon: {
