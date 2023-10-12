@@ -8,5 +8,4 @@ use Inertia\Inertia;
 
 class ChatController extends Controller
 {
-    
 }
