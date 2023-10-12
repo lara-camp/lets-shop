@@ -13,9 +13,6 @@ const { user } = defineProps({ user: Object })
 
 onMounted(() => {
   Pusher.logToConsole = true
-  Echo.private('user.sent').listen('.App\\Events\\UserMessageSent', (payload) => {
-    console.log(payload)
-  })
 })
 
 </script>

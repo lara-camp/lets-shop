@@ -32,7 +32,7 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-
+        return $request;
         $category = new Category();
         $category->title = $request->title;
         $category->slug = Str::slug($request->title);

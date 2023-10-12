@@ -393,7 +393,7 @@ const deleteProduct = () => {
 }
 
 const visible = ref(false) //for Dialog close and open
-const title = ref(null)
+const title = ref("")
 const titleError = ref(null)
 const parentCategory = ref(null)
 const image = ref([])
@@ -407,28 +407,22 @@ const createCategory = () => {
 
   axios.post(route('categories.store'), formdata, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data)
-          image.value = []
-          titleError.value = ''
-          title.value = ''
-          parentCategory.value = ''
-          visible.value = false
-          checked.value = false
-          getCategories()    //calling getCategories function
-          CategoryToast.add({
-            severity: 'success',
-            summary: 'New Category',
-            detail: `New Category (${response.data.title}) is created successfully`,
-            life: 5000
-          })
-        }
+        image.value = []
+        titleError.value = ''
+        title.value = ''
+        parentCategory.value = ''
+        visible.value = false
+        checked.value = false
+        getCategories()    //calling getCategories function
+        CategoryToast.add({
+          severity: 'success',
+          summary: 'New Category',
+          detail: `New Category (${response.data.title}) is created successfully`,
+          life: 5000
+        })
       })
       .catch((error) => {
-        if (error) {
-          console.log(error.response.data)
           titleError.value = error.response.data.errors.title[0]
-        }
       })
 }
 
