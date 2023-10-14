@@ -1,6 +1,6 @@
 <template>
   {{ user }}
-  <div class="chat-popup-container">
+  <div class="chat-popup-container ">
     <div v-if="!onChat"
          class="border-circle bg-primary flex justify-content-center align-items-center text-white cursor-pointer"
          style="width: 80px; height: 80px;"
@@ -37,5 +37,6 @@ onMounted(() => {
   position: fixed;
   bottom: 30px;
   right: 20px;
+  z-index: 100;
 }
 </style>

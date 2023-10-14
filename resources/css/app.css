@@ -25,4 +25,10 @@
 body {
     margin: 0;
     font-family: "Quicksand", sans-serif;
+    overflow-x: hidden;
 }
+
+.home-header{
+    font-family : 'Poppins';
+}
+

@@ -75,7 +75,7 @@ import { useForm } from '@inertiajs/vue3'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import StatusToast from '../../../Component/StatusToast.vue'
-
+import {asset} from '../../../asset-helper'
 defineProps({ status: String })
 
 const form = useForm({

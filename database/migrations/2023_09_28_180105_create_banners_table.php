@@ -17,7 +17,8 @@ return new class extends Migration
             $table->text("description")->nullable();
             $table->enum("banner_type", ["flashsale", "coupon", "event",'coupon_detail']);
             $table->enum("section",['home','coupon'])->nullable();
-            $table->string("url");
+            $table->string('page_section');
+            $table->string("url")->nullable();
             $table->timestamps();
         });
     }

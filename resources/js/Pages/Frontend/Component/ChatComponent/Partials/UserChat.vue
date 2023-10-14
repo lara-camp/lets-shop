@@ -1,17 +1,19 @@
 <template>
   <ChatContainer>
-    <div class="card-body px-3 py-2 overflow-y-scroll">
-      <Message type="user" message="Hi"></Message>
-      <Message type="admin" message="Hello"></Message>
-    </div>
+   <div class="bg-white">
+     <div class="card-body px-3 py-2 overflow-y-scroll">
+       <Message type="user" message="Hi"></Message>
+       <Message type="admin" message="Hello"></Message>
+     </div>
 
-    <div class="chat-footer p-2">
-      <div class="p-inputgroup flex-1 border-0">
-        <InputText size="small" class="font-medium" />
-        <Button size="small" icon="pi-link pi" outlined/>
-        <Button size="small" icon="pi-send pi"/>
-      </div>
-    </div>
+     <div class="chat-footer p-2">
+       <div class="p-inputgroup flex-1 border-0">
+         <InputText size="small" class="font-medium" />
+         <Button size="small" icon="pi-link pi" outlined/>
+         <Button size="small" icon="pi-send pi"/>
+       </div>
+     </div>
+   </div>
   </ChatContainer>
 </template>
 

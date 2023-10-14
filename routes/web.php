@@ -5,6 +5,8 @@ use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\Category\CategoryController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\Mail\MailController;
+use App\Http\Controllers\Backend\Page\HotSlideController;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Shared\OAuthController;
 use Inertia\Inertia;
@@ -13,6 +15,7 @@ use App\Http\Controllers\Backend\Product\DetailController;
 use App\Http\Controllers\Backend\Product\ProductImageController;
 use App\Http\Controllers\Backend\Product\ProductDetailController;
 use App\Http\Controllers\Backend\AdminChatController;
+use App\Http\Controllers\Backend\Page\BannerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,4 +77,14 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'isAdmin']], fun
 
     // Chat Routes
     Route::get('chat', [AdminChatController::class, 'view'])->name('admin-chat.view');
+    Route::resource('categories', CategoryController::class)->except('show', 'create');
+    Route::resource('hot-slide', HotSlideController::class);
+    Route::post('hotslide/{id}', [HotSlideController::class, 'customUpdate'])->name('hotslide.update');
+    Route::post('hotslide-isShow/{id}', [HotSlideController::class, 'isShow'])->name('hotSlide.isShow');
+    Route::resource('banner', BannerController::class);
+    Route::controller(MailController::class)->name('mail.')->group(function () {
+        Route::get('/mail', 'index')->name('index');
+        Route::post('/mail', 'store')->name('store');
+        Route::post('/sub-mail', 'sendSub')->name('sendSub');
+    });
 });

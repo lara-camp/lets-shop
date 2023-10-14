@@ -1,6 +1,6 @@
 <template>
   <ChatContainer>
-    <div class="card-body d-flex justify-content-center align-items-center">
+    <div class="card-body bg-white flex justify-content-center align-items-center">
       <Link :href="route('login')">
         <Button>Login to message</Button>
       </Link>

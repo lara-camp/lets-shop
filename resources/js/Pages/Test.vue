@@ -3,6 +3,7 @@
   <div class="card">
     <MegaMenu :model="items" orientation="vertical" />
   </div>
+
   <Link href="/lang/en"> English </Link>
   <Link href="/lang/my"> Myanmar</Link>
   <p>{{ translations.home }}</p>
