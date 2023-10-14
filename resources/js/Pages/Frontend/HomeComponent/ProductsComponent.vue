@@ -104,7 +104,6 @@ const products = ref([
     }
 ]);
 
-console.log(products.value)
 
 defineProps({ translations: Object })
 </script>

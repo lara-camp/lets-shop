@@ -5,7 +5,7 @@
             <!-- <TabMenu v-model:activeIndex="active" :model="items" /> -->
             <div class="flex justify-content-around font-bold text-600 align-items-center w-4 cursor-pointer text-lg">
                 <div :id="index" v-for="(item, index) in items" :key="index"
-                    @click="menuClicked(index, $event)" :class="{'text-primary': selectedItemIndex == index }">
+                    @click="menuClicked(index, $event)" :class="{'text-primary': selectedItemIndex === index }">
                     {{ item.label }}
                 </div>
             </div>
@@ -116,7 +116,6 @@ const products = ref([
 ]);
 const active = ref(0);
 
-console.log(active.value)
 const items = ref([
     {
         label: 'Men',
@@ -147,7 +146,6 @@ const menuClicked = (index) => {
 //     return selectedItemIndex.value === index;
 //   };
 // });
-
 
 // console.log(products.value)
 

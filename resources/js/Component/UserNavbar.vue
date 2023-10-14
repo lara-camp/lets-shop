@@ -28,11 +28,11 @@
                   type="button"
                   @click="toggle"></Button>
           <TieredMenu id="overlay_tmenu" ref="menu" :model="items" popup>
-            <template #item="{ item  }">
+            <template #item="{ item }">
               <Link v-if="item.route"
                     :href="item.route"
-                    class=" no-underline text-black-alpha-90 "
-                    method="post">
+                    as="text"
+                    class=" no-underline text-black-alpha-90 " method="post">
                 <div class="p-3 text-lg">
                   <i :class="item.icon"></i><span>{{ item.label }}</span>
                 </div>
@@ -62,10 +62,11 @@ const items = ref([
     route: route('logout')
   }
 ])
+
 const tags = ref([
   {
     label: 'Home',
-    active: router.page.url === '/dashboard' ?? false,
+    active: router.page.url === '/' ?? false,
     route: route('page.home')
   },
   {
@@ -85,5 +86,4 @@ const toggle = (event) => {
 .active {
   color: var(--primary-color);
 }
-
 </style>
