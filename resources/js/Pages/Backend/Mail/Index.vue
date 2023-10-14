@@ -55,7 +55,7 @@
             <div class="flex justify-content-end my-2">
                 <span class="p-buttonset">
                     <Button label="Send" icon="pi pi-send" @click="sendUserBtn"
-                        :disabled="selectedUser.length < 1 ? true : false" />
+                        :disabled="selectedUser.length < 1" />
                     <Button label="Subscriber" icon="pi pi-users" @click="sendSubBtn" />
                 </span>
             </div>
@@ -117,17 +117,11 @@ const toast = useToast();
 
 const selectedUser = ref([]);
 watch(selectedUser, ()=>{
-    // console.log(selectedUser.value, typeof selectedUser)
     form.users = [];
     selectedUser.value.map( (user) => {
         form.users.push(user.email);
-        // users = [...user[email]];
     })
-    console.log(form.users);
 })
-
-
-
 
 const visible = ref(false);
 const isSubvisible = ref(false)
@@ -140,7 +134,7 @@ const send = () => {
         onSuccess: () => {
              toast.add({ severity: 'success', summary: 'Send mail', detail: 'your mail has successfully sent', life: 3000 });
              visible.value = false;
-             selectedUser.value = []
+             selectedUser.value = [];
         },
         onError : () =>{
             toast.add({ severity: 'error', summary: 'Send mail', detail: 'Email send failure', life: 3000 });

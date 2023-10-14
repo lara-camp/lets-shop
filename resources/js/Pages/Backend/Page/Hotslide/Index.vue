@@ -16,7 +16,7 @@
                 :modal="true" :draggable="false">
                 <UserNavbar />
                 <HeroSectionComponent :slides="slides.filter((slide) => {
-                    return slide.is_show == '1'
+                    return slide.is_show === '1'
                 })" />
             </Dialog>
             <div class="mt-3 lg:mt-0 flex justify-content-end">
@@ -85,7 +85,7 @@
                             aria-label="Edit" />
                         <Button icon="pi pi-trash" @click="confirm2($event, slotProps.data.id)" severity="danger" rounded
                             outlined aria-label="Delete" class="mx-2" />
-                        <Button icon="pi pi-check" rounded :outlined="slotProps.data.is_show == 0 ? true : false"
+                        <Button icon="pi pi-check" rounded :outlined="slotProps.data.is_show === '0'"
                             @click="ToShow(slotProps.data.id)" aria-label="Show" />
                     </template>
                 </Column>

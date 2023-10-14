@@ -1,4 +1,5 @@
 <template>
+  <Head title="Home"/>
   <ChatComponent/>
   <UserNavbar />
   <HeroSectionComponent :slides="slides" />

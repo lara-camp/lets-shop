@@ -264,6 +264,7 @@ const removeUploadImage = (file, removeFileCallback, index) => {
     productForm.images.splice(imageIndex, 1)
   }
   removeFileCallback(index)
+  imageErrors.value.splice(index,1)
 }
 
 // Remove All Upload Image

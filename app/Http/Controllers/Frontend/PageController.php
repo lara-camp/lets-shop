@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class PageController extends Controller
 {
     public function home () {
-        Auth::logout();
+//        Auth::logout();
         return Inertia::render('Frontend/Home',[
             'slides' => HotSlide::where('is_show' , '1')->latest()->get()
         ]);

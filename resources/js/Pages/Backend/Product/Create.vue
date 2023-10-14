@@ -243,6 +243,7 @@ const removeImage = (file, removeFileCallback, index) => {
     productForm.images.splice(imageIndex, 1)
   }
   removeFileCallback(index)
+  imageErrors.value.splice(index,1)
 }
 const removeAllImages = () => {
   productForm.images = []

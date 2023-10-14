@@ -81,8 +81,6 @@ import Dropdown from 'primevue/dropdown';
 let { banners } = defineProps({
     banners: Array,
 })
-
-console.log(banners)
 const toast = useToast();
 const previewVisible = ref(false)
 

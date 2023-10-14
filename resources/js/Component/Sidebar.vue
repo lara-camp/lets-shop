@@ -77,7 +77,7 @@ const menus = ref({
             }
         ]
     },
-    category: {
+  category: {
         name: 'Categories',
         icon: 'pi-th-large',
         active: router.page.url === '/dashboard/categories' ?? false,
@@ -122,7 +122,8 @@ const menus = ref({
     chat: {
         name: 'Chat',
         icon: 'pi-comment',
-        active: false,
+        active: router.page.url === '/dashboard/chat' ?? false,
+      route: route('admin-chat.view'),
     },
     reviews: {
         name: 'Reviews',
