@@ -5,7 +5,9 @@
            style="background-color:whitesmoke;box-shadow:0 0 10px lightgrey">
         <!-- //left div -->
         <div class="  flex flex-row align-items-center">
-          <div class="mr-3 text-5xl">Logo</div>
+          <div class="mr-3 flex justify-content-center align-items-center">
+            <img src="../../images/logo.png" width="40" alt="">
+          </div>
           <div v-for="tag in tags" :key="tag.label" class="ml-6 text-xl">
             <Link :class="tag.active ? 'active' : 'text-black-alpha-90'"
                   :href="tag.route"
@@ -52,6 +54,7 @@ import TieredMenu from 'primevue/tieredmenu'
 import InputText from 'primevue/inputtext'
 
 import { ref } from 'vue'
+import { asset } from '../asset-helper.js'
 
 const search = ref('')
 const menu = ref()

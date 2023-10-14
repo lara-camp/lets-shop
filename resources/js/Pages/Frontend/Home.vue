@@ -1,5 +1,8 @@
 <template>
-  <Head title="Home"/>
+  <Head>
+  <title>Home</title>
+  <link rel="shortcut icon" type="image/x-icon" :href="asset('favicon.ico')" />
+</Head>
   <ChatComponent/>
   <UserNavbar/>
   <HeroSectionComponent :slides="slides"/>
@@ -23,6 +26,7 @@ import MostPopularComponent from './HomeComponent/MostPopularComponent.vue'
 import ProductsComponent from './HomeComponent/ProductsComponent.vue'
 import DynamicCategoryComponent from './HomeComponent/DynamicCategoryComponent.vue'
 import UserNavbar from '../../Component/UserNavbar.vue'
+import { asset } from '../../asset-helper.js'
 
 const { translations, slides } = defineProps({
   slides: Array

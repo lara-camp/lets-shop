@@ -17,7 +17,7 @@
             <Link v-if="item.route"
                   :href="item.route"
                   class=" no-underline text-black-alpha-90 "
-                  method="post">
+                  method="post" as="text">
               <div class="p-3 text-lg">
                 <i :class="item.icon"></i><span>{{ item.label }}</span>
               </div>

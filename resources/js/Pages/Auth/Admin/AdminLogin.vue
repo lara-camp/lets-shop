@@ -2,13 +2,13 @@
   <AdminAuthLayoutVue>
     <Head title="Dashboard Login"/>
     <!-- Card for Login Form -->
-    <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+    <div class="surface-card p-5 pt-6  shadow-2 border-round w-full lg:w-6">
       <div class="text-center mb-5">
         <!-- Logo Image -->
         <img
             alt="Image"
             class="mb-3"
-            height="126"
+            height="80"
             src="../../../../images/logo.png"
         />
         <div class="text-900 text-3xl font-medium mb-3">
