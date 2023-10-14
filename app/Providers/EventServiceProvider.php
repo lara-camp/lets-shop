@@ -6,6 +6,10 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use App\Events\UserMessageSent;
+use App\Events\AdminMessageSent;
+use App\Listeners\SendAdminMessage;
+use App\Listeners\SendUserMessage;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,6 +22,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        AdminMessageSent::class => [
+            SendAdminMessage::class
+        ],
+        UserMessageSent::class => [
+            SendUserMessage::class
+        ]
     ];
 
     /**
