@@ -47,6 +47,7 @@ Route::get("/test", function () {
 
 // Guest Routes
 Route::get("/", [PageController::class, "home"])->name("page.home");
+Route::get("/details/{product:slug}", [PageController::class, 'detail'])->name('page.detail');
 Route::get("/shop", [PageController::class, "shop"])->name("page.shop");
 Route::get("/category/{category}", [PageController::class, "category"])->name("page.category");
 Route::get("/product/{product}", [PageController::class, "detail"])->name("page.detail");

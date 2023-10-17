@@ -9,7 +9,7 @@
   <BannerComponent image='banner.png'/>
   <MostPopularComponent/>
   <DynamicCategoryComponent/>
-  <ProductsComponent/>
+  <ProductsComponent :products="products"/>
 </template>
 
 
@@ -25,7 +25,8 @@ import DynamicCategoryComponent from './HomeComponent/DynamicCategoryComponent.v
 import UserNavbar from '../../Component/UserNavbar.vue'
 
 const { translations, slides } = defineProps({
-  slides: Array
+  slides: Array,
+  products : Array
 })
 </script>
 

@@ -10,7 +10,7 @@ class Detail extends Model
     use HasFactory;
     protected $fillable = ["key"];
 
-    public function productDetails () {
-        return $this->hasMany(ProductDetail::class);
+    public function product () {
+        return $this->belongsToMany(Product::class, 'product_details');
     }
 }

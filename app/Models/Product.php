@@ -62,7 +62,7 @@ class Product extends Model
 
     public function productDetails()
     {
-        return $this->hasMany(ProductDetail::class);
+        return $this->belongsToMany(Detail::class, 'product_details')->withPivot('value');;
     }
 
     public function flashDiscounts()

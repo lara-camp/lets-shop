@@ -36,8 +36,8 @@
                 </template>
                 <Column header="Image">
                     <template #body="slotProps">
-                        <img :src="asset('hot-slide/' + slotProps.data.image)" :alt="slotProps.data.image" class="shadow-2"
-                            width="300" style="object-fit: cover;" />
+                            <Image :src="asset('hot-slide/' + slotProps.data.image)" alt="Image"
+                                width="300" preview />
                     </template>
                 </Column>
                 <Column header="Created at">
@@ -99,7 +99,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { asset } from '../../../../asset-helper.js';
@@ -116,6 +116,7 @@ import Toast from 'primevue/toast';
 import Dialog from 'primevue/dialog';
 import FileUpload from 'primevue/fileupload';
 import InlineMessage from 'primevue/inlinemessage';
+import Image from 'primevue/image';
 import HeroSectionComponent from '../../../Frontend/HomeComponent/HeroSectionComponent.vue';
 import UserNavbar from '../../../../Component/UserNavbar.vue'
 let { slides } = defineProps({
