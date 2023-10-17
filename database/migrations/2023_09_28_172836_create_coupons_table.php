@@ -17,7 +17,7 @@ return new class extends Migration
             $table->double("discount");
             $table->text('coupon_code');
             $table->foreignId("discounttimeline_id")->nullable();
-            $table->boolean("is_used")->default(false);
+            $table->string("status")->nullable();
             $table->timestamps();
         });
     }

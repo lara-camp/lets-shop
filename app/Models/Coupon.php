@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Coupon extends Model
 {
     use HasFactory;
-    protected $fillable = ["min_purchase", "discount","coupon_code", "discounttimeline_id","is_used"];
+    protected $fillable = ["min_purchase", "discount","coupon_code", "discounttimeline_id","status"];
 
     public function discounttimeline() {
         return $this->belongsTo(DiscountTimeline::class);

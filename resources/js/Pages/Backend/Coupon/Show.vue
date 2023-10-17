@@ -7,8 +7,8 @@
                  :secondary-name="`#ID - ${coupon.id}`"/>
             <Divider/>
             <div class="font-medium text-3xl text-900 mb-4">Detail Coupon</div>
-                <div class="justify-cotent-center grid">
-                        <div class="col-6 pr-5">
+                <dsiv class="justify-cotent-center grid ">
+                    <div class="col-6 pr-5">
                         <!--Coupon code Input-->
                         <div class="flex flex-column mb-4">
                             <label class="text-xl font-medium mb-2" for="code">Coupon Code</label>
@@ -22,7 +22,7 @@
                                         mode="currency"
                                         placeholder="MMK" readonly="true"/>
                         </div>
-                </div>
+                    </div>
                 <div class="col-6 pr-2">
                         <!--Min Purchase Input-->
                         <div class="flex flex-column mb-4">
@@ -31,14 +31,19 @@
                                         mode="currency"
                                         placeholder="MMK" readonly="true"/>
                         </div>
+                        <div class="flex flex-column mb-4">
+                            <div class="my-3"><span class="text-xl font-medium ">Start Date</span> - {{coupon.discounttimeline.start}}</div>
+                            <div><span class="text-xl font-medium ">End Date</span> - {{coupon.discounttimeline.end}}</div>
+                        </div>
                         <div class="flex justify-content-end">
                             <Link :href="route('coupons.index')">
                                 <Button label="Back"></Button>
                             </Link>
                         </div>
+
                 </div>
 
-            </div>
+            </dsiv>
 
     </div>
 </AdminLayout>

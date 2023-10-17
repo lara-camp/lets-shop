@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Discount;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\DiscountTimeline;
 use Inertia\Inertia;
 
 class CouponController extends Controller
@@ -14,7 +15,7 @@ class CouponController extends Controller
      */
     public function index()
     {
-        $coupons=request()->input('action') == 1 ? Coupon::latest()->get() :Inertia::lazy(fn ()=> Coupon::get());
+        $coupons=request()->input('action') == 1 ? Coupon::with('discounttimeline')->latest()->get() :Inertia::lazy(fn ()=> Coupon::with('discounttimeline')->get());
 
         return Inertia::render("Backend/Coupon/Index", [
             "status"   => session('status') ?? null,
@@ -27,7 +28,10 @@ class CouponController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Backend/Coupon/Create');
+        $timelines=DiscountTimeline::all();
+        return Inertia::render('Backend/Coupon/Create',[
+            'timelines'=>$timelines
+        ]);
     }
 
     /**
@@ -38,14 +42,17 @@ class CouponController extends Controller
         $validated = $request->validate([
             'code'    => 'required|min:5|max:10|unique:coupons,coupon_code',
             'discount' => 'required|numeric',
-            'min_purchase'=>'required|numeric'
+            'min_purchase'=>'required|numeric',
+            "selectedTimeline"=>"required"
         ],[
             'code.unique'=>'Code already existed',
         ]);
         $coupon=Coupon::create([
             'coupon_code'=>$request->code,
             'discount'=>$request->discount,
-            'min_purchase'=>$request->min_purchase
+            'min_purchase'=>$request->min_purchase,
+            'discounttimeline_id'=>$request->selectedTimeline['id'],
+            'status'=>'pending'
         ]);
         return redirect()->route('coupons.index')->with('status','Coupon code is created successfully');
     }
@@ -55,7 +62,7 @@ class CouponController extends Controller
      */
     public function show($coupon_code)
     {
-        $coupon=Coupon::where('coupon_code',$coupon_code)->firstOrFail();
+        $coupon=Coupon::where('coupon_code',$coupon_code)->with('discounttimeline')->firstOrFail();
         return Inertia::render('Backend/Coupon/Show',[
             'coupon'=>$coupon
         ]);
@@ -66,8 +73,11 @@ class CouponController extends Controller
      */
     public function edit(Coupon $coupon)
     {
+        $coupon=Coupon::with('discounttimeline')->findOrFail($coupon->id);
+        $timelines=DiscountTimeline::all();
         return Inertia::render('Backend/Coupon/Edit',[
-            'coupon'=>$coupon
+            'coupon'=>$coupon,
+            'timelines'=>$timelines
         ]);
     }
 
@@ -77,15 +87,15 @@ class CouponController extends Controller
     public function update(Request $request, Coupon $coupon)
     {
         $validated = $request->validate([
-            'code'    => 'required|min:5|max:10|unique:coupons,coupon_code',
+            'code'    => 'required|min:5|max:10',
             'discount' => 'required|numeric',
-            'min_purchase'=>'required|numeric'
-        ],[
-            'code.unique'=>'Code already existed',
+            'min_purchase'=>'required|numeric',
+            'selectedTimeline'=>'required'
         ]);
         $coupon->coupon_code=$request->code;
         $coupon->discount=$request->discount;
         $coupon->min_purchase=$request->min_purchase;
+        $coupon->discounttimeline_id=$request->selectedTimeline['id'];
         $coupon->update();
 
         return redirect()->route('coupons.index')->with('status','Coupon code is updated successfully');

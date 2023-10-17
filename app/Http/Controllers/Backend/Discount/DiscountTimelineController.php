@@ -6,6 +6,8 @@ use App\Models\DiscountTimeline;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DateTime;
+use GuzzleHttp\Promise\Create;
+use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 
 class DiscountTimelineController extends Controller
@@ -15,7 +17,12 @@ class DiscountTimelineController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Backend/Timeline/Index');
+        $timelines=request()->input('action') == 1 ? DiscountTimeline::latest()->get() : Inertia::lazy(fn ()=> DiscountTimeline::get());
+
+        return Inertia::render("Backend/Timeline/Index", [
+            "status"   => session('status') ?? null,
+            "timelines" => $timelines,
+        ]);
     }
 
     /**
@@ -32,15 +39,15 @@ class DiscountTimelineController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'startTime'=> "required",
-            'endTime'=> "required"
+            'startTime'=> "required|date|after:today",
+            'endTime'=> "required|date|after:startTime"
         ]);
-        $startTimeline=new DateTime($request->startTime);
-        $endTimeline=new DateTime($request->endTime);
-        $timeline=new DiscountTimeline();
-        $timeline->start=$startTimeline;
-        $timeline->end=$endTimeline;
-        $timeline->save();
+        $startTime = Carbon::parse($request->startTime)->setTimezone('Asia/Yangon')->toDateTimeString();
+        $endTime = Carbon::parse($request->endTime)->setTimezone('Asia/Yangon')->toDateTimeString();
+        $timelines=DiscountTimeline::create([
+            'start'=>$startTime,
+            'end'=>$endTime
+        ]);
         return redirect()->route('discount_timelines.index')->with('status','created Timeline successfully');
     }
 
@@ -57,7 +64,9 @@ class DiscountTimelineController extends Controller
      */
     public function edit(DiscountTimeline $discountTimeline)
     {
-        //
+        return Inertia::render('Backend/Timeline/Edit',[
+            'timeline'=>$discountTimeline
+        ]);
     }
 
     /**
@@ -65,7 +74,16 @@ class DiscountTimelineController extends Controller
      */
     public function update(Request $request, DiscountTimeline $discountTimeline)
     {
-        //
+        $validated = $request->validate([
+            'startTime'=> "required|date|after:today",
+            'endTime'=> "required|date|after:startTime"
+        ]);
+        $startTime = Carbon::parse($request->startTime)->setTimezone('Asia/Yangon')->toDateTimeString();
+        $endTime = Carbon::parse($request->endTime)->setTimezone('Asia/Yangon')->toDateTimeString();
+        $discountTimeline->start=$startTime;
+        $discountTimeline->end=$endTime;
+        $discountTimeline->update();
+        return redirect()->route('discount_timelines.index')->with('status','updated Timeline successfully');
     }
 
     /**
@@ -73,6 +91,8 @@ class DiscountTimelineController extends Controller
      */
     public function destroy(DiscountTimeline $discountTimeline)
     {
-        //
+        $discountTimeline->delete();
+
+        return redirect()->route('discount_timelines.index',['action'=>1])->with('status','Timeline is deleted successfully');
     }
 }

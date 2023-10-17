@@ -42,10 +42,30 @@
                         </div>
                     </div>
                     <!-- Date time picker -->
-                     <!-- <div class="flex flex-column mb-4">
-                        <label for="dateTime" class="text-xl font-medium mb-2">Pick an Expired Time</label>
-                        <Calendar id="dateTime" v-model="couponForm.datetime12h" showTime hourFormat="12" />
-                    </div> -->
+                    <div class="flex flex-column mb-5">
+                        <label class="text-xl font-medium mb-2" for="currency-mmk">Choose Expired Date</label>
+                        <Dropdown v-model="couponForm.selectedTimeline"  :options="timelines"  optionLabel="['start','end']" placeholder="Select an expired date" class="w-full ">
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="flex flex-column">
+                                    <div>Start - {{ slotProps.value.start }}</div>
+                                    <div>End  -  {{ slotProps.value.end }}</div>
+                                </div>
+                                <span v-else>
+                                    {{ slotProps.placeholder }}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="flex flex-column">
+                                    <div class="py-1">Start - <b>{{ slotProps.option.start }}</b></div>
+                                    <div class="py-1">End   - <b>{{ slotProps.option.end }}</b></div>
+                                </div>
+                            </template>
+                        </Dropdown>
+                        <div v-if="couponForm.errors.selectedTimeline" class="text-md text-red-600">
+                        {{ couponForm.errors.selectedTimeline }}
+                        </div>
+                    </div>
+
                     <div class="flex justify-content-end">
                         <Button type="submit" label="Create"></Button>
                     </div>
@@ -64,12 +84,14 @@ import AdminLayout from "../../../Layout/AdminLayout.vue";
 import BreadList from '../Component/BreadList.vue'
 import Calendar from 'primevue/calendar';
 import Button from "primevue/button";
+import Dropdown from "primevue/dropdown";
 
+const {timelines}=defineProps({timelines:Array})
 const  couponForm=useForm({
     code:null,
     discount:null,
     min_purchase:null,
-    // datetime12h:null
+    selectedTimeline:null
 })
 </script>
 
