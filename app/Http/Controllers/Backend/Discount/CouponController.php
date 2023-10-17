@@ -15,7 +15,7 @@ class CouponController extends Controller
      */
     public function index()
     {
-        $coupons=request()->input('action') == 1 ? Coupon::with('discounttimeline')->latest()->get() :Inertia::lazy(fn ()=> Coupon::with('discounttimeline')->get());
+        $coupons=request()->input('action') == 1 ? Coupon::with('discounttimeline')->latest()->get() : Inertia::lazy(fn ()=> Coupon::with('discounttimeline')->get());
 
         return Inertia::render("Backend/Coupon/Index", [
             "status"   => session('status') ?? null,
@@ -41,8 +41,8 @@ class CouponController extends Controller
     {
         $validated = $request->validate([
             'code'    => 'required|min:5|max:10|unique:coupons,coupon_code',
-            'discount' => 'required|numeric',
-            'min_purchase'=>'required|numeric',
+            'discount' => 'required|numeric|min:500|max:10000000',
+            'min_purchase'=>'required|numeric|min:500|max:10000000',
             "selectedTimeline"=>"required"
         ],[
             'code.unique'=>'Code already existed',
