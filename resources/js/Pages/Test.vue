@@ -22,8 +22,7 @@ defineProps({ translations: Object })
 </style> -->
 
 <template>
-    <div class="card flex justify-content-center" v-for="item in items" :key="item.key">
-        heloo world
+    <div class="card flex justify-content-center">
         <Button icon="pi pi-ellipsis-v" text rounded aria-label="Filter" type="button" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"/>
         <Menu ref="drop" id="overlay_menu" :model="items" :popup="true" />
         <Toast />
@@ -59,7 +58,7 @@ const items = ref([
                 }
             }
         ]
-    },{},{},{}
+    }
 ]);
 
 const toggle = (event) => {
