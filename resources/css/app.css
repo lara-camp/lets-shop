@@ -31,4 +31,17 @@ body {
 .home-header{
     font-family : 'Poppins';
 }
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+    border-radius: 8px;
+    background-color: #4645454b;
+}
+
+body::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #8a8a8ae0;
+}
 

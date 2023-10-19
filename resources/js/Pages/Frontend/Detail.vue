@@ -157,9 +157,10 @@
                                 <div class="text-xl mb-3">
                                     Reviews lists
                                 </div>
-                                <div v-if="product.reviews.length >0" id="reviewsList" style="height: 443.6px; overflow-y: scroll; overflow-x: hidden;" >
+                                <div v-if="product.reviews.length > 0" id="reviewsList"
+                                    style="height: 443.6px; overflow-y: scroll; overflow-x: hidden;">
                                     <div class="mb-1 pr-3" v-for="review in product.reviews" :key="review.id">
-                                        <div class="flex justify-content-between align-items-center pt-2 pb-1 " >
+                                        <div class="flex justify-content-between align-items-center pt-2 pb-1 ">
                                             <div class="text-lg font-bold">
                                                 {{ review.user.name }}
                                             </div>
@@ -167,19 +168,24 @@
                                                 {{ formatRelativeTime(review.created_at) }}
                                             </div>
                                         </div>
-                                        <div class="py-3 pl-2 pr-1 border-left-3 border-primary surface-50 flex justify-content-between align-items-center">
+                                        <div
+                                            class="py-3 pl-2 pr-1 border-left-3 border-primary surface-50 flex justify-content-between align-items-center">
                                             <div class="">
                                                 {{ review.content }}
                                             </div>
                                             <div>
-                                                <Button icon="pi pi-ellipsis-v" text rounded aria-label="Filter" type="button" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"/>
-                                                <Menu ref="drop" id="overlay_menu" :model="items" :popup="true" />
+                                                <Button :aria-label="'Filter ' + review.id" icon="pi pi-ellipsis-v" text
+                                                    rounded type="button" @click="toggle" :aria-haspopup="true"
+                                                    :aria-controls="'overlay_menu_' + review.id" />
+                                                    <Menu ref="drop"
+                                                    :id="'overlay_menu_' + review.id" :model="items" :popup="true" />
                                                 <Toast />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div v-else class="surface-50 flex flex-column justify-content-center align-items-center h-full">
+                                <div v-else
+                                    class="surface-50 flex flex-column justify-content-center align-items-center h-full">
                                     <div class="text-xl font-semibold">No reviews yet, Let's give it</div>
                                 </div>
                             </div>
@@ -188,14 +194,15 @@
                                 <div class="text-xl mb-3">
                                     Give reviews
                                 </div>
-                                <div class="" >
+                                <div class="">
                                     <div class="flex justify-content-between align-items-center pt-2 pb-1 ">
                                         <div class="text-lg font-bold">
                                             {{ user.name }}
                                         </div>
                                         <div class="text-sm text-500">xxx.. ago</div>
                                     </div>
-                                    <div class="py-3 pl-4 border-left-3 border-primary surface-50" style="white-space: normal; word-wrap: break-word;">
+                                    <div class="py-3 pl-4 border-left-3 border-primary surface-50"
+                                        style="white-space: normal; word-wrap: break-word;">
                                         {{ form.content.length > 0 ? form.content : "your review's preview will appear here..." }}
                                     </div>
 
@@ -204,11 +211,14 @@
                                 <div class="mt-4">
                                     <form action="post" @submit.prevent="giveReviews">
                                         <span class="p-float-label">
-                                            <Textarea v-model="form.content" rows="5" style="width:477px; max-width: 100%;" :class="form.errors.content?'p-invalid':''" />
-                                            <div v-if="form.errors.content" class="text-red-500"> {{ form.errors.content }}</div>
+                                            <Textarea v-model="form.content" rows="5" style="width:477px; max-width: 100%;"
+                                                :class="form.errors.content ? 'p-invalid' : ''" />
+                                            <div v-if="form.errors.content" class="text-red-500"> {{ form.errors.content }}
+                                            </div>
                                             <label>Reviews</label>
                                             <div class="flex justify-content-end my-2">
-                                                <button type="submit" style="outline: none; background: transparent; border: none;">
+                                                <button type="submit"
+                                                    style="outline: none; background: transparent; border: none;">
                                                     <Button label="Submit" />
                                                 </button>
                                             </div>
@@ -224,7 +234,8 @@
                                 <div class="font-semibold text-xl">
                                     Please Login first to give reviews
                                 </div>
-                                <Link :href="route('login')" class="bg-primary py-2 px-6 text-white border-round-2xl mt-3 no-underline">Login</Link>
+                                <Link :href="route('login')"
+                                    class="bg-primary py-2 px-6 text-white border-round-2xl mt-3 no-underline">Login</Link>
                             </div>
                         </div>
                     </TabPanel>
@@ -235,7 +246,7 @@
 </template>
 
 <script setup>
-import { Link,useForm } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import Galleria from 'primevue/galleria';
 import { computed, ref, watch } from 'vue';
 import UserNavbar from '../../Component/UserNavbar.vue';
@@ -255,10 +266,10 @@ import { useToast } from "primevue/usetoast";
 import { formatDistanceToNow } from 'date-fns';
 
 const formatRelativeTime = (dateTime) => {
-      const formattedTime = formatDistanceToNow(new Date(dateTime), { addSuffix: true });
-      return formattedTime;
+    const formattedTime = formatDistanceToNow(new Date(dateTime), { addSuffix: true });
+    return formattedTime;
 }
-const { product,user } = defineProps({ product: Array, user: Object })
+const { product, user } = defineProps({ product: Array, user: Object })
 
 const images = ref(product.images);
 
@@ -272,8 +283,8 @@ const stars2 = ref(2);
 const stars1 = ref(1);
 
 const form = useForm({
-  content:'',
-  productId:product.id,
+    content: '',
+    productId: product.id,
 })
 
 console.log(route('reviews.store'))
@@ -336,10 +347,10 @@ watch(active, () => {
     }
 })
 
-const giveReviews = ()=>{
-    form.post(route('reviews.store'),{
-        preserveScroll:true,
-        preserveState:true
+const giveReviews = () => {
+    form.post(route('reviews.store'), {
+        preserveScroll: true,
+        preserveState: true
     });
     form.content = '';
 }
@@ -374,7 +385,7 @@ const toggle = (event) => {
 };
 
 const save = () => {
-    toast.add({severity: 'success', summary: 'Success', detail: 'Data Saved', life: 3000});
+    toast.add({ severity: 'success', summary: 'Success', detail: 'Data Saved', life: 3000 });
 };
 </script>
 
@@ -405,9 +416,10 @@ const save = () => {
     border-radius: 70px !important;
     width: 130px !important;
 }
+
 #reviewsList::-webkit-scrollbar {
     width: 5px;
- }
+}
 
 #reviewsList::-webkit-scrollbar-track {
     border-radius: 8px;
