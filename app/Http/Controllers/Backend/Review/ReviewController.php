@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Review;
 
 use App\Models\Review;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -29,7 +30,16 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "content" => 'required|max:300'
+        ]);
+
+        Review::create([
+            'user_id' => Auth::user()->id,
+            'product_id' => $request->productId,
+            'content' => $request->content
+        ]);
+        return redirect()->back();
     }
 
     /**

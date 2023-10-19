@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\HotSlide;
 use App\Models\Product;
+use App\Models\Review;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,6 +46,7 @@ class PageController extends Controller
     {
     }
     public function detail(Product $product){
+        //  return($product->reviews);
         $product = [
             'id' => $product->id,
                 'name' => $product->name,
@@ -56,6 +58,11 @@ class PageController extends Controller
                 'category' => $product->category->title,
                 'images' => $product->productImages,
                 'details' => $product->productDetails,
+                'reviews' => $product->reviews()
+                ->with(['user' => function ($query) {
+                    $query->select('id', 'name', 'email', 'role');
+                }])
+                ->latest()->get(),
         ];
 
         // return response()->json($product);

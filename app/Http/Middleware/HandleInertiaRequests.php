@@ -52,5 +52,6 @@ class HandleInertiaRequests extends Middleware
             'translations' => $translations,
             'user'         => Auth::user() ?? null,
         ]);
+
     }
 }

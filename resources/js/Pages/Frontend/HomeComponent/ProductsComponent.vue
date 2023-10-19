@@ -1,7 +1,5 @@
 <template>
     <div class="grid">
-        <InputNumber v-model="quantity" inputId="percent" prefix="quantity : " size="small" />
-fjdlak
         <div class="col-11 m-auto ">
             <h2 class="font-semibold text-center text-primary my-3 text-4xl home-header">Products</h2>
         </div>

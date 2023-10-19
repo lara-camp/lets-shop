@@ -98,7 +98,8 @@
         </div>
         <div class="col-10 m-auto mt-2">
             <div>
-                <div class="text-xl font-semibold text-600 border-left-3 px-3 my-3 border-primary ">{{ tab }} Product</div>
+                <div class="text-xl font-semibold text-600 border-left-3 px-3 my-3 border-primary ">Product {{ tab }} of {{
+                    product.name }}</div>
             </div>
             <div class="card">
                 <TabView v-model:activeIndex="active">
@@ -108,23 +109,123 @@
                         </p>
                     </TabPanel>
                     <TabPanel @click="tabClick('Details')" header="Details">
-                        <div v-for="groupedDetail in groupedDetails" :key="groupedDetail.key">
-                            <div class="flex justify-content-start mb-3">
-                                <p style="width: 100px;" class="font-semibold p-0 m-0">{{ groupedDetail.key }}</p>
-                                <p class="p-0 m-0">{{ groupedDetail.values.join(', ') }}</p>
+                        <div class="flex">
+                            <div class="mr-8">
+                                <div v-for="groupedDetail in groupedDetails" :key="groupedDetail.key">
+                                    <div class="flex justify-content-start mb-3">
+                                        <p style="width: 100px;" class="font-semibold p-0 m-0">{{ groupedDetail.key }}</p>
+                                        <p class="p-0 m-0">{{ groupedDetail.values.join(', ') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <Divider layout="vertical" />
+                            <div class="ml-5 flex">
+                                <div>
+                                    <div class="text-3xl mb-2 font-semibold">
+                                        Ratings
+                                    </div>
+                                    <div class="">
+                                        <Rating v-model="stars" :cancel="false" readonly />
+                                        <div class="my-1 p-0">{{ stars }} out of 5 stars ({{ stars }}/5)</div>
+                                    </div>
+                                </div>
+                                <div class="ml-5 mt-2">
+                                    <div class="flex">
+                                        <Rating v-model="stars5" readonly class="mb-1 mr-3" :cancel="false" />
+                                        <span>30</span>
+                                    </div>
+                                    <div class="flex">
+                                        <Rating v-model="stars4" readonly class="mb-1 mr-3" :cancel="false" />
+                                        <span>10</span>
+                                    </div>
+                                    <div class="flex">
+                                        <Rating v-model="stars3" readonly class="mb-1 mr-3" :cancel="false" /><span>4</span>
+                                    </div>
+                                    <div class="flex">
+                                        <Rating v-model="stars2" readonly class="mb-1 mr-3" :cancel="false" /><span>0</span>
+                                    </div>
+                                    <div class="flex">
+                                        <Rating v-model="stars1" readonly class="mb-1 mr-3" :cancel="false" /><span>0</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </TabPanel>
                     <TabPanel @click="tabClick('Reviews')" header="Reviews">
-                        <p>
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                            laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto
-                            beatae vitae dicta sunt explicabo. Nemo enim
-                            ipsam voluptatem quia voluafsdfptas sit aspernatur aut odit aut fugit, sed quia consequuntur
-                            magni
-                            dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non
-                            numquam eius modi.
-                        </p>
+                        <div class="grid m-auto flex">
+                            <div class="col-7 px-3">
+                                <div class="text-xl mb-3">
+                                    Reviews lists
+                                </div>
+                                <div v-if="product.reviews.length >0" id="reviewsList" style="height: 443.6px; overflow-y: scroll; overflow-x: hidden;" >
+                                    <div class="mb-1 pr-3" v-for="review in product.reviews" :key="review.id">
+                                        <div class="flex justify-content-between align-items-center pt-2 pb-1 " >
+                                            <div class="text-lg font-bold">
+                                                {{ review.user.name }}
+                                            </div>
+                                            <div class="text-sm text-500">
+                                                {{ formatRelativeTime(review.created_at) }}
+                                            </div>
+                                        </div>
+                                        <div class="py-3 pl-2 pr-1 border-left-3 border-primary surface-50 flex justify-content-between align-items-center">
+                                            <div class="">
+                                                {{ review.content }}
+                                            </div>
+                                            <div @click="toggle" aria-haspopup="true" aria-controls="overlay_menu">
+                                                <i class="pi pi-ellipsis-v"></i>
+                                                <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else class="surface-50 flex flex-column justify-content-center align-items-center h-full">
+                                    <div class="text-xl font-semibold">No reviews yet, Let's give it</div>
+                                </div>
+                            </div>
+                            <Divider layout="vertical" class="p-0 m-0" />
+                            <div class="col-5 px-3" v-if="user">
+                                <div class="text-xl mb-3">
+                                    Give reviews
+                                </div>
+                                <div class="" >
+                                    <div class="flex justify-content-between align-items-center pt-2 pb-1 ">
+                                        <div class="text-lg font-bold">
+                                            {{ user.name }}
+                                        </div>
+                                        <div class="text-sm text-500">xxx.. ago</div>
+                                    </div>
+                                    <div class="py-3 pl-4 border-left-3 border-primary surface-50" style="white-space: normal; word-wrap: break-word;">
+                                        {{ form.content.length > 0 ? form.content : "your review's preview will appear here..." }}
+                                    </div>
+
+                                </div>
+
+                                <div class="mt-4">
+                                    <form action="post" @submit.prevent="giveReviews">
+                                        <span class="p-float-label">
+                                            <Textarea v-model="form.content" rows="5" style="width:477px; max-width: 100%;" :class="form.errors.content?'p-invalid':''" />
+                                            <div v-if="form.errors.content" class="text-red-500"> {{ form.errors.content }}</div>
+                                            <label>Reviews</label>
+                                            <div class="flex justify-content-end my-2">
+                                                <button type="submit" style="outline: none; background: transparent; border: none;">
+                                                    <Button label="Submit" />
+                                                </button>
+                                            </div>
+                                        </span>
+                                    </form>
+
+                                </div>
+                            </div>
+                            <div class="col-5 surface-50 flex flex-column justify-content-center align-items-center" v-else>
+                                <div class="text-xl mb-3">
+                                    Give reviews
+                                </div>
+                                <div class="font-semibold text-xl">
+                                    Please Login first to give reviews
+                                </div>
+                                <Link :href="route('login')" class="bg-primary py-2 px-6 text-white border-round-2xl mt-3 no-underline">Login</Link>
+                            </div>
+                        </div>
                     </TabPanel>
                 </TabView>
             </div>
@@ -133,7 +234,7 @@
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { Link,useForm } from '@inertiajs/vue3';
 import Galleria from 'primevue/galleria';
 import { computed, ref, watch } from 'vue';
 import UserNavbar from '../../Component/UserNavbar.vue';
@@ -141,17 +242,64 @@ import { asset } from '../../asset-helper';
 import Rating from 'primevue/rating';
 import Image from 'primevue/image';
 import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
 import Divider from 'primevue/divider';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import InputNumber from 'primevue/inputnumber';
+import Textarea from 'primevue/textarea';
+import Menu from 'primevue/menu';
+import { formatDistanceToNow } from 'date-fns';
 
-
-
-const { product } = defineProps({ product: Array })
+const formatRelativeTime = (dateTime) => {
+      const formattedTime = formatDistanceToNow(new Date(dateTime), { addSuffix: true });
+      return formattedTime;
+}
+const { product,user } = defineProps({ product: Array, user: Object })
 
 const images = ref(product.images);
+
+const menu = ref();
+const items = ref([
+    {
+        label: 'Options',
+        items: [
+            {
+                label: 'Update',
+                icon: 'pi pi-refresh',
+                command: () => {
+                    toast.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000 });
+                }
+            },
+            {
+                label: 'Delete',
+                icon: 'pi pi-times',
+                command: () => {
+                    toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000 });
+                }
+            }
+        ]
+    }
+]);
+
+const toggle = (event) => {
+    menu.value.toggle(event);
+};
+
+const stars = ref(4);
+
+const stars5 = ref(5);
+const stars4 = ref(4);
+const stars3 = ref(3);
+const stars2 = ref(2);
+const stars1 = ref(1);
+
+const form = useForm({
+  content:'',
+  productId:product.id,
+})
+
+console.log(route('reviews.store'))
+
 const position = ref('bottom');
 const responsiveOptions = ref([
     {
@@ -210,6 +358,13 @@ watch(active, () => {
     }
 })
 
+const giveReviews = ()=>{
+    form.post(route('reviews.store'),{
+        preserveScroll:true,
+        preserveState:true
+    });
+    form.content = '';
+}
 </script>
 
 <style>
@@ -231,7 +386,7 @@ watch(active, () => {
 
 .buy-now:hover {
     background: transparent;
-    color: #aaa;
+    color: #870EFF;
     border-color: #870EFF;
 }
 
@@ -239,4 +394,18 @@ watch(active, () => {
     border-radius: 70px !important;
     width: 130px !important;
 }
+#reviewsList::-webkit-scrollbar {
+    width: 5px;
+ }
+
+#reviewsList::-webkit-scrollbar-track {
+    border-radius: 8px;
+    background-color: #e7e7e7;
+}
+
+#reviewsList::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #d2d0d0e0;
+}
 </style>
+

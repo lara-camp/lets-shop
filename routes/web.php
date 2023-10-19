@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\Review\ReviewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Backend\AuthController;
@@ -54,6 +55,9 @@ Route::get("/product/{product}", [PageController::class, "detail"])->name("page.
 Route::get("/flashsale", [PageController::class, "flashsale"])->name("page.flashsale");
 Route::get("/contact", [PageController::class, "contact"])->name("page.contact");
 
+Route::middleware(['auth'])->group(function () {
+    Route::resource('/reviews', ReviewController::class);
+});
 
 // Admin Routes
 Route::get("dashboard/login", [AuthController::class, "loginView"])->name("admin.loginView");
@@ -88,4 +92,5 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'isAdmin']], fun
         Route::post('/mail', 'store')->name('store');
         Route::post('/sub-mail', 'sendSub')->name('sendSub');
     });
+
 });
