@@ -183,6 +183,8 @@ import { useToast } from "primevue/usetoast";
 import TableSkeleton from "../Coupon/Partials/TableSkeleton.vue";
 import Tag from "primevue/tag";
 import StatusToast from "../../../Component/StatusToast.vue";
+import Echo from 'laravel-echo';
+
 
 //format Currency
 const formatCurrency = (value) => {
@@ -239,9 +241,19 @@ const deleteCoupon = () => {
   deleteCouponDialog.value = false;
 };
 
+
+// listening Events
+
+
+
+
 //Load Coupons
 let { coupons, status } = defineProps({ coupons: undefined, status: String });
 onMounted(() => {
+    window.Echo.channel(`CouponStatus`)
+    .listen('UpdateCouponStatus', (e) => {
+        console.log(e)
+    });
   router.reload({ only: ["coupons"] });
 });
 </script>

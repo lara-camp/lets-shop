@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Events\UpdateCouponStatus as EventsUpdateCouponStatus;
 use App\Models\Coupon;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -32,7 +33,7 @@ class UpdateCouponStatus extends Command
         foreach ($coupons as $coupon) {
             $start=$coupon->discounttimeline->start;
             $end=$coupon->discounttimeline->end;
-            
+
             if($start > $now){
                 $coupon->status = 'pending';
             }elseif($start <= $now && $end > $now){
@@ -41,6 +42,7 @@ class UpdateCouponStatus extends Command
                 $coupon->status = 'expired';
             }
             $coupon->save();
+            event(new EventsUpdateCouponStatus($coupon));
         }
     }
 }
