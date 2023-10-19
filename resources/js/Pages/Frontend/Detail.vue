@@ -171,9 +171,10 @@
                                             <div class="">
                                                 {{ review.content }}
                                             </div>
-                                            <div @click="toggle" aria-haspopup="true" aria-controls="overlay_menu">
-                                                <i class="pi pi-ellipsis-v"></i>
-                                                <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+                                            <div>
+                                                <Button icon="pi pi-ellipsis-v" text rounded aria-label="Filter" type="button" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"/>
+                                                <Menu ref="drop" id="overlay_menu" :model="items" :popup="true" />
+                                                <Toast />
                                             </div>
                                         </div>
                                     </div>
@@ -248,6 +249,9 @@ import TabPanel from 'primevue/tabpanel';
 import InputNumber from 'primevue/inputnumber';
 import Textarea from 'primevue/textarea';
 import Menu from 'primevue/menu';
+import { useToast } from "primevue/usetoast";
+
+
 import { formatDistanceToNow } from 'date-fns';
 
 const formatRelativeTime = (dateTime) => {
@@ -258,32 +262,6 @@ const { product,user } = defineProps({ product: Array, user: Object })
 
 const images = ref(product.images);
 
-const menu = ref();
-const items = ref([
-    {
-        label: 'Options',
-        items: [
-            {
-                label: 'Update',
-                icon: 'pi pi-refresh',
-                command: () => {
-                    toast.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000 });
-                }
-            },
-            {
-                label: 'Delete',
-                icon: 'pi pi-times',
-                command: () => {
-                    toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000 });
-                }
-            }
-        ]
-    }
-]);
-
-const toggle = (event) => {
-    menu.value.toggle(event);
-};
 
 const stars = ref(4);
 
@@ -365,6 +343,39 @@ const giveReviews = ()=>{
     });
     form.content = '';
 }
+const toast = useToast();
+const drop = ref();
+const items = ref([
+    {
+        label: 'Options',
+        items: [
+            {
+                label: 'Update',
+                icon: 'pi pi-refresh',
+                command: () => {
+                    toast.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000 });
+                }
+            },
+            {
+                label: 'Delete',
+                icon: 'pi pi-times',
+                visible: false,
+                command: () => {
+                    toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000 });
+                }
+            }
+        ]
+    }
+]);
+
+const toggle = (event) => {
+    console.log(drop.value)
+    drop.value.toggle(event);
+};
+
+const save = () => {
+    toast.add({severity: 'success', summary: 'Success', detail: 'Data Saved', life: 3000});
+};
 </script>
 
 <style>
@@ -408,4 +419,3 @@ const giveReviews = ()=>{
     background-color: #d2d0d0e0;
 }
 </style>
-

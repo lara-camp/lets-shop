@@ -24,8 +24,7 @@ defineProps({ translations: Object })
 <template>
     <div class="card flex justify-content-center">
         <Button icon="pi pi-ellipsis-v" text rounded aria-label="Filter" type="button" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"/>
-        <!-- <Button type="button" label="Toggle" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" /> -->
-        <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+        <Menu ref="drop" id="overlay_menu" :model="items" :popup="true" />
         <Toast />
     </div>
 </template>
@@ -38,7 +37,7 @@ import Button from 'primevue/button';
 
 
 const toast = useToast();
-const menu = ref();
+const drop = ref();
 const items = ref([
     {
         label: 'Options',
@@ -63,7 +62,8 @@ const items = ref([
 ]);
 
 const toggle = (event) => {
-    menu.value.toggle(event);
+    console.log(drop.value)
+    drop.value.toggle(event);
 };
 
 const save = () => {
