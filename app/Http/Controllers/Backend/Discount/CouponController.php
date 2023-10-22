@@ -15,7 +15,7 @@ class CouponController extends Controller
      */
     public function index()
     {
-        $coupons=request()->input('action') == 1 ? Coupon::with('discounttimeline')->latest()->get() : Inertia::lazy(fn ()=> Coupon::with('discounttimeline')->get());
+        $coupons=request()->input('action') == 1 ? Coupon::with('discounttimeline')->get() :  Coupon::with('discounttimeline')->get();
 
         return Inertia::render("Backend/Coupon/Index", [
             "status"   => session('status') ?? null,

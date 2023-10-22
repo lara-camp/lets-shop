@@ -169,7 +169,7 @@
 import Button from "primevue/button";
 import AdminLayout from "../../../Layout/AdminLayout.vue";
 import { FilterMatchMode } from "primevue/api";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { Link, router } from "@inertiajs/vue3";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
@@ -241,20 +241,20 @@ const deleteCoupon = () => {
   deleteCouponDialog.value = false;
 };
 
-
 // listening Events
 
-
-
+let { coupons, status } = defineProps({ coupons: Array, status: String });
 
 //Load Coupons
-let { coupons, status } = defineProps({ coupons: undefined, status: String });
 onMounted(() => {
-    window.Echo.channel(`CouponStatus`)
-    .listen('UpdateCouponStatus', (e) => {
-        console.log(e)
+    window.Echo.channel('CouponStatus')
+        .listen('UpdateCouponStatus', (e) =>{
+              const UpdateCouponStatus = coupons.find((coupon)=>coupon.id == e.coupon.id)
+              if(UpdateCouponStatus){
+                UpdateCouponStatus.status=e.coupon.status
+              }
     });
-  router.reload({ only: ["coupons"] });
+//   router.reload({ only: ["coupons"] });
 });
 </script>
 
