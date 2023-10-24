@@ -45,20 +45,21 @@ class PageController extends Controller
     public function category()
     {
     }
-    public function detail(Product $product){
+    public function detail(Product $product)
+    {
         //  return($product->reviews);
         $product = [
             'id' => $product->id,
-                'name' => $product->name,
-                'slug' => $product->slug,
-                'truncate' => $product->truncate,
-                'description' => $product->description,
-                'price' => $product->price,
-                'stock' => $product->stock,
-                'category' => $product->category->title,
-                'images' => $product->productImages,
-                'details' => $product->productDetails,
-                'reviews' => $product->reviews()
+            'name' => $product->name,
+            'slug' => $product->slug,
+            'truncate' => $product->truncate,
+            'description' => $product->description,
+            'price' => $product->price,
+            'stock' => $product->stock,
+            'category' => $product->category->title,
+            'images' => $product->productImages,
+            'details' => $product->productDetails,
+            'reviews' => $product->reviews()
                 ->with(['user' => function ($query) {
                     $query->select('id', 'name', 'email', 'role');
                 }])
@@ -66,9 +67,9 @@ class PageController extends Controller
         ];
 
         // return response()->json($product);
-        return Inertia::render('Frontend/Detail',[
+        return Inertia::render('Frontend/Detail', [
             'product' => $product,
-        ] );
+        ]);
     }
     public function flashsale()
     {

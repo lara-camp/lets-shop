@@ -23,8 +23,6 @@
                         :thumbnailsPosition="position" :circular="false" :showItemNavigatorsOnHover="false">
                         <template #item="slotProps">
                             <Image :src="asset(slotProps.item.image)" alt="Image" width="450" height="400" preview />
-                            <!-- <img :src="asset(slotProps.item.image)" :alt="slotProps.item.alt"
-                                style="width: 100%;height:400px;object-fit: cover; " /> -->
                         </template>
                         <template #thumbnail="slotProps">
                             <div class="">
@@ -43,7 +41,7 @@
                         <Rating v-model="product.stars" :cancel="false" />
                         <div class="flex align-items-center text-xl ">
                             <i class="pi pi-comment ml-4 mr-2"></i>
-                            <div class="font-semibold"> 34 reviews</div>
+                            <div class="font-semibold"> {{product.reviews.length}} reviews</div>
                         </div>
                     </div>
                     <div class="text-2xl font-bold mt-3 text-primary ">
@@ -55,8 +53,6 @@
 
                         <Button icon="pi pi-minus" rounded outlined aria-label="quantity" class="quantity-button"
                             severity="secondary" @click="quantityFunc('minus')" />
-                        <!-- <InputText type="text" size="small" placeholder="1"
-                            :style="{borderRadius: '50px'}" class="mx-2" prefix="quantity : "/> -->
                         <InputNumber v-model="quantity" inputId="percent" prefix="quantity : " size="small" class="mx-2" />
                         <Button icon="pi pi-plus" rounded outlined aria-label="quantity" class="quantity-button"
                             severity="secondary" @click="quantityFunc('plus')" />
@@ -173,13 +169,24 @@
                                             <div class="">
                                                 {{ review.content }}
                                             </div>
-                                            <div>
-                                                <Button :aria-label="'Filter ' + review.id" icon="pi pi-ellipsis-v" text
-                                                    rounded type="button" @click="toggle" :aria-haspopup="true"
-                                                    :aria-controls="'overlay_menu_' + review.id" />
-                                                    <Menu ref="drop"
-                                                    :id="'overlay_menu_' + review.id" :model="items" :popup="true" />
-                                                <Toast />
+                                            <Toast />
+
+                                            <div style="position: relative;">
+                                                <i class="pi pi-ellipsis-v cursor-pointer" @click="toggleMenu(review)" v-if="user"></i>
+                                                <div class="py-2 px-3 bg-white rounded shadow-1"
+                                                    style="position: absolute;right: 16px;" v-if="review.isMenuOpen">
+
+                                                        <div v-if="review.user_id == user.id"
+                                                            class="flex align-items-center cursor-pointer" @click="deleteReview(review.id)"><i
+                                                                class="pi pi-trash mr-2 mb-2 p-1"></i><span>Delete</span></div>
+                                                        <div v-if="review.user_id == user.id"
+                                                            class="flex align-items-center cursor-pointer"><i
+                                                                class="pi pi-pencil mr-2 mb-2 p-1"></i><span>Edit</span></div>
+                                                        <div class="flex align-items-center cursor-pointer"><i
+                                                                class="pi pi-reply mr-2 mb-2 p-1"></i><span>Reply</span></div>
+
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -203,7 +210,7 @@
                                     </div>
                                     <div class="py-3 pl-4 border-left-3 border-primary surface-50"
                                         style="white-space: normal; word-wrap: break-word;">
-                                        {{ form.content.length > 0 ? form.content : "your review's preview will appear here..." }}
+                                        {{ CommentPreviewText }}
                                     </div>
 
                                 </div>
@@ -246,9 +253,9 @@
 </template>
 
 <script setup>
-import { Link, useForm } from '@inertiajs/vue3';
+import { Link, useForm, router } from '@inertiajs/vue3';
 import Galleria from 'primevue/galleria';
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import UserNavbar from '../../Component/UserNavbar.vue';
 import { asset } from '../../asset-helper';
 import Rating from 'primevue/rating';
@@ -261,10 +268,12 @@ import InputNumber from 'primevue/inputnumber';
 import Textarea from 'primevue/textarea';
 import Menu from 'primevue/menu';
 import { useToast } from "primevue/usetoast";
-
-
+import Toast from 'primevue/toast';
 import { formatDistanceToNow } from 'date-fns';
-
+const toast = useToast();
+const CommentPreviewText = computed(() => {
+    return form.content.length > 0 ? form.content : "your review's preview will appear here..."
+})
 const formatRelativeTime = (dateTime) => {
     const formattedTime = formatDistanceToNow(new Date(dateTime), { addSuffix: true });
     return formattedTime;
@@ -273,7 +282,26 @@ const { product, user } = defineProps({ product: Array, user: Object })
 
 const images = ref(product.images);
 
+const isMenuOpenToFalse = () => {
+    product.reviews.map((review) => {
+        review.isMenuOpen = false;
+    })
+}
 
+const toggleMenu = (review) => {
+    product.reviews.map((r) => {
+        if(r.id != review.id && r.isMenuOpen){
+            r.isMenuOpen = false;
+        }
+    })
+    review.isMenuOpen = !review.isMenuOpen;
+
+    console.log(review.isMenuOpen)
+};
+
+onMounted(()=>{
+    isMenuOpenToFalse();
+})
 const stars = ref(4);
 
 const stars5 = ref(5);
@@ -354,39 +382,13 @@ const giveReviews = () => {
     });
     form.content = '';
 }
-const toast = useToast();
-const drop = ref();
-const items = ref([
-    {
-        label: 'Options',
-        items: [
-            {
-                label: 'Update',
-                icon: 'pi pi-refresh',
-                command: () => {
-                    toast.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000 });
-                }
-            },
-            {
-                label: 'Delete',
-                icon: 'pi pi-times',
-                visible: false,
-                command: () => {
-                    toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000 });
-                }
-            }
-        ]
-    }
-]);
-
-const toggle = (event) => {
-    console.log(drop.value)
-    drop.value.toggle(event);
-};
-
-const save = () => {
-    toast.add({ severity: 'success', summary: 'Success', detail: 'Data Saved', life: 3000 });
-};
+const deleteReview =(reviewId)=>{
+    router.delete(route('reviews.destroy', reviewId),{
+        preserveScroll:true,
+        preserveState:true,
+    });
+    toast.add({ severity: 'success', summary: 'Delete review', detail: 'Your review is successfully deleted', life: 3000 });
+}
 </script>
 
 <style>
