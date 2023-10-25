@@ -166,11 +166,16 @@
                                         </div>
                                         <div
                                             class="py-3 pl-2 pr-1 border-left-3 border-primary surface-50 flex justify-content-between align-items-center">
-                                            <div class="">
+                                            <div v-if="review.isEditOpen" class="w-9">
+                                                <form @submit.prevent = "updateReview">
+                                                <input type="text" v-model="review.content" class="border-primary border-round outline-none px-3 py-2 w-full " >
+
+                                                </form>
+                                            </div>
+                                            <div class="" v-else>
                                                 {{ review.content }}
                                             </div>
                                             <Toast />
-
                                             <div style="position: relative;">
                                                 <i class="pi pi-ellipsis-v cursor-pointer" @click="toggleMenu(review)" v-if="user"></i>
                                                 <div class="py-2 px-3 bg-white rounded shadow-1"
@@ -180,7 +185,7 @@
                                                             class="flex align-items-center cursor-pointer" @click="deleteReview(review.id)"><i
                                                                 class="pi pi-trash mr-2 mb-2 p-1"></i><span>Delete</span></div>
                                                         <div v-if="review.user_id == user.id"
-                                                            class="flex align-items-center cursor-pointer"><i
+                                                            class="flex align-items-center cursor-pointer" @click="editReview(review)"><i
                                                                 class="pi pi-pencil mr-2 mb-2 p-1"></i><span>Edit</span></div>
                                                         <div class="flex align-items-center cursor-pointer"><i
                                                                 class="pi pi-reply mr-2 mb-2 p-1"></i><span>Reply</span></div>
@@ -270,6 +275,7 @@ import Menu from 'primevue/menu';
 import { useToast } from "primevue/usetoast";
 import Toast from 'primevue/toast';
 import { formatDistanceToNow } from 'date-fns';
+
 const toast = useToast();
 const CommentPreviewText = computed(() => {
     return form.content.length > 0 ? form.content : "your review's preview will appear here..."
@@ -285,18 +291,19 @@ const images = ref(product.images);
 const isMenuOpenToFalse = () => {
     product.reviews.map((review) => {
         review.isMenuOpen = false;
+        review.isEditOpen = false;
     })
 }
 
 const toggleMenu = (review) => {
     product.reviews.map((r) => {
-        if(r.id != review.id && r.isMenuOpen){
+        if(r.id != review.id && (r.isMenuOpen || r.isEditOpen)){
             r.isMenuOpen = false;
+            r.isEditOpen = false;
         }
     })
     review.isMenuOpen = !review.isMenuOpen;
-
-    console.log(review.isMenuOpen)
+    review.isEditOpen = false;
 };
 
 onMounted(()=>{
@@ -381,6 +388,9 @@ const giveReviews = () => {
         preserveState: true
     });
     form.content = '';
+    if(!form.errors){
+        toast.add({ severity: 'success', summary: 'Give review', detail: 'Your review is submitted,', life: 3000 });
+    }
 }
 const deleteReview =(reviewId)=>{
     router.delete(route('reviews.destroy', reviewId),{
@@ -388,6 +398,11 @@ const deleteReview =(reviewId)=>{
         preserveState:true,
     });
     toast.add({ severity: 'success', summary: 'Delete review', detail: 'Your review is successfully deleted', life: 3000 });
+}
+const editReview = (review) => {
+    // alert(review.isEditOpen);
+    review.isEditOpen = !review.isEditOpen;
+    review.isMenuOpen = false;
 }
 </script>
 
