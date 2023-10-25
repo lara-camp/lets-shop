@@ -41,7 +41,7 @@
                         <Rating v-model="product.stars" :cancel="false" />
                         <div class="flex align-items-center text-xl ">
                             <i class="pi pi-comment ml-4 mr-2"></i>
-                            <div class="font-semibold"> {{product.reviews.length}} reviews</div>
+                            <div class="font-semibold"> {{ product.reviews.length }} reviews</div>
                         </div>
                     </div>
                     <div class="text-2xl font-bold mt-3 text-primary ">
@@ -167,9 +167,13 @@
                                         <div
                                             class="py-3 pl-2 pr-1 border-left-3 border-primary surface-50 flex justify-content-between align-items-center">
                                             <div v-if="review.isEditOpen" class="w-9">
-                                                <form @submit.prevent = "updateReview">
-                                                <input type="text" v-model="review.content" class="border-primary border-round outline-none px-3 py-2 w-full " >
-
+                                                <form @submit.prevent="updateReview(review)" class="flex align-items-center ">
+                                                    <input type="text" v-model="review.content"
+                                                        class="border-primary border-round outline-none px-3 py-3 w-full ">
+                                                    <button type="submit"
+                                                        style="outline: none; background: transparent; border: none;">
+                                                        <Button label="Edit" icon="pi pi-pencil" outlined class="py-3"/>
+                                                    </button>
                                                 </form>
                                             </div>
                                             <div class="" v-else>
@@ -177,18 +181,21 @@
                                             </div>
                                             <Toast />
                                             <div style="position: relative;">
-                                                <i class="pi pi-ellipsis-v cursor-pointer" @click="toggleMenu(review)" v-if="user"></i>
+                                                <i class="pi pi-ellipsis-v cursor-pointer" @click="toggleMenu(review)"
+                                                    v-if="user"></i>
                                                 <div class="py-2 px-3 bg-white rounded shadow-1"
                                                     style="position: absolute;right: 16px;" v-if="review.isMenuOpen">
 
-                                                        <div v-if="review.user_id == user.id"
-                                                            class="flex align-items-center cursor-pointer" @click="deleteReview(review.id)"><i
-                                                                class="pi pi-trash mr-2 mb-2 p-1"></i><span>Delete</span></div>
-                                                        <div v-if="review.user_id == user.id"
-                                                            class="flex align-items-center cursor-pointer" @click="editReview(review)"><i
-                                                                class="pi pi-pencil mr-2 mb-2 p-1"></i><span>Edit</span></div>
-                                                        <div class="flex align-items-center cursor-pointer"><i
-                                                                class="pi pi-reply mr-2 mb-2 p-1"></i><span>Reply</span></div>
+                                                    <div v-if="review.user_id == user.id"
+                                                        class="flex align-items-center cursor-pointer"
+                                                        @click="deleteReview(review.id)"><i
+                                                            class="pi pi-trash mr-2 mb-2 p-1"></i><span>Delete</span></div>
+                                                    <div v-if="review.user_id == user.id"
+                                                        class="flex align-items-center cursor-pointer"
+                                                        @click="editReview(review)"><i
+                                                            class="pi pi-pencil mr-2 mb-2 p-1"></i><span>Edit</span></div>
+                                                    <div class="flex align-items-center cursor-pointer"><i
+                                                            class="pi pi-reply mr-2 mb-2 p-1"></i><span>Reply</span></div>
 
                                                 </div>
 
@@ -297,8 +304,9 @@ const isMenuOpenToFalse = () => {
 
 const toggleMenu = (review) => {
     product.reviews.map((r) => {
-        if(r.id != review.id && (r.isMenuOpen || r.isEditOpen)){
+        if (r.id != review.id && r.isMenuOpen) {
             r.isMenuOpen = false;
+        }else if(r.id != review.id && r.isEditOpen){
             r.isEditOpen = false;
         }
     })
@@ -306,7 +314,7 @@ const toggleMenu = (review) => {
     review.isEditOpen = false;
 };
 
-onMounted(()=>{
+onMounted(() => {
     isMenuOpenToFalse();
 })
 const stars = ref(4);
@@ -388,14 +396,14 @@ const giveReviews = () => {
         preserveState: true
     });
     form.content = '';
-    if(!form.errors){
+    if (!form.errors) {
         toast.add({ severity: 'success', summary: 'Give review', detail: 'Your review is submitted,', life: 3000 });
     }
 }
-const deleteReview =(reviewId)=>{
-    router.delete(route('reviews.destroy', reviewId),{
-        preserveScroll:true,
-        preserveState:true,
+const deleteReview = (reviewId) => {
+    router.delete(route('reviews.destroy', reviewId), {
+        preserveScroll: true,
+        preserveState: true,
     });
     toast.add({ severity: 'success', summary: 'Delete review', detail: 'Your review is successfully deleted', life: 3000 });
 }
@@ -403,6 +411,12 @@ const editReview = (review) => {
     // alert(review.isEditOpen);
     review.isEditOpen = !review.isEditOpen;
     review.isMenuOpen = false;
+}
+const updateReview = (review)=>{
+    router.patch(route('reviews.update',review.id),{content:review.content},{
+        preserveScroll:true,
+        preserveState:true,
+    })
 }
 </script>
 
@@ -446,5 +460,4 @@ const editReview = (review) => {
 #reviewsList::-webkit-scrollbar-thumb {
     border-radius: 8px;
     background-color: #d2d0d0e0;
-}
-</style>
+}</style>

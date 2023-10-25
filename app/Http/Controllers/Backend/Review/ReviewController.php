@@ -63,7 +63,13 @@ class ReviewController extends Controller
      */
     public function update(Request $request, Review $review)
     {
-        //
+        $request->validate([
+            'content' => 'required|max:300',
+        ]);
+        $review->update([
+            'content' => $request->content,
+        ]);
+        return redirect()->back();
     }
 
     /**
