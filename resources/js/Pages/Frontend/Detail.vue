@@ -156,6 +156,9 @@
                                 <div v-if="product.reviews.length > 0" id="reviewsList"
                                     style="height: 443.6px; overflow-y: scroll; overflow-x: hidden;">
                                     <div class="mb-1 pr-3" v-for="review in product.reviews" :key="review.id">
+                                        <pre>
+                                            {{review}}
+                                        </pre>
                                         <div class="flex justify-content-between align-items-center pt-2 pb-1 ">
                                             <div class="text-lg font-bold">
                                                 {{ review.user.name }}
@@ -202,7 +205,7 @@
                                             </div>
                                         </div>
                                         <div v-if="review.isReplyOpen">
-                                            <form @submit.prevent="replyReviewServer(review.id)" class="flex align-items-center mt-3">
+                                            <form @submit.prevent="replyReviewServer(review)" class="flex align-items-center mt-3">
                                                     <input type="text" v-model="review.replyContent" autofocus
                                                         class="border-primary border-round outline-none px-3 py-3 w-full ">
                                                     <button type="submit"
@@ -441,8 +444,15 @@ const replyReview  = (review)=>{
     review.isEditOpen = false;
 }
 
-const replyReviewServer = (reviewId)=>{
-    router.post();
+const replyReviewServer = (review)=>{
+    router.post(route('reviews.reply'),{
+        content : review.replyContent,
+        parent_id : review.id,
+        product_id : review.product_id
+    },{
+        preserveScroll:true,
+        preserveState:true,
+    });
 }
 </script>
 
