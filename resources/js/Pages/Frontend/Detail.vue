@@ -205,8 +205,8 @@
                                             </div>
                                         </div>
                                         <div v-if="review.isReplyOpen">
-                                            <form @submit.prevent="replyReviewServer(review)" class="flex align-items-center mt-3">
-                                                    <input type="text" v-model="review.replyContent" autofocus
+                                            <form  @submit.prevent="replyReviewServer(review)" class="flex align-items-center mt-3">
+                                                    <input type="text" v-model="replyForm.replyContent" autofocus
                                                         class="border-primary border-round outline-none px-3 py-3 w-full ">
                                                     <button type="submit"
                                                         style="outline: none; background: transparent; border: none;">
@@ -313,7 +313,6 @@ const isMenuOpenToFalse = () => {
         review.isMenuOpen = false;
         review.isEditOpen = false;
         review.isReplyOpen = false;
-        review.replyContent = '';
     })
 }
 
@@ -348,6 +347,11 @@ const form = useForm({
     productId: product.id,
 })
 
+const replyForm = useForm({
+    productId: product.id,
+    parent_id:null,
+    replyContent:'',
+})
 console.log(route('reviews.store'))
 
 const position = ref('bottom');
@@ -408,7 +412,7 @@ watch(active, () => {
     }
 })
 
-const giveReviews = () => {
+const giveReviews = (review) => {
     form.post(route('reviews.store'), {
         preserveScroll: true,
         preserveState: true
@@ -445,11 +449,9 @@ const replyReview  = (review)=>{
 }
 
 const replyReviewServer = (review)=>{
-    router.post(route('reviews.reply'),{
-        content : review.replyContent,
-        parent_id : review.id,
-        product_id : review.product_id
-    },{
+    console.log(replyForm)
+    replyForm.parent_id = review.id;
+    replyForm.post(route('reviews.reply'),{
         preserveScroll:true,
         preserveState:true,
     });

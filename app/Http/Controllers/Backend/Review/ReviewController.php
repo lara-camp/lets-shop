@@ -30,15 +30,15 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
+        // return ($request);
         $request->validate([
             "content" => 'required|max:300',
-            "parent_id" => "required",
-            'product_id' => "requireds",
         ]);
 
         Review::create([
             'user_id' => Auth::user()->id,
             'product_id' => $request->productId,
+            'parent_id' => $request->parent_id ?? null,
             'content' => $request->content
         ]);
 
@@ -49,15 +49,13 @@ class ReviewController extends Controller
     {
         $request->validate([
             "content" => 'required|max:300',
-            "parent_id" => "required",
-            'product_id' => "required",
         ]);
 
         Review::create([
             'user_id' => Auth::user()->id,
-            'product_id' => $request->product_id,
-            'parent_id' => $request->parent_id,
-            'content' => $request->content
+            'product_id' => $request->productId,
+            'parent_id' => $request->parent_id ?? null,
+            'content' => $request->replyContent
         ]);
 
         return redirect()->back();
