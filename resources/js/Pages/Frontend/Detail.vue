@@ -194,12 +194,22 @@
                                                         class="flex align-items-center cursor-pointer"
                                                         @click="editReview(review)"><i
                                                             class="pi pi-pencil mr-2 mb-2 p-1"></i><span>Edit</span></div>
-                                                    <div class="flex align-items-center cursor-pointer"><i
+                                                    <div class="flex align-items-center cursor-pointer" @click="replyReview(review)"><i
                                                             class="pi pi-reply mr-2 mb-2 p-1"></i><span>Reply</span></div>
 
                                                 </div>
 
                                             </div>
+                                        </div>
+                                        <div v-if="review.isReplyOpen">
+                                            <form @submit.prevent="replyReviewServer(review.id)" class="flex align-items-center mt-3">
+                                                    <input type="text" v-model="review.replyContent" autofocus
+                                                        class="border-primary border-round outline-none px-3 py-3 w-full ">
+                                                    <button type="submit"
+                                                        style="outline: none; background: transparent; border: none;">
+                                                        <Button label="Reply" icon="pi pi-reply" outlined class="py-3"/>
+                                                    </button>
+                                                </form>
                                         </div>
                                     </div>
                                 </div>
@@ -299,6 +309,8 @@ const isMenuOpenToFalse = () => {
     product.reviews.map((review) => {
         review.isMenuOpen = false;
         review.isEditOpen = false;
+        review.isReplyOpen = false;
+        review.replyContent = '';
     })
 }
 
@@ -308,10 +320,13 @@ const toggleMenu = (review) => {
             r.isMenuOpen = false;
         }else if(r.id != review.id && r.isEditOpen){
             r.isEditOpen = false;
+        }else if(r.id != review.id && r.isReplyOpen){
+            r.isReplyOpen = false;
         }
     })
     review.isMenuOpen = !review.isMenuOpen;
     review.isEditOpen = false;
+    review.isReplyOpen = false;
 };
 
 onMounted(() => {
@@ -411,12 +426,23 @@ const editReview = (review) => {
     // alert(review.isEditOpen);
     review.isEditOpen = !review.isEditOpen;
     review.isMenuOpen = false;
+    review.isReplyOpen = false;
 }
 const updateReview = (review)=>{
     router.patch(route('reviews.update',review.id),{content:review.content},{
         preserveScroll:true,
         preserveState:true,
     })
+}
+
+const replyReview  = (review)=>{
+    review.isReplyOpen = !review.isReplyOpen;
+    review.isMenuOpen = false;
+    review.isEditOpen = false;
+}
+
+const replyReviewServer = (reviewId)=>{
+    router.post();
 }
 </script>
 

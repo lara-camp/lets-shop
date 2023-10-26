@@ -57,6 +57,7 @@ Route::get("/contact", [PageController::class, "contact"])->name("page.contact")
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('/reviews', ReviewController::class);
+    Route::post('reviews/reply', [ReviewController::class,'reply'])->name('reviews.reply');
 });
 
 // Admin Routes

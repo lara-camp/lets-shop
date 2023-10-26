@@ -39,6 +39,24 @@ class ReviewController extends Controller
             'product_id' => $request->productId,
             'content' => $request->content
         ]);
+
+        return redirect()->back();
+    }
+
+    public function reply(Request $request)
+    {
+        $request->validate([
+            "content" => 'required|max:300',
+            "parent_id" => "required",
+        ]);
+
+        Review::create([
+            'user_id' => Auth::user()->id,
+            'product_id' => $request->productId,
+            'parent_id' => $request->parent_id,
+            'content' => $request->content
+        ]);
+
         return redirect()->back();
     }
 
